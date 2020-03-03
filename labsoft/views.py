@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 
 @login_required()
 def home(request):
-    return render(request, "vali-admin/dashboard.html")
+    return render(request, "home.html")
 
 @login_required()
 def logoutUser(request):
