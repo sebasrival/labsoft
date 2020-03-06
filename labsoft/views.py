@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 
 @login_required()
 def home(request):
-    return render(request, "home.html")
+    return render(request, "index.html")
 
 @login_required()
 def logoutUser(request):
