@@ -23,13 +23,14 @@
     {% block sidebar%}
     {% endblock %}
 
-    {% block head-app %}
-    {% endblock %}
-
-    {% block content %}
-    {% endblock %}
+    <main class="app-content">
+        {% block head-app %}
+        {% endblock %}
         
-
+        {% block content %}
+        {% endblock content %}
+    </main>
+    
     <!-- Essential javascripts for application to work-->
     <script src="{% static "js/jquery-3.3.1.min.js" %}"></script>
     <script src="{% static "js/popper.min.js" %}"></script>
