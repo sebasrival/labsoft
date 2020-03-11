@@ -17,13 +17,18 @@ from django.contrib import admin
 from django.urls import path
 from .views import home, logoutUser
 from django.contrib.auth import views as auth_views
-from clientes.views import agregar_cliente
+from clientes.views import agregar_cliente, lista_cliente
+from productos.views import agregar_producto, lista_producto
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', logoutUser, name="logout"),
     path('', home, name="index"),
-    #clientes
+    # clientes
     path('agregar_cliente/', agregar_cliente, name="add_cliente"),
+    path('lista_cliente/', lista_cliente, name="lista_cliente"),
+    # Productos
+    path('agregar_producto/', agregar_producto, name="add_producto" ),
+    path('lista_producto/', lista_producto, name="lista_producto"),
 ]

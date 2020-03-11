@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+{% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+
+{% block sidebar %}
+{% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+
+{% block head-app %}
+    {% include 'home/content_app.html' %}
+{% endblock head-app %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered" id="Table">
+                        <thead>
+                            <tr>
+                                <th>Ruc</th>
+                                <th>CI</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Razon social</th>
+                                <th>Telefono</th>
+                                <th>Email</th>
+                                <th>Dirección</th>
+                                <th>Descuento</th>
+                                <th>Bonificación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for client in clientes %}
+                            <tr>
+                                <td>{{ client.ruc }}</td>
+                                <td>{{ client.cedula }}</td>
+                                <td>{{ client.nombre }}</td>
+                                <td>{{ client.apellido }}</td>
+                                <td>{{ client.razon_social }}</td>
+                                <td>{{ client.telefono }}</td>
+                                <td>{{ client.email }}</td>
+                                <td>{{ client.direccion }}</td>
+                                <td>{{ client.descuento }}</td>
+                                <td>{{ client.bonificacion}}</td>
+                            </tr>
+                            {% endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block scripts %}
+<script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
+<script>$('#Table').DataTable()</script>
+{% endblock %}

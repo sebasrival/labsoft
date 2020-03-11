@@ -1,22 +1,34 @@
+<!--
+    base.html es ela plantilla para extender las demas vistas, donde deben incluir
+    las demas partes del template dentro de navbar sidebar head y content
+    de los nuevos template para añadir
+-->
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <!-- Open Graph Meta-->
+    {% block title%}
     <title>Labsoft</title>
+    {% endblock %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}">
+    {% block css %}
+    {% endblock%}
     <!-- Font-icon css-->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 </head>
 
 <body class="app sidebar-mini">
-        
+
     {% block navbar %}
     {% endblock %}
 
@@ -26,11 +38,11 @@
     <main class="app-content">
         {% block head-app %}
         {% endblock %}
-        
+
         {% block content %}
         {% endblock content %}
     </main>
-    
+
     <!-- Essential javascripts for application to work-->
     <script src="{% static "js/jquery-3.3.1.min.js" %}"></script>
     <script src="{% static "js/popper.min.js" %}"></script>

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+{% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+
+{% block sidebar %}
+{% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+
+{% block head-app %}
+    {% include 'home/content_app.html' %}
+{% endblock head-app %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered" id="Table">
+                        <thead>
+                            <tr>
+                                <th>Cod. Producto</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Volumen</th>
+                                <th>color</th>
+                                <th>Cantidad Neto</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in productos %}
+                            <tr>
+                                <td>{{ product.codigo_producto}}</td>
+                                <td>{{ product.nombre }}</td>
+                                <td>{{ product.descripcion }}</td>
+                                <td>{{ product.volumen}}</td>
+                                <td>{{ product.color }}</td>
+                                <td>{{ product.cantidad_neto }}</td>
+                                <td>{{ product.precio }}</td>
+                            </tr>
+                            {% endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block scripts %}
+<script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
+<script>$('#Table').DataTable()</script>
+{% endblock %}
