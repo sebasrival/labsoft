@@ -15,10 +15,10 @@ class Cliente (models.Model):
     direccion = models.CharField(max_length=150, blank=True)
 
     def __str__(self):
-        if self.es_entidad:
-            return '%s %s %s' % (self.cedula, self.nombre, self.apellido)
+        if not self.es_entidad:
+            return '%s - %s - %s' % (self.cedula, self.nombre, self.apellido)
         else:
-            return '%s %s' % (self.ruc, self.razon_social)
+            return '%s - %s' % (self.ruc, self.razon_social)
 
     class Meta():
         verbose_name = "Cliente"
