@@ -21,8 +21,7 @@ class Pedido(models.Model):
         verbose_name_plural = 'Pedidos'
     
     def __str__(self):
-        return 'Nro Pedido: %s ---> Cliente: %s ---> Fecha Entrega: %s ---> Estado: %s' \
-            % (self.id, self.cliente, self.fecha_entrega, self.estado)
+        return 'Nro Pedido: %s - Cliente: %s' % (self.id, self.cliente)
 
 class PedidoDetalle(models.Model):
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
