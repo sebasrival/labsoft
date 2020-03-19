@@ -67,7 +67,11 @@
 
 {% block scripts %}
 <script type="text/javascript" src="{% static "js/plugins/formset/jquery.formset.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.min.js" %}"></script>
+<!--Lenguage español-->
+<script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.es.js" %}"></script>
 <script type="text/javascript">
+    /*Formset dynamic*/
     $(function () {
         $('.xd').formset({
             prefix: '{{ formset.prefix }}',
@@ -77,5 +81,13 @@
             deleteCssClass: 'btn btn-danger h-25 mt-4'
         });
     });
+    /*Date Picker*/
+    $('#datePick').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            todayHighlight: true,
+            language:'es'
+        });
 </script>
+
 {% endblock %}

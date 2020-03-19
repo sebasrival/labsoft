@@ -6,8 +6,11 @@ class PedidoForm(ModelForm):
         model = Pedido
         exclude = ['fecha_pedido']
         widgets = {
-            'cliente': Select(attrs={'class':'form-control',},),
-            'fecha_entrega': DateInput(attrs={'class': 'form-control'}),
+            'cliente': Select(attrs={'class':'form-control',
+                                     'id': 'cliente_select'}),
+            'fecha_entrega': DateInput(attrs={'class': 'form-control',
+                                              'id': 'datePick',
+                                              'placeholder': 'Selecciona la fecha'}),
             'estado': Select(attrs={'class': 'form-control'})
         }
 
