@@ -11,12 +11,27 @@
 {% include 'home/sidebar.html' %}
 {% endblock sidebar %}
 
+{% block css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+{% endblock css %}
+
 
 {% block content %}
 <div class="row">
     <div class="col-md-12">
         <div class="tile">
             <div class="tile-body">
+            <!--
+                <div id="message_id">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}" role="alert">
+                                {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            -->
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered" id="Table">
                         <thead>
@@ -31,6 +46,7 @@
                                 <th>Dirección</th>
                                 <th>Descuento</th>
                                 <th>Bonificación</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,7 +61,15 @@
                                 <td>{{ client.email }}</td>
                                 <td>{{ client.direccion }}</td>
                                 <td>{{ client.descuento }}</td>
-                                <td>{{ client.bonificacion}}</td>
+                                <td>{{ client.bonificacion }}</td>
+                                <td>
+                                    <a class="btn btn-success p-2" href="{% url 'editar_cliente' client.id %}"> 
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button class="btn btn-danger del p-2" href="{% url 'delete_cliente' client.id %}">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
                             </tr>
                             {% endfor%}
                         </tbody>
@@ -62,5 +86,80 @@
 <script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
-<script>$('#Table').DataTable()</script>
+<script type="text/javascript" src="{% static "js/plugins/sweetalert.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
+
+<script> 
+    $('.del').click(function(){
+        var href = $(this).attr('href');
+      	swal({
+      		title: "¿Está seguro de eliminar este cliente?",
+      		text: "",
+      		type: "warning",
+      		showCancelButton: true,
+      		confirmButtonText: "Si, eliminar!",
+      		cancelButtonText: "Cancelar!",
+      		closeOnConfirm: false,
+      		closeOnCancel: false
+      	}, function(isConfirm) {
+      		if (isConfirm) {
+      			swal({
+                      title: "Eliminado",
+                      type: "success"
+                  }, function(){
+                      window.location.href=href;
+                  });
+      		} else {
+      			swal("Cancelado", "", "error");
+      		}
+      	});
+    });
+
+    $('#Table').DataTable();
+
+    /*  Notificacion django messages
+        var message_ele = document.getElementById("message_id");
+    
+        setTimeout(function(){ 
+            message_ele.style.display = "none"; 
+        }, 3000);
+    */
+    
+    {% if messages %}
+        {% for message in messages %}
+        setTimeout(function(){ 
+            $.notify({
+      		    title: "",
+      		    message: "{{ message }}",
+      		    icon: 'fa fa-check' 
+      	    },{
+                type: "{{ message.tags}}",
+                allow_dismiss: true,
+                newest_on_top: false,
+                showProgressbar: false,
+                placement: {
+                    from: "top",
+                    align: "right"
+                },
+                offset: 20,
+                spacing: 10,
+                z_index: 50000,
+                delay: 3000,
+                timer: 2000,
+                url_target: '_blank',
+                mouse_over: null,
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+                onShow: null,
+                onShown: null,
+                onClose: null,
+                onClosed: null,
+      	    });
+        }, 1000);
+        {% endfor %}
+    {% endif %}
+</script>
 {% endblock %}
+

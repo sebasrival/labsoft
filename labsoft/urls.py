@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from .views import home, logoutUser
 from django.contrib.auth import views as auth_views
-from clientes.views import agregar_cliente, lista_cliente
+from clientes.views import agregar_cliente, lista_cliente, editar_cliente, delete_cliente
 from productos.views import agregar_producto, lista_producto
 from pedidos.views import agregar_pedido
 
@@ -29,9 +29,11 @@ urlpatterns = [
     # clientes
     path('agregar_cliente/', agregar_cliente, name="add_cliente"),
     path('lista_cliente/', lista_cliente, name="lista_cliente"),
+    path('editar_cliente/<id>/', editar_cliente, name="editar_cliente"),
+    path('eliminar_cliente/<id>/', delete_cliente, name="delete_cliente"),
     # Productos
-    path('agregar_producto/', agregar_producto, name="add_producto" ),
+    path('agregar_producto/', agregar_producto, name="add_producto"),
     path('lista_producto/', lista_producto, name="lista_producto"),
-    #pedidos
+    # pedidos
     path('agregar_pedido/', agregar_pedido, name='add_pedido')
 ]
