@@ -11,6 +11,10 @@
 {% include 'home/sidebar.html' %}
 {% endblock sidebar %}
 
+{% block css %}
+<!-- Animacion CSS notify-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+{% endblock css %}
 
 {% block content %}
 <div class="row">
@@ -28,6 +32,7 @@
                                 <th>color</th>
                                 <th>Cantidad Neto</th>
                                 <th>Precio</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,6 +45,16 @@
                                 <td>{{ product.color }}</td>
                                 <td>{{ product.cantidad_neto }}</td>
                                 <td>{{ product.precio }}</td>
+                                <td>
+                                    <a class="btn btn-success p-2" href="{% url 'editar_producto' product.codigo_producto %}"
+                                       title="Editar"
+                                    > 
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button title="Borrar"class="btn btn-danger del p-2" href="{% url 'delete_producto' product.codigo_producto %}">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
                             </tr>
                             {% endfor%}
                         </tbody>
@@ -56,5 +71,70 @@
 <script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
-<script>$('#Table').DataTable()</script>
+<script type="text/javascript" src="{% static "js/plugins/sweetalert.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
+<script>
+    $('.del').click(function(){
+        var href = $(this).attr('href');
+      	swal({
+      		title: "¿Está seguro de eliminar este Producto?",
+      		text: "",
+      		type: "warning",
+      		showCancelButton: true,
+      		confirmButtonText: "Si, eliminar!",
+      		cancelButtonText: "Cancelar!",
+      		closeOnConfirm: false,
+      		closeOnCancel: false
+      	}, function(isConfirm) {
+      		if (isConfirm) {
+      			swal({
+                      title: "Eliminado",
+                      type: "success"
+                  }, function(){
+                      window.location.href=href;
+                  });
+      		} else {
+      			swal("Cancelado", "", "error");
+      		}
+      	});
+    });
+
+    $('#Table').DataTable();
+
+    {% if messages %}
+        {% for message in messages %}
+        setTimeout(function(){ 
+            $.notify({
+      		    title: "",
+      		    message: "{{ message }}",
+      		    icon: 'fa fa-check' 
+      	    },{
+                type: "{{ message.tags}}",
+                allow_dismiss: true,
+                newest_on_top: false,
+                showProgressbar: false,
+                placement: {
+                    from: "top",
+                    align: "right"
+                },
+                offset: 20,
+                spacing: 10,
+                z_index: 50000,
+                delay: 3000,
+                timer: 2000,
+                url_target: '_blank',
+                mouse_over: null,
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+                onShow: null,
+                onShown: null,
+                onClose: null,
+                onClosed: null,
+      	    });
+        }, 1000);
+        {% endfor %}
+    {% endif %}
+</script>
 {% endblock %}

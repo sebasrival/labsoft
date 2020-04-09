@@ -68,6 +68,7 @@
 {% block scripts %}
 <script type="text/javascript" src="{% static "js/plugins/formset/jquery.formset.js" %}"></script>
 <script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/select2.min.js" %}"></script>
 <!--Lenguage español-->
 <script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.es.js" %}"></script>
 <script type="text/javascript">
@@ -77,8 +78,8 @@
             prefix: '{{ formset.prefix }}',
             addText: '+',
             deleteText: 'x',
-            addCssClass: 'btn btn-success',
-            deleteCssClass: 'btn btn-danger h-25 mt-4'
+            addCssClass: 'btn btn-success btn-select',
+            deleteCssClass: 'btn btn-danger h-25 mt-4',
         });
     });
     /*Date Picker*/
@@ -87,7 +88,12 @@
             autoclose: true,
             todayHighlight: true,
             language:'es'
-        });
+    });
+
+    $(document).ready(function() {
+            // id establecido en forms de pedidos y el productos
+            $('#cliente_select').select2();
+    });
 </script>
 
 {% endblock %}

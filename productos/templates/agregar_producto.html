@@ -10,6 +10,10 @@
 {% include 'home/sidebar.html' %}
 {% endblock sidebar %}
 
+{% block css %}
+<!-- Animacion CSS notify-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+{% endblock css %}
 
 {% block content %}
 <div class="container-fluid">
@@ -50,7 +54,7 @@
                         </div>
                         <div class="tile-footer">
                             <button class="btn btn-primary" type="submit" id="register"><i
-                                    class="fa fa-fw fa-lg fa-check-circle"></i>Register</button>&nbsp;&nbsp;&nbsp;<a
+                                    class="fa fa-fw fa-lg fa-check-circle"></i>Registrar</button>&nbsp;&nbsp;&nbsp;<a
                                 class="btn btn-secondary" href="{% url 'index' %}"><i
                                     class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
                         </div>
@@ -61,4 +65,44 @@
         </div>
     </div>
     {% endblock%}
-        
+
+{% block scripts %}
+<script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
+<script>
+    {% if messages %}
+            {% for message in messages %}
+                setTimeout(function(){ 
+                    $.notify({
+                        title: "",
+                        message: "{{ message }}",
+                        icon: 'fa fa-check' 
+                    },{
+                        type: "{{ message.tags}}",
+                        allow_dismiss: true,
+                        newest_on_top: false,
+                        showProgressbar: false,
+                        placement: {
+                            from: "top",
+                            align: "right"
+                        },
+                        offset: 20,
+                        spacing: 10,
+                        z_index: 50000,
+                        delay: 3000,
+                        timer: 2000,
+                        url_target: '_blank',
+                        mouse_over: null,
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        onShow: null,
+                        onShown: null,
+                        onClose: null,
+                        onClosed: null,
+                    });
+                }, 1000);
+            {% endfor %}
+    {% endif %}
+</script>
+{% endblock scripts %}

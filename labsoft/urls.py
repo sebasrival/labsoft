@@ -18,7 +18,7 @@ from django.urls import path
 from .views import home, logoutUser
 from django.contrib.auth import views as auth_views
 from clientes.views import agregar_cliente, lista_cliente, editar_cliente, delete_cliente
-from productos.views import agregar_producto, lista_producto
+from productos.views import agregar_producto, lista_producto, editar_producto, delete_producto
 from pedidos.views import agregar_pedido
 
 urlpatterns = [
@@ -34,6 +34,8 @@ urlpatterns = [
     # Productos
     path('agregar_producto/', agregar_producto, name="add_producto"),
     path('lista_producto/', lista_producto, name="lista_producto"),
+    path('editar_producto/<id>/', editar_producto, name="editar_producto"),
+    path('eliminar_producto/<id>/', delete_producto, name="delete_producto"),
     # pedidos
     path('agregar_pedido/', agregar_pedido, name='add_pedido')
 ]

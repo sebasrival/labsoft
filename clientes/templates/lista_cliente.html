@@ -12,6 +12,7 @@
 {% endblock sidebar %}
 
 {% block css %}
+<!-- Animacion CSS notify-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 {% endblock css %}
 
@@ -63,10 +64,12 @@
                                 <td>{{ client.descuento }}</td>
                                 <td>{{ client.bonificacion }}</td>
                                 <td>
-                                    <a class="btn btn-success p-2" href="{% url 'editar_cliente' client.id %}"> 
+                                    <a class="btn btn-success p-2" href="{% url 'editar_cliente' client.id %}"
+                                       title="Editar"
+                                    > 
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <button class="btn btn-danger del p-2" href="{% url 'delete_cliente' client.id %}">
+                                    <button title="Borrar"class="btn btn-danger del p-2" href="{% url 'delete_cliente' client.id %}">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </td>
