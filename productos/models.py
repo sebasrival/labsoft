@@ -5,9 +5,9 @@ class Producto (models.Model):
     codigo_producto = models.CharField(max_length=50, primary_key=True)
     nombre = models.CharField(max_length=100, null=False)
     descripcion = models.TextField(blank=True)
-    volumen = models.FloatField(blank=True)
+    volumen = models.FloatField(blank=True, null=True)
     color = models.CharField(max_length=10, blank=True)
-    precio = models.FloatField(blank=True)
+    precio = models.FloatField()
     cantidad_neto = models.FloatField(blank=True)
 
     def __str__(self):
