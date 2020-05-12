@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block navbar %}
+{% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+
+{% block sidebar %}
+{% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+{% endblock css %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">Editar Cliente</h3>
+                <!--
+                    <div id="message_id">
+                     {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                     {% endif %}
+                </div>
+                -->
+
+                <div class="tile-body">
+                    <form method="POST">
+                        {% csrf_token%}
+                        <div class="form-group">
+                            <label class="control-label">Ruc</label>
+                            {{form.ruc}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Cedula</label>
+                            {{form.cedula}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Nombre</label>
+                            {{form.nombre}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Apellido</label>
+                            {{form.apellido}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Razon Social</label>
+                            {{form.razon_social}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Telefono</label>
+                            {{form.telefono}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Email</label>
+                            {{form.email}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Dirección</label>
+                            {{form.direccion}}
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-8 col-md-offset-3">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        {{form.es_entidad}} ¿Es entidad ? (Empresa)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Descuento</label>
+                            {{form.descuento}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Bonificación</label>
+                            {{form.bonificacion}}
+                        </div>
+                        <div class="tile-footer">
+                            <button class="btn btn-primary" type="submit"><i
+                                    class="fa fa-fw fa-lg fa-check-circle"></i>Registrar</button>&nbsp;&nbsp;&nbsp;<a
+                                class="btn btn-secondary" href="{% url 'index' %}"><i class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
+                        </div>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    {% endblock%}
+
+    {% block scripts %}
+    <script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
+    <script>
+        
+        /*
+            var message_ele = document.getElementById("message_id");
+            setTimeout(function(){ 
+                message_ele.style.display = "none"; 
+            }, 3000);
+        */
+        {% if messages %}
+            {% for message in messages %}
+                setTimeout(function(){ 
+                    $.notify({
+                        title: "",
+                        message: "{{ message }}",
+                        icon: 'fa fa-check' 
+                    },{
+                        type: "{{ message.tags}}",
+                        allow_dismiss: true,
+                        newest_on_top: false,
+                        showProgressbar: false,
+                        placement: {
+                            from: "top",
+                            align: "right"
+                        },
+                        offset: 20,
+                        spacing: 10,
+                        z_index: 50000,
+                        delay: 3000,
+                        timer: 2000,
+                        url_target: '_blank',
+                        mouse_over: null,
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        onShow: null,
+                        onShown: null,
+                        onClose: null,
+                        onClosed: null,
+                    });
+                }, 1000);
+            {% endfor %}
+    {% endif %}
+
+    </script>
+    {% endblock%}
+    
