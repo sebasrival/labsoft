@@ -15,7 +15,7 @@ def agregar_cliente(request):
         if form.is_valid():
             form.save()
             messages.success(request, "El cliente ha sido agregado correctamente!")
-            return redirect('/agregar_cliente')
+            return redirect('/lista_cliente')
 
     context = {'form':form}
     return render(request, 'agregar_cliente.html', context)
@@ -27,6 +27,9 @@ def editar_cliente(request, id):
     if request.method =='POST':
         print("Imprimiendo POST: ", request.POST)
         form = ClienteForm(request.POST, instance=cliente)
+        if not form.has_changed():
+            messages.info(request,"No ha hecho ningun cambio")
+            return redirect('/lista_cliente')
         if form.is_valid():
             cliente = form.save(commit=False)
             cliente.save()

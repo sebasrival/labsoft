@@ -6,6 +6,12 @@
 {% include 'home/navbar.html' %}
 {% endblock navbar %}
 
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i> Producción</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
 
 {% block sidebar %}
 {% include 'home/sidebar.html' %}
@@ -23,6 +29,7 @@
             <div class="tile-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered" id="Table">
+                    <h3 class="tile-title">Lista de Lineas de Productos</h3>
                         <thead>
                             <tr>
                                 <th>Cod. Producto</th>
@@ -103,35 +110,19 @@
 
     {% if messages %}
         {% for message in messages %}
-        setTimeout(function(){ 
+        setTimeout(function(){
             $.notify({
       		    title: "",
       		    message: "{{ message }}",
-      		    icon: 'fa fa-check' 
+            {% if message.tags == 'success' %}
+      		    icon: 'fa fa-check'
+            {% endif %}
       	    },{
                 type: "{{ message.tags}}",
-                allow_dismiss: true,
-                newest_on_top: false,
-                showProgressbar: false,
                 placement: {
                     from: "top",
-                    align: "right"
-                },
-                offset: 20,
-                spacing: 10,
-                z_index: 50000,
-                delay: 3000,
-                timer: 2000,
-                url_target: '_blank',
-                mouse_over: null,
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
-                onShow: null,
-                onShown: null,
-                onClose: null,
-                onClosed: null,
+                    align: "center"
+                }
       	    });
         }, 1000);
         {% endfor %}

@@ -26,6 +26,9 @@ def editar_producto(request, id):
     if request.method =='POST':
         print("Imprimiendo POST: ", request.POST)
         form = ProductoForm(request.POST, instance=producto)
+        if not form.has_changed():
+            messages.info(request,"No ha hecho ningun cambio")
+            return redirect('/lista_producto')
         if form.is_valid():
             producto = form.save(commit=False)
             producto.save()

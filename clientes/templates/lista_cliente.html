@@ -6,6 +6,12 @@
 {% include 'home/navbar.html' %}
 {% endblock navbar %}
 
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i> Clientes</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
 
 {% block sidebar %}
 {% include 'home/sidebar.html' %}
@@ -34,6 +40,7 @@
             </div>
             -->
                 <div class="table-responsive">
+                <h3 class="tile-title">Lista de Clientes</h3>
                     <table class="table table-hover table-bordered" id="Table">
                         <thead>
                             <tr>
@@ -65,11 +72,10 @@
                                 <td>{{ client.bonificacion }}</td>
                                 <td>
                                     <a class="btn btn-success p-2" href="{% url 'editar_cliente' client.id %}"
-                                       title="Editar"
-                                    > 
+                                       title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <button title="Borrar"class="btn btn-danger del p-2" href="{% url 'delete_cliente' client.id %}">
+                                    <button title="Borrar" class="btn btn-danger del p-2" href="{% url 'delete_cliente' client.id %}">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </td>
@@ -94,8 +100,8 @@
 
 <script> 
     $('.del').click(function(){
-        var href = $(this).attr('href');
-      	swal({
+        const href = $(this).attr('href');
+        swal({
       		title: "¿Está seguro de eliminar este cliente?",
       		text: "",
       		type: "warning",
@@ -134,7 +140,9 @@
             $.notify({
       		    title: "",
       		    message: "{{ message }}",
-      		    icon: 'fa fa-check' 
+            {% if message.tags == 'success' %}
+                icon: 'fa fa-check'
+            {% endif %}
       	    },{
                 type: "{{ message.tags}}",
                 allow_dismiss: true,
@@ -142,7 +150,7 @@
                 showProgressbar: false,
                 placement: {
                     from: "top",
-                    align: "right"
+                    align: "center"
                 },
                 offset: 20,
                 spacing: 10,
