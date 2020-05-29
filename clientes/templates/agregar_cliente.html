@@ -45,12 +45,8 @@
                         <form method="POST">
                             {% csrf_token %}
                             <div class="form-group">
-                                <label class="control-label">Ruc</label>
-                                {{ form.ruc }}
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label">Cedula</label>
-                                {{ form.cedula }}
+                                <label class="control-label">Numero de Documento</label>
+                                {{ form.id_documento }}
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Nombre</label>

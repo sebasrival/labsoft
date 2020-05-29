@@ -14,7 +14,7 @@ def agregar_producto(request):
         if form.is_valid():
             form.save()
             messages.success(request, "El producto ha sido creado correctamente!")
-            return redirect('/agregar_producto')
+            return redirect('/lista_producto')
 
     context = {'form':form}
     return render(request, 'agregar_producto.html', context)

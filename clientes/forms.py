@@ -6,9 +6,8 @@ class ClienteForm(forms.ModelForm):
         model = Cliente
         fields = '__all__'
         widgets = {
-            'ruc' : forms.TextInput(attrs={'class': 'form-control'}),
+            'id_documento' : forms.TextInput(attrs={'class': 'form-control'}),
             'es_entidad': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'cedula' : forms.TextInput(attrs={'class': 'form-control'}),
             'nombre' : forms.TextInput(attrs={'class': 'form-control'}),
             'apellido' : forms.TextInput(attrs={'class': 'form-control'}),
             'razon_social' : forms.TextInput(attrs={'class': 'form-control'}),

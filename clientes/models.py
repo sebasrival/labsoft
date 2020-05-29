@@ -2,8 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Cliente (models.Model):
-    ruc = models.CharField(max_length=200, unique=True)
-    cedula = models.CharField(max_length=200, unique=True, blank=True)
+    id_documento = models.CharField(max_length=200, unique=True)
     nombre = models.CharField(max_length=50, blank=True)
     apellido = models.CharField(max_length=50, blank=True)
     razon_social = models.CharField(max_length=100, blank=True)
@@ -15,10 +14,8 @@ class Cliente (models.Model):
     direccion = models.CharField(max_length=150, blank=True)
 
     def __str__(self):
-        if not self.es_entidad:
-            return '%s - %s - %s' % (self.cedula, self.nombre, self.apellido)
-        else:
-            return '%s - %s' % (self.ruc, self.razon_social)
+            return '%s - %s - %s' % (self.id_documento, self.nombre, self.apellido)
+
 
     class Meta():
         verbose_name = "Cliente"
