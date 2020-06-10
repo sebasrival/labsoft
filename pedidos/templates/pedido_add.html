@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block navbar %}
+    {% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+{% block head %}
+    <link type="text/css" href="{% static "lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.css" %}"
+          rel="stylesheet"/>
+
+{% endblock %}
+
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i> Pedidos</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block content %}
+    <div class="tile mb-4">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-header">
+                    <h5 class="mb-3 line-head" id="typography">Realizar Pedido</h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="card">
+                    <h6 class="card-header">Pedidos</h6>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label> <strong> Buscar Producto:</strong> </label>
+                            <span class="input-group-append">
+                                <select class="form-control" id="search"></select>
+                            </span>
+                        </div>
+                        <div class="table-responsive">
+                            <button type="button" class="mb-2 py-0 btn btn-danger btn-sm btnRemoveAll"
+                                    style="height: 20px; align-content: center">
+                                <label>Eliminar todo</label>
+                            </button>
+                            <table class="table table-bordered"
+                                   id="tblPedidos" style="width: 100%;">
+                                <thead>
+                                <tr>
+                                    <td>Cod</td>
+                                    <td>Producto</td>
+                                    <td>Descripción</td>
+                                    <td>Precio</td>
+                                    <td>Cantidad</td>
+                                    <td>SubTotal</td>
+                                    <td>Eliminar</td>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card">
+                    <h6 class="card-header">Datos Pedidos</h6>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label><strong>Cliente:</strong></label>
+                            {{ form.cliente }}
+                        </div>
+                        <fieldset disabled>
+                            <div class="form-group">
+                                <label><strong>Fecha Pedido: </strong></label>
+                                {{ form.fecha_pedido }}
+                            </div>
+                        </fieldset>
+                        <div class="form-group  ">
+                            <label><strong>Fecha Entrega:</strong></label>
+                            {{ form.fecha_entrega }}
+                        </div>
+                        <fieldset disabled>
+                            <div class="form-group">
+                                <label><strong>Total a pagar sin IVA: </strong></label>
+                                <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text" style="font-weight: bold;">$</div>
+                                    </div>
+                                    <input type="text" class="form-control" id="subtotal" style="font-weight: bold;">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tile-footer">
+            <a class="btn btn-primary" style="color: white"><i
+                    class="fa fa-fw fa-lg fa-check-circle"></i>Registrar
+            </a>&nbsp;&nbsp;&nbsp;
+            <a class="btn btn-secondary" href="{% url 'index' %}">
+                <i class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/select2.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
+    <script type="text/javascript" src="{% static "js/plugins/sweetalert.min.js" %}"></script>
+    <script type="text/javascript"
+            src="{% static "lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js" %} "></script>
+    <!--Lenguage español-->
+    <script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.es.js" %}"></script>
+    <script type="text/javascript" src= {% static "js/functions/functions.js " %}></script>
+    <script type="text/javascript" src= {% static "js/pedidos/forms.js" %}></script>
+    <script type="text/javascript">
+        /*Date Picker*/
+        $('#datePick').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            todayHighlight: true,
+            language: 'es',
+            startDate: new Date(),
+        });
+
+        $('#subtotal').val(0.00);
+
+        // id establecido en forms de pedidos y el productos
+        $('#cliente_select').select2({
+            placeholder: 'Seleccione un Cliente',
+            language: "es",
+        });
+
+        //dataTable
+        $('#tblPedidos').DataTable({
+            ordering: false,
+        });
+
+        //busqueda de productos
+        $('#search').select2({
+            ajax: {
+                type: 'POST',
+                url: '/product/search/',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        term: params.term,
+                        action: 'search_products'
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    }
+                },
+            },
+            minimumInputLength: 1,
+            placeholder: 'Ingrese una descripción',
+            language: {
+                inputTooShort: function () {
+                    return '';
+                },
+                searching: function () {
+                    return 'Buscando...'
+                }
+            }
+        });
+    </script>
+{% endblock %}

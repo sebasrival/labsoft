@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block navbar %}
-{% include 'home/navbar.html' %}
+    {% include 'home/navbar.html' %}
 {% endblock navbar %}
 
 {% block head-app %}
@@ -14,21 +14,21 @@
 {% endblock %}
 
 {% block sidebar %}
-{% include 'home/sidebar.html' %}
+    {% include 'home/sidebar.html' %}
 {% endblock sidebar %}
 
 {% block css %}
-<!-- Animacion CSS notify-->
+    <!-- Animacion CSS notify-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 {% endblock css %}
 
 
 {% block content %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="tile">
-            <div class="tile-body">
-            <!--
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <!--
                 <div id="message_id">
                 {% if messages %}
                     {% for message in messages %}
@@ -39,10 +39,10 @@
                 {% endif %}
             </div>
             -->
-                <div class="table-responsive">
-                <h3 class="tile-title">Lista de Clientes</h3>
-                    <table class="table table-hover table-bordered" id="Table">
-                        <thead>
+                    <div class="table-responsive">
+                        <h3 class="tile-title">Lista de Clientes</h3>
+                        <table class="table table-hover table-bordered" id="Table">
+                            <thead>
                             <tr>
                                 <th>Nro. Doc.</th>
                                 <th>Nombre</th>
@@ -55,120 +55,121 @@
                                 <th>Bonificación</th>
                                 <th>Acciones</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             {% for client in clientes %}
-                            <tr>
-                                <td>{{ client.id_documento }}</td>
-                                <td>{{ client.nombre }}</td>
-                                <td>{{ client.apellido }}</td>
-                                <td>{{ client.razon_social }}</td>
-                                <td>{{ client.telefono }}</td>
-                                <td>{{ client.email }}</td>
-                                <td>{{ client.direccion }}</td>
-                                <td>{{ client.descuento }}</td>
-                                <td>{{ client.bonificacion }}</td>
-                                <td>
-                                    <a class="btn btn-success p-2" href="{% url 'editar_cliente' client.id %}"
-                                       title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button title="Borrar" class="btn btn-danger del p-2" href="{% url 'delete_cliente' client.id %}">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            {% endfor%}
-                        </tbody>
-                    </table>
+                                <tr>
+                                    <td>{{ client.id_documento }}</td>
+                                    <td>{{ client.nombre }}</td>
+                                    <td>{{ client.apellido }}</td>
+                                    <td>{{ client.razon_social }}</td>
+                                    <td>{{ client.telefono }}</td>
+                                    <td>{{ client.email }}</td>
+                                    <td>{{ client.direccion }}</td>
+                                    <td>{{ client.descuento }}</td>
+                                    <td>{{ client.bonificacion }}</td>
+                                    <td>
+                                        <a class="btn btn-success p-2" href="{% url 'editar_cliente' client.id %}"
+                                           title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button title="Borrar" class="btn btn-danger del p-2"
+                                                href="{% url 'delete_cliente' client.id %}">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock content %}
 
 
 {% block scripts %}
-<script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
-<script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
-<script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
-<script type="text/javascript" src="{% static "js/plugins/sweetalert.min.js" %}"></script>
-<script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
+    <script type="text/javascript" src="{% static "js/plugins/sweetalert.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
 
-<script> 
-    $('.del').click(function(){
-        const href = $(this).attr('href');
-        swal({
-      		title: "¿Está seguro de eliminar este cliente?",
-      		text: "",
-      		type: "warning",
-      		showCancelButton: true,
-      		confirmButtonText: "Si, eliminar!",
-      		cancelButtonText: "Cancelar!",
-      		closeOnConfirm: false,
-      		closeOnCancel: false
-      	}, function(isConfirm) {
-      		if (isConfirm) {
-      			swal({
-                      title: "Eliminado",
-                      type: "success"
-                  }, function(){
-                      window.location.href=href;
-                  });
-      		} else {
-      			swal("Cancelado", "", "error");
-      		}
-      	});
-    });
+    <script>
+        $('.del').click(function () {
+            const href = $(this).attr('href');
+            swal({
+                title: "¿Está seguro de eliminar este cliente?",
+                text: "",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Si, eliminar!",
+                cancelButtonText: "Cancelar!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    swal({
+                        title: "Eliminado",
+                        type: "success"
+                    }, function () {
+                        window.location.href = href;
+                    });
+                } else {
+                    swal("Cancelado", "", "error");
+                }
+            });
+        });
 
-    $('#Table').DataTable();
+        $('#Table').DataTable();
 
-    /*  Notificacion django messages
-        var message_ele = document.getElementById("message_id");
-    
-        setTimeout(function(){ 
-            message_ele.style.display = "none"; 
-        }, 3000);
-    */
-    
-    {% if messages %}
-        {% for message in messages %}
-        setTimeout(function(){ 
-            $.notify({
-      		    title: "",
-      		    message: "{{ message }}",
-            {% if message.tags == 'success' %}
-                icon: 'fa fa-check'
-            {% endif %}
-      	    },{
-                type: "{{ message.tags}}",
-                allow_dismiss: true,
-                newest_on_top: false,
-                showProgressbar: false,
-                placement: {
-                    from: "top",
-                    align: "center"
-                },
-                offset: 20,
-                spacing: 10,
-                z_index: 50000,
-                delay: 3000,
-                timer: 2000,
-                url_target: '_blank',
-                mouse_over: null,
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
-                onShow: null,
-                onShown: null,
-                onClose: null,
-                onClosed: null,
-      	    });
-        }, 1000);
-        {% endfor %}
-    {% endif %}
-</script>
+        /*  Notificacion django messages
+            var message_ele = document.getElementById("message_id");
+
+            setTimeout(function(){
+                message_ele.style.display = "none";
+            }, 3000);
+        */
+
+        {% if messages %}
+            {% for message in messages %}
+                setTimeout(function () {
+                    $.notify({
+                        title: "",
+                        message: "{{ message }}",
+                        {% if message.tags == 'success' %}
+                            icon: 'fa fa-check'
+                        {% endif %}
+                    }, {
+                        type: "{{ message.tags}}",
+                        allow_dismiss: true,
+                        newest_on_top: false,
+                        showProgressbar: false,
+                        placement: {
+                            from: "top",
+                            align: "center"
+                        },
+                        offset: 20,
+                        spacing: 10,
+                        z_index: 50000,
+                        delay: 3000,
+                        timer: 2000,
+                        url_target: '_blank',
+                        mouse_over: null,
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        onShow: null,
+                        onShown: null,
+                        onClose: null,
+                        onClosed: null,
+                    });
+                }, 1000);
+            {% endfor %}
+        {% endif %}
+    </script>
 {% endblock %}
 

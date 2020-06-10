@@ -15,8 +15,7 @@ class ClienteAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields = ['id_documento', 'nombre', 'razon_social']
     list_display = ('id_documento','nombre', 'apellido', 'email',
                     'razon_social', 'telefono', 'descuento', 'bonificacion')
-    list_display_links = ('id_documento',)
-    resource_class = ClienteResource
+    list_display_links = ('id_documento',); resource_class = ClienteResource
 
 
 # Register your models here.

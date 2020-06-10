@@ -14,7 +14,10 @@ class Cliente (models.Model):
     direccion = models.CharField(max_length=150, blank=True)
 
     def __str__(self):
-            return '%s - %s - %s' % (self.id_documento, self.nombre, self.apellido)
+        if self.es_entidad:
+            return '%s' % (self.razon_social)
+        else:
+            return '%s %s' % (self.nombre, self.apellido)
 
 
     class Meta():
