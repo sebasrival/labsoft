@@ -81,39 +81,58 @@ var pedidos = {
     }
 }
 
-$('#search').on('select2:select', function (e) {
-    var data = e.params.data;
-    data['cantidad'] = 1;
-    data['subtotal'] = 0.00;
-    //se agrega los datos a la estructura
-    pedidos.add(data)
-    // borra luego de la seleccion
-    $(this).val('').trigger('change.select2');
-});
+$(function () {
+    $('#search').on('select2:select', function (e) {
+        var data = e.params.data;
+        data['cantidad'] = 1;
+        data['subtotal'] = 0.00;
+        //se agrega los datos a la estructura
+        pedidos.add(data)
+        // borra luego de la seleccion
+        $(this).val('').trigger('change.select2');
+    });
 
-$('.btnRemoveAll').on('click', function () {
-    if (pedidos.items.products.length === 0) return false;
-    alert_delete('Notificación', '¿Estás seguro de eliminar todos los detalles del pedido', function () {
-        pedidos.items.products = [];
+    $('.btnRemoveAll').on('click', function () {
+        if (pedidos.items.products.length === 0) return false;
+        alert_delete('Notificación', '¿Estás seguro de eliminar todos los detalles del pedido', function () {
+            pedidos.items.products = [];
+            pedidos.list();
+        });
+    });
+
+
+    $('#tblPedidos').on('click', 'a[rel="remove"]', function () {
+        var tr = tblPedidos.cell($(this).closest('td, li')).index();
+        pedidos.items.products.splice(tr.row, 1);
         pedidos.list();
+    }).on('change', 'input[name="cant"]', function () {
+        console.clear();
+        var cant = parseInt($(this).val());
+        var tr = tblPedidos.cell($(this).closest('td, li')).index();
+        pedidos.items.products[tr.row].cantidad = cant;
+        pedidos.calc_invoice();
+        $('td:eq(5)', tblPedidos.row(tr.row).node()).html('$' + pedidos.items.products[tr.row].subtotal.toFixed(2));
+        console.log(cant);
+    });
+
+    $('form').on('submit', function (e) {
+        e.preventDefault();
+        pedidos.items.cliente = $('select[name="cliente"]').val();
+        console.log('Cliente: ' + pedidos.items.cliente)
+        pedidos.items.fecha_entrega = $('input[name="fecha_entrega"]').val();
+        console.log('Fecha entrega: ' + pedidos.items.fecha_entrega);
+        pedidos.items.fecha_pedido = $('input[name="fecha_pedido"]').val();
+        console.log(' Fecha pedido: ' +  pedidos.items.fecha_pedido);
+        var parameters = new FormData();
+        parameters.append('pedidos', JSON.stringify(pedidos.items));4
+        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+        console.log(csrf);
+        parameters.append('csrfmiddlewaretoken', csrf);
+        submit_with_ajax(window.location.pathname, 'Noticicación', '¿Desea registrar este pedido?', parameters, function () {
+            location.href = "/";
+        });
     });
 });
-
-
-$('#tblPedidos').on('click', 'a[rel="remove"]', function () {
-    var tr = tblPedidos.cell($(this).closest('td, li')).index();
-    pedidos.items.products.splice(tr.row, 1);
-    pedidos.list();
-}).on('change', 'input[name="cant"]', function () {
-    console.clear();
-    var cant = parseInt($(this).val());
-    var tr = tblPedidos.cell($(this).closest('td, li')).index();
-    pedidos.items.products[tr.row].cantidad = cant;
-    pedidos.calc_invoice();
-    $('td:eq(5)', tblPedidos.row(tr.row).node()).html('$' + pedidos.items.products[tr.row].subtotal.toFixed(2));
-    console.log(cant);
-});
-
 
 // validar entrada
 function validate_form_text(type, event, regex) {

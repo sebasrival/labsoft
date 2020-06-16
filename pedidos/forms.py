@@ -19,7 +19,7 @@ class PedidoForm(ModelForm):
                                               'autocomplete': 'off'}),
             'fecha_pedido': DateInput(attrs={
                 'class': 'form-control',
-                'value': datetime.now(),
+                'value': datetime.now().strftime('%d/%m/%Y'),
             })
         }
 

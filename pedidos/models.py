@@ -1,4 +1,4 @@
-from datetime import datetime
+#from datetime import datetime
 
 from django.db import models
 
@@ -15,7 +15,7 @@ ESTADOS_PEDIDOS = [
 # Create your models here.
 class Pedido(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
-    fecha_pedido = models.DateTimeField(default=datetime.now)
+    fecha_pedido = models.DateField()
     fecha_entrega = models.DateField()
     estado = models.CharField(max_length=15, choices=ESTADOS_PEDIDOS, default=ESTADOS_PEDIDOS[0])
 
