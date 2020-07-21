@@ -43,3 +43,9 @@ def agregar_pedido(request):
 
     context = {'form': form}
     return render(request, 'pedido_add.html', context)
+
+@login_required()
+def list_pedido(request):
+    pedidos = Pedido.objects.all()
+    context = { 'pedidos': pedidos }
+    return render(request, 'lista_pedido.html',context)
