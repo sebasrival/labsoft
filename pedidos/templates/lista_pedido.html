@@ -48,6 +48,7 @@
                                 <th>Fecha de Pedido</th>
                                 <th>Fecha de Entrega</th>
                                 <th>Estado</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -57,13 +58,13 @@
                                     <td>{{  pedido.fecha_pedido }}</td>
                                     <td>{{  pedido.fecha_entrega }}</td>
                                     <td>{{  pedido.estado }}</td>
-                                    <td>
-                                        <a class="btn btn-success p-2" href=""
-                                           title="Editar">
+                                    <td class="m-0 px-2 py-2">
+                                        <a class="btn btn-success p-2"
+                                           title="Editar" href="{% url 'editar_pedido' pedido.id%}">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <button title="Borrar" class="btn btn-danger del p-2"
-                                                href="">
+                                                href="{% url 'delete_pedido' pedido.id %}">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </td>

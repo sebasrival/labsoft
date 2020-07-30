@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="page-header">
-                        <h5 class="mb-3 line-head" id="typography">Realizar Pedido</h5>
+                        <h5 class="mb-3 line-head" id="typography">Editar Pedido</h5>
                     </div>
                 </div>
             </div>
@@ -103,7 +103,7 @@
             </div>
             <div class="tile-footer">
                 <button type="submit" class="btn btn-primary" style="color: white"><i
-                        class="fa fa-fw fa-lg fa-check-circle"></i>Registrar
+                        class="fa fa-fw fa-lg fa-check-circle"></i>Actualizar
                 </button>&nbsp;&nbsp;&nbsp;
                 <a class="btn btn-secondary" href="{% url 'index' %}">
                     <i class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
@@ -123,8 +123,9 @@
             src="{% static "lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js" %} "></script>
     <!--Lenguage español-->
     <script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.es.js" %}"></script>
-    <script type="text/javascript" src= {% static "js/functions/functions.js " %}></script>
-    <script type="text/javascript" src= {% static "js/pedidos/forms.js" %}></script>
+    <script type="text/javascript" src= "{% static "js/functions/functions.js " %}"></script>
+    <script type="text/javascript" src= "{% static "js/pedidos/forms.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/pedidos/form_submit.js" %}"></script>
     <script type="text/javascript">
         /*Date Picker*/
         $('#datePick').datepicker({
@@ -177,5 +178,8 @@
                 }
             }
         });
+        pedidos.items.products = {{ det|safe}};
+        console.log(pedidos.items.products)
+        pedidos.list();
     </script>
 {% endblock %}

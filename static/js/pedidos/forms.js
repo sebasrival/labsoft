@@ -100,7 +100,6 @@ $(function () {
         });
     });
 
-
     $('#tblPedidos').on('click', 'a[rel="remove"]', function () {
         var tr = tblPedidos.cell($(this).closest('td, li')).index();
         pedidos.items.products.splice(tr.row, 1);
@@ -124,12 +123,13 @@ $(function () {
         pedidos.items.fecha_pedido = $('input[name="fecha_pedido"]').val();
         console.log(' Fecha pedido: ' +  pedidos.items.fecha_pedido);
         var parameters = new FormData();
-        parameters.append('pedidos', JSON.stringify(pedidos.items));4
+        parameters.append('pedidos', JSON.stringify(pedidos.items));
         var csrf = $('input[name="csrfmiddlewaretoken"]').val();
         console.log(csrf);
         parameters.append('csrfmiddlewaretoken', csrf);
+        console.log(pedidos.items);
         submit_with_ajax(window.location.pathname, 'Noticicación', '¿Desea registrar este pedido?', parameters, function () {
-            location.href = "/";
+            location.href = "/pedido/list/";
         });
     });
 });
