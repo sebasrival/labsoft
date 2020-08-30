@@ -1,5 +1,3 @@
-#from datetime import datetime
-
 from django.db import models
 
 from clientes.models import Cliente
@@ -22,6 +20,7 @@ class Pedido(models.Model):
     class Meta:
         verbose_name = 'Pedido'
         verbose_name_plural = 'Pedidos'
+        ordering = ['id']
 
     def __str__(self):
         return 'Nro Pedido: %s - Cliente: %s' % (self.id, self.cliente)
@@ -31,3 +30,6 @@ class PedidoDetalle(models.Model):
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField(blank=False)
+
+    class Meta:
+        ordering = ['id']

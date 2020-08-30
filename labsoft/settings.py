@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'import_export',
     'clientes',
     'productos',
-    'pedidos'
+    'pedidos',
+    'ventas',
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -79,7 +81,7 @@ LOGIN_URL='/login'
 
 LOGOUT_REDIRECT_URL = '/login'
 
-
+AUTH_USER_MODEL = 'accounts.User'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -132,9 +134,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, "static"),]
+
 MEDIA_URL = '/media/'
-MEDIA_ROOT = 'media'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Config Messages Tag
 from django.contrib.messages import constants as messages

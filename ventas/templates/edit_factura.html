@@ -13,7 +13,7 @@
 
 {% block head-app %}
     <div>
-        <h1><i class="fas fa-atom"> </i> Pedidos</h1>
+        <h1><i class="fas fa-atom"> </i> Facturación</h1>
         <p>Sistema de Gestion - Labsoft</p>
     </div>
 {% endblock %}
@@ -29,14 +29,14 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="page-header">
-                        <h5 class="mb-3 line-head" id="typography">Realizar Pedido</h5>
+                        <h5 class="mb-3 line-head" id="typography">Editar Factura</h5>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-9">
                     <div class="card">
-                        <h6 class="card-header">Pedidos</h6>
+                        <h6 class="card-header">Factura</h6>
                         <div class="card-body">
                             <div class="form-group">
                                 <label> <strong> Buscar Producto:</strong> </label>
@@ -50,11 +50,10 @@
                                     <label>Eliminar todo</label>
                                 </button>
                                 <table class="table table-bordered"
-                                       id="tblPedidos" style="width: 100%;">
+                                       id="tblFactura" style="width: 100%;">
                                     <thead>
                                     <tr>
                                         <td>Cod</td>
-                                        <td>Producto</td>
                                         <td>Descripción</td>
                                         <td>Precio</td>
                                         <td>Cantidad</td>
@@ -69,30 +68,40 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="card">
-                        <h6 class="card-header">Datos Pedidos</h6>
+                        <h6 class="card-header">Datos Factura</h6>
                         <div class="card-body">
+                            <div class="form-group">
+                                <label><strong>Número Factura:</strong></label>
+                                {{ form.nro_factura }}
+                            </div>
                             <div class="form-group">
                                 <label><strong>Cliente:</strong></label>
                                 {{ form.cliente }}
                             </div>
-                            <fieldset disabled>
-                                <div class="form-group">
-                                    <label><strong>Fecha Pedido: </strong></label>
-                                    {{ form.fecha_pedido }}
-                                </div>
-                            </fieldset>
                             <div class="form-group">
-                                <label><strong>Fecha Entrega:</strong></label>
-                                {{ form.fecha_entrega }}
+                                <label><strong>Fecha Emision:</strong></label>
+                                {{ form.fecha_emision }}
                             </div>
                             <fieldset disabled>
                                 <div class="form-group">
-                                    <label><strong>Total a pagar sin IVA: </strong></label>
+                                    <label><strong>Total Iva: </strong></label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
-                                            <div class="input-group-text" style="font-weight: bold;">$</div>
+                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
                                         </div>
-                                        <input type="text" class="form-control" id="subtotal"
+                                        <input type="text" class="form-control" id="totalIva"
+                                               style="font-weight: bold;">
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <label><strong>Total a pagar IVA incluído: </strong></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
+                                        </div>
+                                        <input type="text" class="form-control" id="total"
                                                style="font-weight: bold;">
                                     </div>
                                 </div>
@@ -103,10 +112,10 @@
             </div>
             <div class="tile-footer">
                 <button type="submit" class="btn btn-primary" style="color: white"><i
-                        class="fa fa-fw fa-lg fa-check-circle"></i>Registrar
+                        class="fa fa-fw fa-lg fa-check-circle"></i>Modificar Factura
                 </button>&nbsp;&nbsp;&nbsp;
                 <a class="btn btn-secondary" href="{% url 'index' %}">
-                    <i class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
+                    <i class="fa fa-fw fa-lg fa-times-circle"></i>Cancelar</a>
             </div>
         </div>
     </form>
@@ -124,10 +133,13 @@
     <!--Lenguage español-->
     <script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.es.js" %}"></script>
     <script type="text/javascript" src= {% static "js/functions/functions.js " %}></script>
-    <script type="text/javascript" src= {% static "js/pedidos/forms.js" %}></script>
+    <script type="text/javascript" src= {% static "js/ventas/forms.js" %}></script>
     <script type="text/javascript">
-        /*Date Picker*/
-        $('#datePick').datepicker({
+
+        $('#total').val(0);
+
+         /*Date Picker*/
+        $('#datePick-emision').datepicker({
             format: "dd/mm/yyyy",
             autoclose: true,
             todayHighlight: true,
@@ -135,7 +147,7 @@
             startDate: new Date(),
         });
 
-        $('#subtotal').val(0.00);
+        $('#datePick-emision').datepicker('setDate', new Date());
 
         // id establecido en forms de pedidos y el productos
         $('#cliente_select').select2({
@@ -144,7 +156,7 @@
         });
 
         //dataTable
-        $('#tblPedidos').DataTable({
+        $('#tblFactura').DataTable({
             ordering: false,
         });
 
@@ -177,5 +189,9 @@
                 }
             }
         });
+
+        factura.items.products = {{ det|safe}};
+        console.log(factura.items.products)
+        factura.list();
     </script>
 {% endblock %}

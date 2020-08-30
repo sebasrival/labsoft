@@ -2,11 +2,11 @@
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
     <div class="app-sidebar__user">
-        <img class="app-sidebar__user-avatar" src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg"
-            alt="User Image" />
+        <img class="app-sidebar__user-avatar" src="{{ request.user.get_profile }}"
+            alt="User Image" width="48px" height="48px"/>
         <div>
-            <p class="app-sidebar__user-name">John Doe</p>
-            <p class="app-sidebar__user-designation">Frontend Developer</p>
+            <p class="app-sidebar__user-name">{{request.user.first_name}}</p>
+            <p class="app-sidebar__user-designation">{{ request.user.last_name }}</p>
         </div>
     </div>
     <ul class="app-menu">
@@ -43,10 +43,8 @@
                     class="app-menu__label">Ventas</span><i class="treeview-indicator fa fa-angle-right"></i></a>
             <ul class="treeview-menu">
                 <li>
-                    <a class="treeview-item" href=""> Basic Tables</a>
-                </li>
-                <li>
-                    <a class="treeview-item" href=""> Data Tables</a>
+                    <a class="treeview-item" href="{% url 'add_factura' %}">Facturación</a>
+                    <a class="treeview-item" href="{% url 'list_factura' %}">Lista de Facturas</a>
                 </li>
             </ul>
         </li>
