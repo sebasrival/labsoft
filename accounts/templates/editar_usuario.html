@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block navbar %}
+    {% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i>{{ title }}</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+{% endblock css %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="tile">
+                    <h3 class="tile-title">{{ subtitle }}</h3>
+
+                    <div id="message_id">
+                     {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                     {% endif %}
+                </div>
+
+                    <div class="tile-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="control-label">Username</label>
+                                {{ form.username }}
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Nombre</label>
+                                {{ form.first_name }}
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Apellido</label>
+                                {{ form.last_name }}
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Email</label>
+                                {{ form.email }}
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Imagen</label>
+                                {{ form.profile }}
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Grupos</label>
+                                {{ form.groups }}
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Contraseña</label>
+                                {{ form.password1 }}
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Confirmar Contraseña</label>
+                                {{ form.password2 }}
+                            </div>
+                            <div class="tile-footer">
+                                <button class="btn btn-primary" type="submit"><i
+                                        class="fa fa-fw fa-lg fa-check-circle"></i>Actualizar
+                                </button>&nbsp;&nbsp;&nbsp;<a
+                                    class="btn btn-secondary" href="{% url 'list_user' %}"><i
+                                    class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

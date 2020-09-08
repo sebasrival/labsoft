@@ -108,4 +108,10 @@ def agregar_factura(request):
     return render(request, 'factura.html', contex)
 
 def get_config_ventas():
-    return VentasConf.objects.first()
+    conf = VentasConf.objects.first()
+    if conf:
+        return VentasConf.objects.first()
+    else:
+        conf = VentasConf()
+        conf.save()
+    return conf

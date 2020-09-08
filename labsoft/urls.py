@@ -17,6 +17,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
+from accounts.views import lista_usuarios, agregar_usuario, editar_usuario, delete_user
 from ventas.views import agregar_factura, list_factura, delete_factura, editar_factura
 from django.conf import settings
 from .views import home, logoutUser
@@ -55,6 +56,12 @@ urlpatterns = [
     path('factura/list', list_factura, name='list_factura'),
     path('factura/delete/<id>', delete_factura, name='delete_factura'),
     path('factura/edit/<id>', editar_factura, name="editar_factura"),
+
+    #usuarios
+    path('user/list/', lista_usuarios, name='list_user'),
+    path('user/add/', agregar_usuario, name='add_user'),
+    path('user/edit/<id>', editar_usuario, name='edit_user'),
+    path('user/delete/<id>', delete_user, name="delete_user"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

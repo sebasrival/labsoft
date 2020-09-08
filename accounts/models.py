@@ -1,7 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
-# Create your models here.
 from labsoft.settings import STATIC_URL, MEDIA_URL
 
 
