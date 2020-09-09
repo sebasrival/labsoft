@@ -94,49 +94,12 @@
 
 {% block scripts %}
     <script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/select2.min.js" %}"></script>
     <script>
-
-        /*
-            var message_ele = document.getElementById("message_id");
-            setTimeout(function(){
-                message_ele.style.display = "none";
-            }, 3000);
-        */
-        {% if messages %}
-            {% for message in messages %}
-                setTimeout(function () {
-                    $.notify({
-                        title: "",
-                        message: "{{ message }}",
-                        icon: 'fa fa-check'
-                    }, {
-                        type: "{{ message.tags}}",
-                        allow_dismiss: true,
-                        newest_on_top: false,
-                        showProgressbar: false,
-                        placement: {
-                            from: "top",
-                            align: "right"
-                        },
-                        offset: 20,
-                        spacing: 10,
-                        z_index: 50000,
-                        delay: 3000,
-                        timer: 2000,
-                        url_target: '_blank',
-                        mouse_over: null,
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
-                        },
-                        onShow: null,
-                        onShown: null,
-                        onClose: null,
-                        onClosed: null,
-                    });
-                }, 1000);
-            {% endfor %}
-        {% endif %}
-
+        $('.group_select').select2({
+            placeholder: 'Seleccione el Grupo',
+            language: "es",
+            multiple: true
+        });
     </script>
 {% endblock %}

@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
@@ -12,12 +12,14 @@ from ventas.models import VentasConf, Factura, FacturaDetalle
 
 
 @login_required()
+@permission_required('ventas.view_factura', raise_exception=True)
 def list_factura(request):
     facturas = Factura.objects.all()
     context = {'facturas': facturas }
     return render(request, 'lista_factura.html', context)
 
 @login_required()
+@permission_required('ventas.delete_factura', raise_exception=True)
 def delete_factura(request, id):
     factura = Factura.objects.get(id=id)
     factura.delete()
@@ -39,6 +41,7 @@ def get_detalle_factura(id):
 
 
 @login_required()
+@permission_required('ventas.change_factura', raise_exception=True)
 def editar_factura(request, id):
     data = {}
     fact = Factura.objects.get(id=id)
@@ -73,6 +76,7 @@ def editar_factura(request, id):
     return render(request, 'edit_factura.html', context)
 
 @login_required()
+@permission_required('ventas.add_factura', raise_exception=True)
 def agregar_factura(request):
     form = FacturaForm()
     ventas_conf = get_config_ventas()

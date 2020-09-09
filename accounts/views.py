@@ -1,6 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -9,6 +8,7 @@ from accounts.models import User
 
 
 @login_required()
+@permission_required('accounts.view_user', raise_exception=True)
 def lista_usuarios(request):
     usuarios = User.objects.all()
     context = {'usuarios': usuarios,
@@ -18,6 +18,7 @@ def lista_usuarios(request):
     return render(request, 'lista_user.html', context)
 
 @login_required()
+@permission_required('accounts.add_user', raise_exception=True)
 def agregar_usuario(request):
     form = UserForm()
     if request.method == 'POST':
@@ -36,6 +37,7 @@ def agregar_usuario(request):
     return render(request, 'agregar_usuario.html', context)
 
 @login_required()
+@permission_required('accounts.change_user', raise_exception=True)
 def editar_usuario(request, id):
     usuario = User.objects.get(id=id)
     form = UserFormChange(instance=usuario)
@@ -59,6 +61,7 @@ def editar_usuario(request, id):
     return render(request, 'editar_usuario.html', context)
 
 @login_required()
+@permission_required('accounts.delete_user', raise_exception=True)
 def delete_user(request, id):
     user = User.objects.get(id=id)
     user.delete()

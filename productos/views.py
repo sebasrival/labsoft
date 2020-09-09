@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
@@ -10,6 +10,7 @@ from .models import Producto
 
 # Create your views here.
 @login_required()
+@permission_required('productos.add_producto', raise_exception=True)
 def agregar_producto(request):
     form = ProductoForm
     if request.method == 'POST':
@@ -25,6 +26,7 @@ def agregar_producto(request):
 
 
 @login_required()
+@permission_required('productos.change_producto', raise_exception=True)
 def editar_producto(request, id):
     producto = Producto.objects.get(codigo_producto=id)
     form = ProductoForm(instance=producto)
@@ -45,6 +47,7 @@ def editar_producto(request, id):
 
 
 @login_required()
+@permission_required('productos.delete_producto', raise_exception=True)
 def delete_producto(request, id):
     producto = Producto.objects.get(codigo_producto=id)
     producto.delete()
@@ -52,12 +55,14 @@ def delete_producto(request, id):
 
 
 @login_required()
+@permission_required('productos.view_producto', raise_exception=True)
 def lista_producto(request):
     productos = Producto.objects.all()
     context = {'productos': productos}
     return render(request, 'lista_producto.html', context)
 
-
+@login_required()
+@permission_required('productos.view_producto', raise_exception=True)
 @csrf_exempt
 def search_products(request):
     data = {}

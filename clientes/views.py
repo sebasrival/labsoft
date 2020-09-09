@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from .forms import ClienteForm
 from .models import Cliente
 from django.contrib import messages
 
 
 # Create your views here.
-
 @login_required()
+@permission_required('clientes.add_cliente', raise_exception=True)
 def agregar_cliente(request):
     form = ClienteForm
     if request.method == 'POST':
@@ -23,6 +23,7 @@ def agregar_cliente(request):
 
 
 @login_required()
+@permission_required('clientes.change_cliente', raise_exception=True)
 def editar_cliente(request, id):
     cliente = Cliente.objects.get(id=id)
     form = ClienteForm(instance=cliente)
@@ -44,6 +45,7 @@ def editar_cliente(request, id):
 
 
 @login_required()
+@permission_required('clientes.delete_cliente',raise_exception=True)
 def delete_cliente(request, id):
     cliente = Cliente.objects.get(id=id)
     cliente.delete()
@@ -51,6 +53,7 @@ def delete_cliente(request, id):
 
 
 @login_required()
+@permission_required('clientes.view_cliente', raise_exception=True)
 def lista_cliente(request):
     clientes = Cliente.objects.all()
     context = {'clientes': clientes}

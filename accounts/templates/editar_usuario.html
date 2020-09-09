@@ -87,3 +87,15 @@
         </div>
     </div>
 {% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/select2.min.js" %}"></script>
+    <script>
+        $('.group_select').select2({
+            placeholder: 'Seleccione el grupo',
+            language: "es",
+            multiple: true,
+        });
+    </script>
+{% endblock %}

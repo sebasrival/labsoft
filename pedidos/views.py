@@ -3,7 +3,7 @@ import json
 # from django.contrib import messages
 from datetime import datetime
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .forms import PedidoForm
@@ -13,6 +13,7 @@ from .models import Pedido, PedidoDetalle
 # Create your views here.
 
 @login_required()
+@permission_required('pedidos.add_pedido', raise_exception=True)
 def agregar_pedido(request):
     form = PedidoForm()
     data = {}
@@ -45,18 +46,21 @@ def agregar_pedido(request):
     return render(request, 'pedido_add.html', context)
 
 @login_required()
+@permission_required('pedidos.view_pedido', raise_exception=True)
 def list_pedido(request):
     pedidos = Pedido.objects.all()
     context = { 'pedidos': pedidos }
     return render(request, 'lista_pedido.html',context)
 
 @login_required()
+@permission_required('pedidos.delete_pedido', raise_exception=True)
 def delete_pedido(request, id):
     pedido = Pedido.objects.get(id=id)
     pedido.delete()
     return redirect('/pedido/list')
 
 @login_required()
+@permission_required('pedidos.change_pedido', raise_exception=True)
 def editar_pedido(request, id):
     data = {}
     ped = Pedido.objects.get(id=id)

@@ -3,66 +3,79 @@
 <aside class="app-sidebar">
     <div class="app-sidebar__user">
         <img class="app-sidebar__user-avatar" src="{{ request.user.get_profile }}"
-            alt="User Image" width="48px" height="48px"/>
+             alt="User Image" width="48px" height="48px"/>
         <div>
-            <p class="app-sidebar__user-name">{{request.user.first_name}}</p>
+            <p class="app-sidebar__user-name">{{ request.user.first_name }}</p>
             <p class="app-sidebar__user-designation">{{ request.user.last_name }}</p>
         </div>
     </div>
     <ul class="app-menu">
-        <li class="treeview">
-            <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-user"></i><span
-                    class="app-menu__label">Clientes</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-            <ul class="treeview-menu">
-                <li><a class="treeview-item" href="{% url 'add_cliente' %}">Registrar Cliente</a></li>
-                <li><a class="treeview-item" href="{% url 'lista_cliente' %}">Lista de Clientes</a></li>
-            </ul>
-        </li>
-        <li class="treeview">
-            <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fas fa-industry"></i><span
-                    class="app-menu__label">Producción</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-            <ul class="treeview-menu">
-                <li><a class="treeview-item" href="{% url 'add_producto' %}">Registrar Productos</a></li>
-                <li><a class="treeview-item" href="{% url 'lista_producto' %}">Lista de Productos</a></li>
-            </ul>
-        </li>
-        <li class="treeview">
-            <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-book"></i><span
-                    class="app-menu__label">Pedidos</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-            <ul class="treeview-menu">
-                <li>
-                    <a class="treeview-item" href="{% url 'list_pedido' %}">Listar Pedidos</a>
-                </li>
-                <li>
-                    <a class="treeview-item" href="{% url 'add_pedido' %}">Registrar Pedido</a>
-                </li>
-            </ul>
-        </li>
-        <li class="treeview">
-            <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-money"></i><span
-                    class="app-menu__label">Ventas</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-            <ul class="treeview-menu">
-                <li>
-                    <a class="treeview-item" href="{% url 'add_factura' %}">Facturación</a>
-                    <a class="treeview-item" href="{% url 'list_factura' %}">Lista de Facturas</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <a class="app-menu__item" href=""><i class="app-menu__icon fa fa-truck"></i><span
-                    class="app-menu__label">Proveedores</span></a>
-        </li>
-        
-        <li class="treeview">
-            <a class="app-menu__item" href="#" data-toggle="treeview" ><i class="app-menu__icon fa fa-cog"></i><span
-                    class="app-menu__label">Admin. Usuarios</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-             <ul class="treeview-menu">
-                <li>
-                    <a class="treeview-item" href="{% url 'list_user' %}">Lista de Usuarios</a>
-                </li><li>
-                    <a class="treeview-item" href="{% url 'add_user' %}">Agregar Usuario</a>
-                </li>
-            </ul>
-        </li>
+        {% if perms.clientes %}
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-user"></i><span
+                        class="app-menu__label">Clientes</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a class="treeview-item" href="{% url 'add_cliente' %}">Registrar Cliente</a></li>
+                    <li><a class="treeview-item" href="{% url 'lista_cliente' %}">Lista de Clientes</a></li>
+                </ul>
+            </li>
+        {% endif %}
+        {% if perms.productos %}
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fas fa-industry"></i><span
+                        class="app-menu__label">Producción</span><i
+                        class="treeview-indicator fa fa-angle-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a class="treeview-item" href="{% url 'add_producto' %}">Registrar Productos</a></li>
+                    <li><a class="treeview-item" href="{% url 'lista_producto' %}">Lista de Productos</a></li>
+                </ul>
+            </li>
+        {% endif %}
+        {% if perms.pedidos %}
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-book"></i><span
+                        class="app-menu__label">Pedidos</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a class="treeview-item" href="{% url 'list_pedido' %}">Listar Pedidos</a>
+                    </li>
+                    <li>
+                        <a class="treeview-item" href="{% url 'add_pedido' %}">Registrar Pedido</a>
+                    </li>
+                </ul>
+            </li>
+        {% endif %}
+        {% if perms.facturas %}
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview"><i
+                        class="app-menu__icon fa fa-money"></i><span
+                        class="app-menu__label">Ventas</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a class="treeview-item" href="{% url 'add_factura' %}">Facturación</a>
+                        <a class="treeview-item" href="{% url 'list_factura' %}">Lista de Facturas</a>
+                    </li>
+                </ul>
+            </li>
+        {% endif %}
+        {#        <li>#}
+        {#            <a class="app-menu__item" href=""><i class="app-menu__icon fa fa-truck"></i><span#}
+        {#                    class="app-menu__label">Proveedores</span></a>#}
+        {#        </li>#}
+        {% if perms.accounts %}
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-cog"></i><span
+                        class="app-menu__label">Admin. Usuarios</span><i
+                        class="treeview-indicator fa fa-angle-right"></i></a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a class="treeview-item" href="{% url 'list_user' %}">Lista de Usuarios</a>
+                    </li>
+                    <li>
+                        <a class="treeview-item" href="{% url 'add_user' %}">Agregar Usuario</a>
+                    </li>
+                </ul>
+            </li>
+        {% endif %}
     </ul>
 </aside>
