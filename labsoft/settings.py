@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'import_export',
     'clientes',
     'productos',
-    'pedidos'
+    'pedidos',
+    'proveedores',
+    'pagos',
+    'equipos'
 ]
 
 MIDDLEWARE = [
@@ -88,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'labsoft',
         'USER': 'postgres',
-        'PASSWORD': '12345',
+        'PASSWORD': '123456',
         'HOST': 'localhost',
         'PORT': '5432',
     }
