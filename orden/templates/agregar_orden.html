@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block navbar %}
+{% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i>Producción - Orden</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block css %}
+<!-- Animacion CSS notify-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+{% endblock css %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">Agregar Orden de Elaboración</h3>
+                {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                     {% endif %}
+                <div class="tile-body">
+                    <form method="POST">
+                        {% csrf_token%}
+                        <div class="form-group">
+                            <label class="control-label">Codigo Elaboracion</label>
+                            {{form.codigo_elaboracion}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Codigo Producto</label>
+                            {{form.codigo_producto}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Descripción Producto</label>
+                            {{form.desc_producto }}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Cantidad teorica</label>
+                            {{form.cant_teorica}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Vencimiento</label>
+                            {{form.vencimiento}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Estado</label>
+                            {{form.estado}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Numero orden</label>
+                            {{form.orden_numero}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Fecha Emisión</label>
+                            {{form.fecha_emision}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Fecha Vigencia</label>
+                            {{form.fecha_vigencia}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Realizado por</label>
+                            {{form.realizado_por}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Verificado por</label>
+                            {{form.verificado_por}}
+                        </div>
+
+                        <div class="tile-footer">
+                            <button class="btn btn-primary" type="submit" id="register"><i
+                                    class="fa fa-fw fa-lg fa-check-circle"></i>Registrar</button>&nbsp;&nbsp;&nbsp;<a
+                                class="btn btn-secondary" href="{% url 'index' %}"><i
+                                    class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endblock%}
+
+{% block scripts %}
+<script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
+<script>
+    {% if messages %}
+            {% for message in messages %}
+                setTimeout(function(){
+                    $.notify({
+                        title: "",
+                        message: "<h4>{{ message }}</h4>",
+                        icon: 'fa fa-check'
+                    },{
+                        type: "{{ message.tags}}",
+                        placement: {
+                            from: "top",
+                            align: "right"
+                        }
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                    });
+                }, 1000);
+            {% endfor %}
+    {% endif %}
+</script>
+{% endblock scripts %}

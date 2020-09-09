@@ -11,18 +11,7 @@
 {% endblock sidebar %}
 
 {% block css %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-{% endblock css %}
-
-{% block content %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="tile">
-                    <h3 class="tile-title">Editar Cliente</h3>
-                    <!--
-                    <div id="message_id">
-                     {% if messages %}
+                  {% if messages %}
                         {% for message in messages %}
                             <div class="alert alert-{{ message.tags }}" role="alert">
                                 {{ message }}
@@ -98,5 +87,16 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+{% endblock css %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="tile">
+                    <h3 class="tile-title">Editar Cliente</h3>
+                    <!--
+                    <div id="message_id">
+
 {% endblock %}

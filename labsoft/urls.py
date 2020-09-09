@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from accounts.views import lista_usuarios, agregar_usuario, editar_usuario, delete_user
+from orden.views import agregar_orden, lista_orden, editar_orden, delete_orden
 from ventas.views import agregar_factura, list_factura, delete_factura, editar_factura
 from django.conf import settings
 from .views import home, logoutUser
@@ -85,7 +86,13 @@ urlpatterns = [
     path ('equipo/add/', agregar_equipo, name='add_equipo'),
     path ('equipo/list/',lista_equipos,name='lista_equipos'),
     path ('equipo/edit/<id>/',editar_equipo,name='editar_equipo'),
-    path('equipo/delete/<id>/', delete_equipo, name="delete_equipo")
+    path('equipo/delete/<id>/', delete_equipo, name="delete_equipo"),
+
+    #ordenes
+    path ('orden/add/', agregar_orden, name='add_orden'),
+    path ('orden/list/',lista_orden,name='lista_orden'),
+    path ('orden/edit/<id>/',editar_orden,name='editar_orden'),
+    path('orden/delete/<id>/', delete_orden, name="delete_orden")
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

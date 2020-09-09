@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="tile">
-                    <h3 class="tile-title">Editar Equipo</h3>
+                    <h3 class="tile-title">Editar Orden</h3>
                     <!--
                     <div id="message_id">
                      {% if messages %}
@@ -36,41 +36,54 @@
                         <form method="POST">
                             {% csrf_token %}
                             <div class="form-group">
-                                <label class="control-label">Codigo: </label>
-                                {{ form.codigo_equipo }}
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label">Nombre:</label>
-                                {{ form.nombre }}
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label">Descripcion: </label>
-                                {{ form.descripcion }}
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label">Estado: </label>
-                                {{ form.estado }}
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label">Modelo: </label>
-                                {{ form.modelo }}
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label">Costo: </label>
-                                {{ form.costo }}
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label">Codigo elaboracion: </label>
-                                {{ form.codigo_elaboracion }}
-                            </div>
-
-
+                            <label class="control-label">Codigo Elaboracion</label>
+                            {{form.codigo_elaboracion}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Codigo Producto</label>
+                            {{form.codigo_producto}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Descripción Producto</label>
+                            {{form.desc_producto }}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Cantidad teorica</label>
+                            {{form.cant_teorica}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Vencimiento</label>
+                            {{form.vencimiento}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Estado</label>
+                            {{form.estado}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Numero orden</label>
+                            {{form.orden_numero}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Fecha Emisión</label>
+                            {{form.fecha_emision}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Fecha Vigencia</label>
+                            {{form.fecha_vigencia}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Realizado por</label>
+                            {{form.realizado_por}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Verificado por</label>
+                            {{form.verificado_por}}
+                        </div>
                             <div class="tile-footer">
                                 <button class="btn btn-primary" type="submit"><i
                                         class="fa fa-fw fa-lg fa-check-circle"></i>Actualizar
                                 </button>&nbsp;&nbsp;&nbsp;<a
-                                    class="btn btn-secondary" href="{% url 'index' %}"><i
+                                    class="btn btn-secondary" href="{% url 'lista_orden' %}"><i
                                     class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
                             </div>
                         </form>
@@ -88,8 +101,8 @@
 
         /*
             var message_ele = document.getElementById("message_id");
-            setTimeout(function(){ 
-                message_ele.style.display = "none"; 
+            setTimeout(function(){
+                message_ele.style.display = "none";
             }, 3000);
         */
         {% if messages %}

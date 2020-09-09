@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+{% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i> Produccion</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block css %}
+<!-- Animacion CSS notify-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+{% endblock css %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered" id="Table">
+                    <h3 class="tile-title">Lista de Elaboración</h3>
+                        <thead>
+                            <tr>
+                                <th>Codigo Elaboración</th>
+                                <th>Codigo Producto</th>
+                                <th>Cantidad Teorica</th>
+                                <th>Orden Numero</th>
+                                <th>Fecha Emision</th>
+                                <th>Fecha Vencimiento</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ord in ordenes %}
+                            <tr>
+                                <td>{{ ord.codigo_elaboracion }}</td>
+                                <td>{{ ord.codigo_producto }}</td>
+                                <td>{{ ord.cant_teorica}}</td>
+                                <td>{{ ord.orden_numero }}</td>
+                                <td>{{ ord.fecha_emision}}</td>
+                                <td>{{ ord.vencimiento}}</td>
+                                  <td>
+                                    <a class="btn btn-success p-2" href="{% url 'editar_orden' ord.id %}"
+                                       title="Editar"
+                                    >
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button title="Borrar"class="btn btn-danger del p-2" href="{% url 'delete_orden' ord.id %}">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block scripts %}
+<script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
+<script type="text/javascript" src="{% static "js/plugins/sweetalert.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
+<script>
+    $('.del').click(function(){
+        var href = $(this).attr('href');
+      	swal({
+      		title: "¿Está seguro de eliminar este Pago?",
+      		text: "",
+      		type: "warning",
+      		showCancelButton: true,
+      		confirmButtonText: "Si, eliminar!",
+      		cancelButtonText: "Cancelar!",
+      		closeOnConfirm: false,
+      		closeOnCancel: false
+      	}, function(isConfirm) {
+      		if (isConfirm) {
+      			swal({
+                      title: "Eliminado",
+                      type: "success"
+                  }, function(){
+                      window.location.href=href;
+                  });
+      		} else {
+      			swal("Cancelado", "", "error");
+      		}
+      	});
+    });
+
+    $('#Table').DataTable();
+
+    {% if messages %}
+        {% for message in messages %}
+        setTimeout(function(){
+            $.notify({
+      		    title: "",
+      		    message: "{{ message }}",
+            {% if message.tags == 'success' %}
+      		    icon: 'fa fa-check'
+            {% endif %}
+      	    },{
+                type: "{{ message.tags}}",
+                placement: {
+                    from: "top",
+                    align: "center"
+                }
+      	    });
+        }, 1000);
+        {% endfor %}
+    {% endif %}
+</script>
+{% endblock %}
