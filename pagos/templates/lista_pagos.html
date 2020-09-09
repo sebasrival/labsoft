@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+{% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i> Venta</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block css %}
+<!-- Animacion CSS notify-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+{% endblock css %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered" id="Table">
+                    <h3 class="tile-title">Lista de Pagos</h3>
+                        <thead>
+                            <tr>
+                                <th>Nro factura</th>
+                                <th>Fecha pago</th>
+                                <th>Monto</th>
+                                <th>Metodo de pago</th>
+                                <th>Tipo Pago</th>
+                                <th>Es cliente</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pag in pagos %}
+                            <tr>
+                                <td>{{ pag.nro_factura }}</td>     
+                                <td>{{ pag.fecha_pago }}</td>
+                                <td>{{ pag.monto_total }}</td>
+                                <td>{{ pag.metodo_pago }}</td>
+
+                                {% if pag.es_contado %}
+                                <td>CONTADO</td>
+                                {% else %}
+                                <td>CREDITO</td>
+                                {% endif %} 
+                                {% if pag.es_cliente %}
+                                <td>Si</td>
+                                {% else %}
+                                <td>No</td>
+                                {% endif %}                                <td>
+                                    <a class="btn btn-success p-2" href="{% url 'editar_pago' pag.id %}"
+                                       title="Editar"
+                                    > 
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button title="Borrar"class="btn btn-danger del p-2" href="{% url 'delete_pago' pag.id %}">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block scripts %}
+<script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
+<script type="text/javascript" src="{% static "js/plugins/sweetalert.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
+<script>
+    $('.del').click(function(){
+        var href = $(this).attr('href');
+      	swal({
+      		title: "¿Está seguro de eliminar este Pago?",
+      		text: "",
+      		type: "warning",
+      		showCancelButton: true,
+      		confirmButtonText: "Si, eliminar!",
+      		cancelButtonText: "Cancelar!",
+      		closeOnConfirm: false,
+      		closeOnCancel: false
+      	}, function(isConfirm) {
+      		if (isConfirm) {
+      			swal({
+                      title: "Eliminado",
+                      type: "success"
+                  }, function(){
+                      window.location.href=href;
+                  });
+      		} else {
+      			swal("Cancelado", "", "error");
+      		}
+      	});
+    });
+
+    $('#Table').DataTable();
+
+    {% if messages %}
+        {% for message in messages %}
+        setTimeout(function(){
+            $.notify({
+      		    title: "",
+      		    message: "{{ message }}",
+            {% if message.tags == 'success' %}
+      		    icon: 'fa fa-check'
+            {% endif %}
+      	    },{
+                type: "{{ message.tags}}",
+                placement: {
+                    from: "top",
+                    align: "center"
+                }
+      	    });
+        }, 1000);
+        {% endfor %}
+    {% endif %}
+</script>
+{% endblock %}

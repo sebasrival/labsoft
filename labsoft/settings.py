@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'productos',
     'pedidos',
     'ventas',
-    'accounts'
+    'accounts',
+    'proveedores',
+    'pagos',
+    'equipos'
 ]
 
 MIDDLEWARE = [
@@ -86,7 +89,7 @@ AUTH_USER_MODEL = 'accounts.User'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'labsoft',
+        'NAME': 'labsoft-merge',
         'USER': 'postgres',
         'PASSWORD': '12345',
         'HOST': 'localhost',

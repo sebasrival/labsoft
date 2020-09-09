@@ -25,6 +25,11 @@ from django.contrib.auth import views as auth_views
 from clientes.views import agregar_cliente, lista_cliente, editar_cliente, delete_cliente
 from productos.views import agregar_producto, lista_producto, editar_producto, delete_producto, search_products
 from pedidos.views import agregar_pedido, list_pedido, delete_pedido, editar_pedido
+from pedidos.views import agregar_pedido
+from proveedores.views import agregar_proveedor,lista_proveedor,editar_proveedor,delete_proveedor
+from pagos.views import registrar_pago,lista_pagos,editar_pago,delete_pago
+from equipos.views import agregar_equipo,lista_equipos,editar_equipo,delete_equipo
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -62,6 +67,25 @@ urlpatterns = [
     path('user/add/', agregar_usuario, name='add_user'),
     path('user/edit/<id>', editar_usuario, name='edit_user'),
     path('user/delete/<id>', delete_user, name="delete_user"),
+
+    #proveedores
+    path ('proveedor/add/', agregar_proveedor, name='add_proveedor'),
+    path ('proveedor/list/',lista_proveedor,name='lista_proveedor'),
+    path ('proveedor/edit/<id>/',editar_proveedor,name='editar_proveedor'),
+     path('proovedor/delete/<id>/', delete_proveedor, name="delete_proveedor"),
+
+    #pagos
+    path ('pago/add/', registrar_pago, name='add_pago'),
+    path ('pago/list/',lista_pagos,name='lista_pagos'),
+    path ('pago/edit/<id>/',editar_pago,name='editar_pago'),
+    path('pago/delete/<id>/', delete_pago, name="delete_pago"),
+
+    
+    #equipos
+    path ('equipo/add/', agregar_equipo, name='add_equipo'),
+    path ('equipo/list/',lista_equipos,name='lista_equipos'),
+    path ('equipo/edit/<id>/',editar_equipo,name='editar_equipo'),
+    path('equipo/delete/<id>/', delete_equipo, name="delete_equipo")
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
