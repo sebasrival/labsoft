@@ -17,7 +17,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-from accounts.views import lista_usuarios, agregar_usuario, editar_usuario, delete_user
+from accounts.views import lista_usuarios, agregar_usuario, editar_usuario, delete_user, agregar_rol, editar_rol, \
+    delete_rol
 from orden.views import agregar_orden, lista_orden, editar_orden, delete_orden
 from ventas.views import agregar_factura, list_factura, delete_factura, editar_factura
 from django.conf import settings
@@ -26,7 +27,6 @@ from django.contrib.auth import views as auth_views
 from clientes.views import agregar_cliente, lista_cliente, editar_cliente, delete_cliente
 from productos.views import agregar_producto, lista_producto, editar_producto, delete_producto, search_products
 from pedidos.views import agregar_pedido, list_pedido, delete_pedido, editar_pedido
-from pedidos.views import agregar_pedido
 from proveedores.views import agregar_proveedor,lista_proveedor,editar_proveedor,delete_proveedor
 from pagos.views import registrar_pago,lista_pagos,editar_pago,delete_pago
 from equipos.views import agregar_equipo,lista_equipos,editar_equipo,delete_equipo
@@ -92,7 +92,12 @@ urlpatterns = [
     path ('orden/add/', agregar_orden, name='add_orden'),
     path ('orden/list/',lista_orden,name='lista_orden'),
     path ('orden/edit/<id>/',editar_orden,name='editar_orden'),
-    path('orden/delete/<id>/', delete_orden, name="delete_orden")
+    path('orden/delete/<id>/', delete_orden, name="delete_orden"),
+
+    #rol
+    path('rol/add/', agregar_rol, name='add_rol'),
+    path('rol/edit/<id>/', editar_rol, name='editar_rol'),
+    path('rol/delete/<id>/', delete_rol, name='delete_rol')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

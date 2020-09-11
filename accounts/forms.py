@@ -113,8 +113,33 @@ class UserFormChange(UserChangeForm):
                 user.groups.add(grupo)
             return user
 
-    # class GroupForm(ModelForm):
-    #
-    #     class Meta:
-    #         model = Group
-    #         fields = '__all__'
+
+queryset = ["cliente", "pedido", "producto", "factura", "proveedor", "equipo",
+            "ordenelaboracion", "pago", "group", "user"]
+
+class GroupForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['permissions'].queryset = Permission.objects.filter(content_type__model__in=queryset)
+
+    class Meta:
+        model = Group
+        fields = ('name', 'permissions')
+        widgets = {
+            'name': TextInput(attrs={
+                'class':'form-control'
+            }),
+            'permissions': CheckboxSelectMultiple(),
+        }
+
+class GroupChangeForm(ModelForm):
+
+    class Meta:
+        model = Group
+        fields = ('name', 'permissions')
+        widgets = {
+            'name': TextInput(attrs={
+                'class':'form-control'
+            }),
+            'permissions': CheckboxSelectMultiple(),
+        }
