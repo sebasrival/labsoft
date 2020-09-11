@@ -43,6 +43,8 @@ def editar_orden(request, id):
             # messages.success(request, "El cliente ha sido editado correctamente!")
             messages.add_message(request, messages.SUCCESS, 'El Orden se ha editado correctamente!')
             return redirect('/orden/list/')
+        else:
+            messages.add_message(request, messages.ERROR, form.errors)
 
     context = {'form': form}
     return render(request, 'editar_orden.html', context)
