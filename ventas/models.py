@@ -18,7 +18,7 @@ class VentasConf(models.Model):
 
 class Factura(models.Model):
     nro_factura = models.CharField(max_length=20, blank=False)
-    cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     fecha_emision = models.DateField()
     es_contado = models.BooleanField(default=True)
     estado = models.CharField(max_length=15, choices=ESTADOS_FACTURA, default=ESTADOS_FACTURA[0])

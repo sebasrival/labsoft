@@ -40,6 +40,8 @@ def editar_pago(request, id):
             # messages.success(request, "El cliente ha sido editado correctamente!")
             messages.add_message(request, messages.SUCCESS, 'El pago se ha editado correctamente!')
             return redirect('/pago/list/')
+        else:
+            messages.error(request, form.errors)
 
     context = {'form': form}
     return render(request, 'editar_pago.html', context)

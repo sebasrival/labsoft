@@ -51,8 +51,6 @@
                                 <th>Telefono</th>
                                 <th>Email</th>
                                 <th>Dirección</th>
-                                <th>Descuento</th>
-                                <th>Bonificación</th>
                                 <th>Acciones</th>
                             </tr>
                             </thead>
@@ -66,8 +64,6 @@
                                     <td>{{ client.telefono }}</td>
                                     <td>{{ client.email }}</td>
                                     <td>{{ client.direccion }}</td>
-                                    <td>{{ client.descuento }}</td>
-                                    <td>{{ client.bonificacion }}</td>
                                     <td>
                                         <a class="btn btn-success p-2" href="{% url 'editar_cliente' client.id %}"
                                            title="Editar">

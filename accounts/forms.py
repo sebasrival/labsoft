@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.models import Group, Permission
 from django.forms import *
 
 from .models import User
@@ -111,3 +112,9 @@ class UserFormChange(UserChangeForm):
             for grupo in self.cleaned_data['groups']:
                 user.groups.add(grupo)
             return user
+
+    # class GroupForm(ModelForm):
+    #
+    #     class Meta:
+    #         model = Group
+    #         fields = '__all__'

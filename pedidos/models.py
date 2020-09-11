@@ -12,7 +12,7 @@ ESTADOS_PEDIDOS = [
 
 # Create your models here.
 class Pedido(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     fecha_pedido = models.DateField()
     fecha_entrega = models.DateField()
     estado = models.CharField(max_length=15, choices=ESTADOS_PEDIDOS, default=ESTADOS_PEDIDOS[0])

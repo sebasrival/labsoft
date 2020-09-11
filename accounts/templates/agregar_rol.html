@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i>{{ title }}</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+
+
+{% block navbar %}
+    {% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+
+{% block sidebar %}
+    {% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+{% endblock css %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="tile">
+                    <h3 class="tile-title">{{ subtitle }}</h3>
+
+                    <div id="message_id">
+                     {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                     {% endif %}
+                </div>
+
+
+                    <div class="tile-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                           {{  form.as_p }}
+                            <div class="tile-footer">
+                                <button class="btn btn-primary" type="submit"><i
+                                        class="fa fa-fw fa-lg fa-check-circle"></i>Registrar
+                                </button>&nbsp;&nbsp;&nbsp;<a
+                                    class="btn btn-secondary" href="{% url 'index' %}"><i
+                                    class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

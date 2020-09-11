@@ -55,7 +55,7 @@
                 </ul>
             </li>
         {% endif %}
-        {% if perms.facturas %}
+        {% if perms.ventas %}
             <li class="treeview">
                 <a class="app-menu__item" href="#" data-toggle="treeview"><i
                         class="app-menu__icon fa fa-money"></i><span
@@ -65,7 +65,25 @@
                         <a class="treeview-item" href="{% url 'add_factura' %}">Facturación</a>
                         <a class="treeview-item" href="{% url 'list_factura' %}">Lista de Facturas</a>
                     </li>
+                    {% if perms.pagos %}
+                    <li class="treeview">
+                        <a class="app-menu__item" href="#" data-toggle="treeview"><i
+                                class="app-menu__icon fa fa-credit-card"></i><span
+                                class="app-menu__label">Pagos</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a class="treeview-item" href="{% url 'add_pago' %}">Registrar Pago</a>
+                            </li>
+                            <li>
+                                <a class="treeview-item" href="{% url 'lista_pagos' %}">Lista de Pagos</a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% endif %}
                 </ul>
+
+
+
             </li>
         {% endif %}
         {% if perms.proveedores %}
@@ -80,21 +98,6 @@
                     </li>
                     <li>
                         <a class="treeview-item" href="{% url 'lista_proveedor' %}">Lista de Proveedores</a>
-                    </li>
-                </ul>
-            </li>
-        {% endif %}
-        {% if perms.pagos %}
-            <li class="treeview">
-                <a class="app-menu__item" href="#" data-toggle="treeview"><i
-                        class="app-menu__icon fa fa-credit-card"></i><span
-                        class="app-menu__label">Pagos</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a class="treeview-item" href="{% url 'add_pago' %}">Registrar Pago</a>
-                    </li>
-                    <li>
-                        <a class="treeview-item" href="{% url 'lista_pagos' %}">Lista de Pagos</a>
                     </li>
                 </ul>
             </li>
