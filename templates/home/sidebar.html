@@ -66,22 +66,22 @@
                         <a class="treeview-item" href="{% url 'list_factura' %}">Lista de Facturas</a>
                     </li>
                     {% if perms.pagos %}
-                    <li class="treeview">
-                        <a class="app-menu__item" href="#" data-toggle="treeview"><i
-                                class="app-menu__icon fa fa-credit-card"></i><span
-                                class="app-menu__label">Pagos</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-                        <ul class="treeview-menu">
-                            <li>
-                                <a class="treeview-item" href="{% url 'add_pago' %}">Registrar Pago</a>
-                            </li>
-                            <li>
-                                <a class="treeview-item" href="{% url 'lista_pagos' %}">Lista de Pagos</a>
-                            </li>
-                        </ul>
-                    </li>
+                        <li class="treeview">
+                            <a class="app-menu__item" href="#" data-toggle="treeview"><i
+                                    class="app-menu__icon fa fa-credit-card"></i><span
+                                    class="app-menu__label">Pagos</span><i
+                                    class="treeview-indicator fa fa-angle-right"></i></a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="treeview-item" href="{% url 'add_pago' %}">Registrar Pago</a>
+                                </li>
+                                <li>
+                                    <a class="treeview-item" href="{% url 'lista_pagos' %}">Lista de Pagos</a>
+                                </li>
+                            </ul>
+                        </li>
                     {% endif %}
                 </ul>
-
 
 
             </li>
@@ -108,12 +108,21 @@
                         class="app-menu__label">Admin. Usuarios</span><i
                         class="treeview-indicator fa fa-angle-right"></i></a>
                 <ul class="treeview-menu">
-                    <li>
-                        <a class="treeview-item" href="{% url 'list_user' %}">Lista de Usuarios</a>
-                    </li>
-                    <li>
-                        <a class="treeview-item" href="{% url 'add_user' %}">Agregar Usuario</a>
-                    </li>
+                    {% if perms.accounts.view_user or perms.accounts.delete_user or perms.accounts.change_user %}
+                        <li>
+                            <a class="treeview-item" href="{% url 'list_user' %}">Lista de Usuarios</a>
+                        </li>
+                    {% endif %}
+                    {% if perms.accounts.add_user %}
+                        <li>
+                            <a class="treeview-item" href="{% url 'add_user' %}">Agregar Usuario</a>
+                        </li>
+                    {% endif %}
+                    {% if perms.auth.add_group%}
+                        <li>
+                            <a class="treeview-item" href="{% url 'add_rol' %}">Gestionar Roles</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </li>
         {% endif %}

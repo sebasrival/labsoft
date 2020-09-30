@@ -41,21 +41,21 @@
                     </div>
 
                     <div class="tile-body">
-                        <form method="POST" enctype="multipart/form-data">
+                        <form method="POST">
                             {% csrf_token %}
                             <div class="form-group">
                                 <label class="control-label">Nombre</label>
                                 {{ form.name }}
                             </div>
                             <div class="overflow-auto" style="height: 200px">
-                                {% for check in form.permissions %}
-                                    <div class="animated-checkbox">
-                                        <label id="{{ check.id_for_label }}">
-                                            <input type="checkbox"><span
-                                                class="label-text">{{ check.choice_label }}</span>
-                                        </label>
-                                    </div>
-                                {% endfor %}
+                                    <ul class="list-unstyled">
+                                        {% for check in form.permissions %}
+                                            <li>
+                                                {{ check.tag }}
+                                                {{ check.choice_label }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
                             </div>
                             <div class="tile-footer">
                                 <button class="btn btn-primary" type="submit"><i
