@@ -29,49 +29,34 @@
             <div class="tile-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered" id="Table">
-                    <h3 class="tile-title">Lista de Pagos</h3>
+                    <h3 class="tile-title">Listado de cuotas</h3>
                         <thead>
                             <tr>
-                                <th>Nro factura</th>
+                                <th>Estado</th>
                                 <th>Fecha pago</th>
                                 <th>Monto</th>
-                                <th>Metodo de pago</th>
-                                <th>Tipo Pago</th>
-                                <th>Es cliente</th>
+                                <th>Fecha vencimiento</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for pag in pagos %}
+                            {% for cu in cuotas %}
                             <tr>
-                                <td>{{ pag.nro_factura }}</td>     
-                                <td>{{ pag.fecha_pago }}</td>
-                                <td>{{ pag.monto_total }}</td>
-                                <td>{{ pag.metodo_pago }}</td>
-
-                                {% if pag.es_contado %}
-                                <td>CONTADO</td>
+                                <td>{{ cu.estado }}</td> 
+                                {% if cu.fecha_pago %}   
+                                <td>{{ cu.fecha_pago }}</td>
                                 {% else %}
-                                <td>CREDITO</td>
+                               <td></td>
                                 {% endif %} 
-                                {% if pag.es_cliente %}
-                                <td>Si</td>
-                                {% else %}
-                                <td>No</td>
-                                {% endif %}                                <td>
-                                    <a class="btn btn-success p-2" href="{% url 'editar_pago' pag.id %}"
+                                <td>{{ cu.monto_cuota }}</td>
+                                <td>{{ cu.fecha_vencimiento }}</td>
+                             <td>
+                                    <a class="btn btn-success p-2" href="{% url 'editar_cuota' cu.id %}"
                                        title="Editar"
                                     > 
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a class="btn btn-warning p-2" href="{% url 'listado_cuotas' pag.id %}"
-                                    title="Cuotas"
-                                 > 
-                                     <i class="fas fa-eye"></i>
-                                 </a>
-                                    <button title="Borrar"class="btn btn-danger del p-2" href="{% url 'delete_pago' pag.id %}">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
+                              
                                 </td>
                             </tr>
                             {% endfor%}

@@ -39,6 +39,10 @@
                             <label class="control-label">Nro factura: </label>
                             {{form.nro_factura}}
                         </div>
+                        <div class="form-group">
+                            <label class="control-label">Cedula: </label>
+                            {{form.cedula}}
+                        </div>
     
                         <div class="form-group">
                             <label class="control-label">Fecha:</label>
@@ -46,21 +50,24 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label">Monto: </label>
-                            {{form.monto}}
+                            {{form.monto_total}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Cuotas: </label>
+                            {{form.cantidad_cuotas}}
                         </div>
                         <div class="form-group">
                             <label class="control-label">Metodo de pago: </label>
                             {{form.metodo_pago}}
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Es cliente: </label>
-                            {{form.es_cliente}}
+                            <label class="control-label">Estado: </label>
+                            {{form.estado}}
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Es contado: </label>
-                            {{form.es_contado}}
+                            <label class="control-label">Tipo de pago: </label>
+                            {{form.tipo_pago}}
                         </div>
-                       
                        
                         <div class="tile-footer">
                             <button class="btn btn-primary" type="submit"><i

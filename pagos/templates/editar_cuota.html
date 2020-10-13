@@ -19,7 +19,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="tile">
-                <h3 class="tile-title">Registrar Pago</h3>
+                <h3 class="tile-title">Editar Cuota</h3>
                 <!--
                     <div id="message_id">
                      {% if messages %}
@@ -36,43 +36,28 @@
                     <form method="POST">
                         {% csrf_token%}
                         <div class="form-group">
-                            <label class="control-label">Nro factura: </label>
-                            {{form.nro_factura}}
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Cedula: </label>
-                            {{form.cedula}}
-                        </div>
-    
-                        <div class="form-group">
-                            <label class="control-label">Fecha:</label>
-                            {{form.fecha_pago}}
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Monto: </label>
-                            {{form.monto_total}}
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Cuotas: </label>
-                            {{form.cantidad_cuotas}}
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Metodo de pago: </label>
-                            {{form.metodo_pago}}
-                        </div>
-                        <div class="form-group">
                             <label class="control-label">Estado: </label>
                             {{form.estado}}
                         </div>
+                        <fieldset disabled>
                         <div class="form-group">
-                            <label class="control-label">Tipo de pago: </label>
-                            {{form.tipo_pago}}
+                            <label class="control-label" disabled="true">Fecha pago: </label>
+                            {{form.fecha_pago}}
                         </div>
-                      
+                        </fieldset>
+                        <div class="form-group">
+                            <label class="control-label">Fecha de vencimiento:</label>
+                            {{form.fecha_vencimiento}}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Monto cuota: </label>
+                            {{form.monto_cuota}}
+                        </div>
+                     
                        
                         <div class="tile-footer">
                             <button class="btn btn-primary" type="submit"><i
-                                    class="fa fa-fw fa-lg fa-check-circle"></i>Registrar</button>&nbsp;&nbsp;&nbsp;<a
+                                    class="fa fa-fw fa-lg fa-check-circle"></i>Actualizar</button>&nbsp;&nbsp;&nbsp;<a
                                 class="btn btn-secondary" href="{% url 'index' %}"><i class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
                         </div>
                     </form>
