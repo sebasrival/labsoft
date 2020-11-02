@@ -28,7 +28,7 @@ from clientes.views import agregar_cliente, lista_cliente, editar_cliente, delet
 from productos.views import agregar_producto, lista_producto, editar_producto, delete_producto, search_products
 from pedidos.views import agregar_pedido, list_pedido, delete_pedido, editar_pedido
 from proveedores.views import agregar_proveedor,lista_proveedor,editar_proveedor,delete_proveedor
-from pagos.views import registrar_pago,lista_pagos,editar_pago,delete_pago
+from pagos.views import registrar_pago,lista_pagos,editar_pago,delete_pago,lista_cuotas,editar_cuota
 from equipos.views import agregar_equipo,lista_equipos,editar_equipo,delete_equipo
 
 
@@ -80,7 +80,8 @@ urlpatterns = [
     path ('pago/list/',lista_pagos,name='lista_pagos'),
     path ('pago/edit/<id>/',editar_pago,name='editar_pago'),
     path('pago/delete/<id>/', delete_pago, name="delete_pago"),
-
+    path('cuota/list/<id>/', lista_cuotas, name="listado_cuotas"),
+    path ('cuota/edit/<id>/',editar_cuota,name='editar_cuota'),
     
     #equipos
     path ('equipo/add/', agregar_equipo, name='add_equipo'),

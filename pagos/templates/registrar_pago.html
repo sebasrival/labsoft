@@ -2,12 +2,12 @@
 {% load static %}
 
 {% block navbar %}
-{% include 'home/navbar.html' %}
+    {% include 'home/navbar.html' %}
 {% endblock navbar %}
 
 
 {% block sidebar %}
-{% include 'home/sidebar.html' %}
+    {% include 'home/sidebar.html' %}
 {% endblock sidebar %}
 
 {% block css %}
@@ -15,66 +15,78 @@
 {% endblock css %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="tile">
-                <h3 class="tile-title">Registrar Pago</h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="tile">
+                    <h3 class="tile-title">Registrar Pago</h3>
                     <div id="message_id">
-                     {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }}" role="alert">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                     {% endif %}
-                <div class="tile-body">
-                    <form method="POST">
-                        {% csrf_token%}
-                        <div class="form-group">
-                            <label class="control-label">Nro factura: </label>
-                            {{form.nro_factura}}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="tile-body">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="control-label">Nro factura: </label>
+                                    {{ form.nro_factura }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Cedula: </label>
+                                    {{ form.cedula }}
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Fecha:</label>
+                                    {{ form.fecha_pago }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Monto: </label>
+                                    {{ form.monto_total }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Cuotas: </label>
+                                    {{ form.cantidad_cuotas }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Metodo de pago: </label>
+                                    {{ form.metodo_pago }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Estado: </label>
+                                    {{ form.estado }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Tipo de pago: </label>
+                                    {{ form.tipo_pago }}
+                                </div>
+
+
+                                <div class="tile-footer">
+                                    <button class="btn btn-primary" type="submit"><i
+                                            class="fa fa-fw fa-lg fa-check-circle"></i>Registrar
+                                    </button>&nbsp;&nbsp;&nbsp;<a
+                                        class="btn btn-secondary" href="{% url 'index' %}"><i
+                                        class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
+                                </div>
+                            </form>
                         </div>
-    
-                        <div class="form-group">
-                            <label class="control-label">Fecha:</label>
-                            {{form.fecha_pago}}
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Monto: </label>
-                            {{form.monto_total}}
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Metodo de pago: </label>
-                            {{form.metodo_pago}}
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Es cliente: </label>
-                            {{form.es_cliente}}
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Es contado: </label>
-                            {{form.es_contado}}
-                        </div>
-                       
-                       
-                        <div class="tile-footer">
-                            <button class="btn btn-primary" type="submit"><i
-                                    class="fa fa-fw fa-lg fa-check-circle"></i>Registrar</button>&nbsp;&nbsp;&nbsp;<a
-                                class="btn btn-secondary" href="{% url 'index' %}"><i class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
-                        </div>
-                    </form>
+
+                    </div>
                 </div>
-                
             </div>
         </div>
     </div>
-    {% endblock%}
+{% endblock %}
 
-    {% block scripts %}
+{% block scripts %}
     <script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
     <script>
-        
+
         /*
             var message_ele = document.getElementById("message_id");
             setTimeout(function(){ 
@@ -83,12 +95,12 @@
         */
         {% if messages %}
             {% for message in messages %}
-                setTimeout(function(){ 
+                setTimeout(function () {
                     $.notify({
                         title: "",
                         message: "{{ message }}",
-                        icon: 'fa fa-check' 
-                    },{
+                        icon: 'fa fa-check'
+                    }, {
                         type: "{{ message.tags}}",
                         allow_dismiss: true,
                         newest_on_top: false,
@@ -115,8 +127,8 @@
                     });
                 }, 1000);
             {% endfor %}
-    {% endif %}
+        {% endif %}
 
     </script>
-    {% endblock%}
+{% endblock %}
     
