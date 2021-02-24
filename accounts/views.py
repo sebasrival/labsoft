@@ -6,10 +6,10 @@ from django.shortcuts import render, redirect
 from accounts.forms import UserForm, UserFormChange, GroupForm, GroupChangeForm
 from accounts.models import User
 from django.contrib.auth.models import Group
-
+from accounts.decorators import allowed_users
 
 @login_required()
-@permission_required('accounts.view_user', raise_exception=True)
+@allowed_users('accounts.view_user')
 def lista_usuarios(request):
     usuarios = User.objects.all()
     context = {'usuarios': usuarios,
@@ -19,7 +19,7 @@ def lista_usuarios(request):
     return render(request, 'lista_user.html', context)
 
 @login_required()
-@permission_required('accounts.add_user', raise_exception=True)
+@allowed_users('accounts.add_user')
 def agregar_usuario(request):
     form = UserForm()
     if request.method == 'POST':
@@ -38,7 +38,7 @@ def agregar_usuario(request):
     return render(request, 'agregar_usuario.html', context)
 
 @login_required()
-@permission_required('accounts.change_user', raise_exception=True)
+@allowed_users('accounts.change_user')
 def editar_usuario(request, id):
     usuario = User.objects.get(id=id)
     form = UserFormChange(instance=usuario)
@@ -62,7 +62,7 @@ def editar_usuario(request, id):
     return render(request, 'editar_usuario.html', context)
 
 @login_required()
-@permission_required('accounts.delete_user', raise_exception=True)
+@allowed_users('accounts.delete_user')
 def delete_user(request, id):
     user = User.objects.get(id=id)
     user.delete()
@@ -71,8 +71,7 @@ def delete_user(request, id):
 #grupos
 
 @login_required()
-@permission_required('auth.add_group', raise_exception=True)
-@permission_required('auth.view_group', raise_exception=True)
+@allowed_users(('auth.add_group', 'auth.view_group'))
 def agregar_rol(request):
     form = GroupForm()
     if request.method == 'POST':
@@ -94,7 +93,7 @@ def agregar_rol(request):
     return render(request, 'agregar_rol.html', context)
 
 @login_required()
-@permission_required('auth.change_group', raise_exception=True)
+@allowed_users('auth.change_group')
 def editar_rol(request, id):
     group = Group.objects.get(id=id)
     form = GroupChangeForm(instance=group)
@@ -121,7 +120,7 @@ def editar_rol(request, id):
     return render(request, 'agregar_rol.html', context)
 
 @login_required()
-@permission_required('auth.delete_group', raise_exception=True)
+@allowed_users(('auth.delete_group', 'auth.add_group'))
 def delete_rol(request, id):
     group = Group.objects.get(id=id)
     group.delete()

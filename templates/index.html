@@ -4,7 +4,11 @@
     partes de la pagina 
 -->
 
+
 {% extends 'base.html' %}
+
+{% load static %}
+
 
 {% block navbar %}
     {% include 'home/navbar.html' %}
@@ -14,3 +18,31 @@
 {% block sidebar %}
     {% include 'home/sidebar.html' %}
 {% endblock sidebar %}
+
+{% block head %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
+    {% if messages %}
+        <script>
+            {% for message in messages %}
+                $.notify({
+                    message: "{{ message }}",
+                    {% if message.tags == 'success' %}
+                        icon: 'fa fa-check'
+                    {% elif message.tags == 'danger' %}
+                        icon: 'fa fa-exclamation-triangle'
+                    {% endif %}
+                }, {
+                    type: "{{ message.tags}}",
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                });
+            {% endfor %}
+        </script>
+    {% endif %}
+{% endblock %}
