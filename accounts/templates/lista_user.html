@@ -28,17 +28,6 @@
         <div class="col-md-12">
             <div class="tile">
                 <div class="tile-body">
-                    <!--
-                <div id="message_id">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}" role="alert">
-                                {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-            -->
                     <div class="table-responsive">
                         <h3 class="tile-title">{{ subtitle }}</h3>
                         <table class="table table-hover table-bordered" id="Table">
@@ -63,7 +52,8 @@
                                     <td>{{ user.username }}</td>
                                     <td>{{ user.date_joined | date:'d/m/Y' }}</td>
                                     <td>{{ user.email }}</td>
-                                    <td><img class="img-fluid mx-auto d-block" src="{{ user.get_profile }}" width="30px" height="30px"></td>
+                                    <td><img class="img-fluid mx-auto d-block" src="{{ user.get_profile }}" width="30px"
+                                             height="30px"></td>
                                     <td>
                                         <a class="btn btn-success p-2" href="{% url 'edit_user' user.id %}"
                                            title="Editar">
@@ -94,6 +84,7 @@
     <script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
 
     <script>
+
         $('.del').click(function () {
             const href = $(this).attr('href');
             swal({
@@ -107,27 +98,29 @@
                 closeOnCancel: false
             }, function (isConfirm) {
                 if (isConfirm) {
-                    swal({
-                        title: "Eliminado",
-                        type: "success"
-                    }, function () {
-                        window.location.href = href;
-                    });
+                    window.location.href = href;
                 } else {
                     swal("Cancelado", "", "error");
                 }
             });
         });
 
+
         $('#Table').DataTable();
 
-        /*  Notificacion django messages
-            var message_ele = document.getElementById("message_id");
+        {% if confirm %}
+            {% if confirm == True %}
+                swal({
+                    title: "Eliminado",
+                    type: "success"
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                        window.location.href = "{% url 'list_user' %}";
+                    }
+                });
+            {% endif %}
+        {% endif %}
 
-            setTimeout(function(){
-                message_ele.style.display = "none";
-            }, 3000);
-        */
 
         {% if messages %}
             {% for message in messages %}
@@ -143,25 +136,16 @@
                         allow_dismiss: true,
                         newest_on_top: false,
                         showProgressbar: false,
+                        timer: 1500,
+                        delay: 500,
                         placement: {
                             from: "top",
-                            align: "center"
+                            align: "right"
                         },
-                        offset: 20,
-                        spacing: 10,
-                        z_index: 50000,
-                        delay: 3000,
-                        timer: 2000,
-                        url_target: '_blank',
-                        mouse_over: null,
                         animate: {
                             enter: 'animated fadeInDown',
                             exit: 'animated fadeOutUp'
                         },
-                        onShow: null,
-                        onShown: null,
-                        onClose: null,
-                        onClosed: null,
                     });
                 }, 1000);
             {% endfor %}

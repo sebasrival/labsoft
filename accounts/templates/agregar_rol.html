@@ -29,17 +29,6 @@
             <div class="col-md-5">
                 <div class="tile">
                     <h3 class="tile-title">{{ subtitle }}</h3>
-
-                    <div id="message_id">
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert alert-{{ message.tags }}" role="alert">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-
                     <div class="tile-body">
                         <form method="POST">
                             {% csrf_token %}
@@ -48,14 +37,14 @@
                                 {{ form.name }}
                             </div>
                             <div class="overflow-auto" style="height: 200px">
-                                    <ul class="list-unstyled">
-                                        {% for check in form.permissions %}
-                                            <li>
-                                                {{ check.tag }}
-                                                {{ check.choice_label }}
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
+                                <ul class="list-unstyled">
+                                    {% for check in form.permissions %}
+                                        <li>
+                                            {{ check.tag }}
+                                            {{ check.choice_label }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
                             </div>
                             <div class="tile-footer">
                                 <button class="btn btn-primary" type="submit"><i
@@ -144,14 +133,6 @@
 
         $('#Table').DataTable();
 
-        /*  Notificacion django messages
-            var message_ele = document.getElementById("message_id");
-
-            setTimeout(function(){
-                message_ele.style.display = "none";
-            }, 3000);
-        */
-
         {% if messages %}
             {% for message in messages %}
                 setTimeout(function () {
@@ -166,28 +147,20 @@
                         allow_dismiss: true,
                         newest_on_top: false,
                         showProgressbar: false,
+                        timer: 1500,
+                        delay: 500,
                         placement: {
                             from: "top",
-                            align: "center"
+                            align: "right"
                         },
-                        offset: 20,
-                        spacing: 10,
-                        z_index: 50000,
-                        delay: 3000,
-                        timer: 2000,
-                        url_target: '_blank',
-                        mouse_over: null,
                         animate: {
                             enter: 'animated fadeInDown',
                             exit: 'animated fadeOutUp'
                         },
-                        onShow: null,
-                        onShown: null,
-                        onClose: null,
-                        onClosed: null,
                     });
                 }, 1000);
             {% endfor %}
         {% endif %}
+
     </script>
 {% endblock %}

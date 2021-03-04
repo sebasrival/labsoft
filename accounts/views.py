@@ -65,11 +65,19 @@ def editar_usuario(request, id):
 @allowed_users('accounts.delete_user')
 def delete_user(request, id):
     user = User.objects.get(id=id)
-    user.delete()
-    return redirect('/user/list/')
+    confirm = True
+    if request.user == user:
+        messages.error(request, "¡No puedes eliminar tu usuario! Contactar con el soporte técnico.")
+        confirm = False
+        return redirect('/user/list/')
+    else:
+        user.delete()
+    context = {
+        'confirm': confirm,
+    }
+    return render(request, "lista_user.html", context)
 
 #grupos
-
 @login_required()
 @allowed_users(('auth.add_group', 'auth.view_group'))
 def agregar_rol(request):
