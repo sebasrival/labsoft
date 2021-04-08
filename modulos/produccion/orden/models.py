@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-from equipos.models import Equipo
+from modulos.produccion.equipos.models import Equipo
 
 
 class OrdenElaboracion(models.Model):

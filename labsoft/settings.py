@@ -36,15 +36,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'import_export',
-    'clientes',
-    'productos',
-    'pedidos',
-    'ventas',
-    'accounts',
-    'proveedores',
-    'pagos',
-    'equipos',
-    'orden'
+    'modulos.ventas.clientes',
+    'modulos.produccion.productos',
+    'modulos.ventas.pedidos',
+    'modulos.ventas.ventas',
+    'modulos.accounts',
+    'modulos.compras.proveedores',
+    'modulos.ventas.pagos',
+    'modulos.produccion.equipos',
+    'modulos.produccion.orden'
 ]
 
 MIDDLEWARE = [

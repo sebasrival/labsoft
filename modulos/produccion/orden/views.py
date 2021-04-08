@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from orden.forms import OrdenForm
-from orden.models import OrdenElaboracion
+from modulos.produccion.orden.forms import OrdenForm
+from modulos.produccion.orden.models import OrdenElaboracion
 
 
 @login_required()

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from ventas.models import Factura, FacturaDetalle, VentasConf
+from modulos.ventas.ventas.models import Factura, FacturaDetalle, VentasConf
 
 # Register your models here.
 admin.site.register(Factura)

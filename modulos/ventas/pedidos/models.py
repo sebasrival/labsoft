@@ -1,7 +1,7 @@
 from django.db import models
 
-from clientes.models import Cliente
-from productos.models import Producto
+from modulos.ventas.clientes.models import Cliente
+from modulos.produccion.productos.models import Producto
 
 ESTADOS_PEDIDOS = [
     ('PENDIENTE', 'Pendiente'),

@@ -3,10 +3,10 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from accounts.forms import UserForm, UserFormChange, GroupForm, GroupChangeForm
-from accounts.models import User
+from modulos.accounts.forms import UserForm, UserFormChange, GroupForm, GroupChangeForm
+from modulos.accounts.models import User
 from django.contrib.auth.models import Group
-from accounts.decorators import allowed_users
+from modulos.accounts.decorators import allowed_users
 
 @login_required()
 @allowed_users('accounts.view_user')

@@ -17,19 +17,19 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-from accounts.views import lista_usuarios, agregar_usuario, editar_usuario, delete_user, agregar_rol, editar_rol, \
+from modulos.accounts.views import lista_usuarios, agregar_usuario, editar_usuario, delete_user, agregar_rol, editar_rol, \
     delete_rol
-from orden.views import agregar_orden, lista_orden, editar_orden, delete_orden
-from ventas.views import agregar_factura, list_factura, delete_factura, editar_factura
+from modulos.produccion.orden.views import agregar_orden, lista_orden, editar_orden, delete_orden
+from modulos.ventas.ventas.views import agregar_factura, list_factura, delete_factura, editar_factura
 from django.conf import settings
 from .views import home, logoutUser
 from django.contrib.auth import views as auth_views
-from clientes.views import agregar_cliente, lista_cliente, editar_cliente, delete_cliente
-from productos.views import agregar_producto, lista_producto, editar_producto, delete_producto, search_products
-from pedidos.views import agregar_pedido, list_pedido, delete_pedido, editar_pedido
-from proveedores.views import agregar_proveedor,lista_proveedor,editar_proveedor,delete_proveedor
-from pagos.views import registrar_pago,lista_pagos,editar_pago,delete_pago,lista_cuotas,editar_cuota
-from equipos.views import agregar_equipo,lista_equipos,editar_equipo,delete_equipo
+from modulos.ventas.clientes.views import agregar_cliente, lista_cliente, editar_cliente, delete_cliente
+from modulos.produccion.productos.views import agregar_producto, lista_producto, editar_producto, delete_producto, search_products
+from modulos.ventas.pedidos.views import agregar_pedido, list_pedido, delete_pedido, editar_pedido
+from modulos.compras.proveedores.views import agregar_proveedor,lista_proveedor,editar_proveedor,delete_proveedor
+from modulos.ventas.pagos.views import registrar_pago,lista_pagos,editar_pago,delete_pago,lista_cuotas,editar_cuota
+from modulos.produccion.equipos.views import agregar_equipo,lista_equipos,editar_equipo,delete_equipo
 
 
 urlpatterns = [

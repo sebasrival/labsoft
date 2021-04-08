@@ -5,10 +5,10 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
-from ventas.forms import FacturaForm
+from modulos.ventas.ventas.forms import FacturaForm
 
 # Create your views here.
-from ventas.models import VentasConf, Factura, FacturaDetalle
+from modulos.ventas.ventas.models import VentasConf, Factura, FacturaDetalle
 
 
 @login_required()

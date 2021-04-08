@@ -4,7 +4,7 @@ from django import forms
 
 
 # Create your froms here.
-from orden.models import OrdenElaboracion
+from modulos.produccion.orden.models import OrdenElaboracion
 
 
 class OrdenForm(forms.ModelForm):
