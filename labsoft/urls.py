@@ -27,7 +27,7 @@ from django.contrib.auth import views as auth_views
 from modulos.ventas.clientes.views import agregar_cliente, lista_cliente, editar_cliente, delete_cliente
 from modulos.produccion.productos.views import agregar_producto, lista_producto, editar_producto, delete_producto, search_products
 from modulos.ventas.pedidos.views import agregar_pedido, list_pedido, delete_pedido, editar_pedido
-from modulos.compras.proveedores.views import agregar_proveedor,lista_proveedor,editar_proveedor,delete_proveedor
+from modulos.compras.proveedores_2.views import agregar_proveedor,lista_proveedor,editar_proveedor,delete_proveedor
 from modulos.ventas.pagos.views import registrar_pago,lista_pagos,editar_pago,delete_pago,lista_cuotas,editar_cuota
 from modulos.produccion.equipos.views import agregar_equipo,lista_equipos,editar_equipo,delete_equipo
 

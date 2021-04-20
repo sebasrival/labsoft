@@ -35,16 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'import_export',
-    'modulos.ventas.clientes',
-    'modulos.produccion.productos',
-    'modulos.ventas.pedidos',
-    'modulos.ventas.ventas',
-    'modulos.accounts',
-    'modulos.compras.proveedores',
-    'modulos.ventas.pagos',
-    'modulos.produccion.equipos',
-    'modulos.produccion.orden'
+    'modulos.compras'
 ]
 
 MIDDLEWARE = [
@@ -91,7 +82,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'labsoft',
-        'USER': 'postgres',
+        'USER': 'postgres-dev',
         'PASSWORD': '12345',
         'HOST': 'localhost',
         'PORT': '5432',

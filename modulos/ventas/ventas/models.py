@@ -40,6 +40,5 @@ class FacturaDetalle(models.Model):
     descripcion = models.CharField(max_length=200, blank=True)
     cantidad = models.IntegerField(blank=False)
 
-
     class Meta:
         ordering = ['id']
