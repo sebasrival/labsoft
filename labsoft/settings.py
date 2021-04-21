@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'modulos.compras'
+    'modulos.compras',
+    'modulos.accounts'
 ]
 
 MIDDLEWARE = [
@@ -81,8 +82,8 @@ AUTH_USER_MODEL = 'accounts.User'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'labsoft',
-        'USER': 'postgres-dev',
+        'NAME': 'labsoft-dev',
+        'USER': 'postgres',
         'PASSWORD': '12345',
         'HOST': 'localhost',
         'PORT': '5432',
