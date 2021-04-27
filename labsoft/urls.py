@@ -17,8 +17,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-# from modulos.accounts.views import lista_usuarios, agregar_usuario, editar_usuario, delete_user, agregar_rol, editar_rol, \
-#     delete_rol
+from modulos.accounts.views import lista_usuarios, agregar_usuario, editar_usuario, delete_user, agregar_rol, editar_rol, \
+    delete_rol
 # from modulos.produccion.orden.views import agregar_orden, lista_orden, editar_orden, delete_orden
 # from modulos.ventas.ventas.views import agregar_factura, list_factura, delete_factura, editar_factura
 from django.conf import settings
@@ -64,10 +64,10 @@ urlpatterns = [
     # path('factura/edit/<id>', editar_factura, name="editar_factura"),
     #
     # #usuarios
-    # path('user/list/', lista_usuarios, name='list_user'),
-    # path('user/add/', agregar_usuario, name='add_user'),
-    # path('user/edit/<id>', editar_usuario, name='edit_user'),
-    # path('user/delete/<id>', delete_user, name="delete_user"),
+    path('user/list/', lista_usuarios, name='list_user'),
+    path('user/add/', agregar_usuario, name='add_user'),
+    path('user/edit/<id>', editar_usuario, name='edit_user'),
+    path('user/delete/<id>', delete_user, name="delete_user"),
     #
     # #proveedores
     # path ('proveedor/add/', agregar_proveedor, name='add_proveedor'),
@@ -96,9 +96,9 @@ urlpatterns = [
     # path('orden/delete/<id>/', delete_orden, name="delete_orden"),
     #
     # #rol
-    # path('rol/add/', agregar_rol, name='add_rol'),
-    # path('rol/edit/<id>/', editar_rol, name='editar_rol'),
-    # path('rol/delete/<id>/', delete_rol, name='delete_rol')
+    path('rol/add/', agregar_rol, name='add_rol'),
+    path('rol/edit/<id>/', editar_rol, name='editar_rol'),
+    path('rol/delete/<id>/', delete_rol, name='delete_rol')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

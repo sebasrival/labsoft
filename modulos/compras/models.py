@@ -2,7 +2,7 @@ from django.db import models
 
 
 # Create your models here.
-class Proveedores(models.Model):
+class Proveedor(models.Model):
     ruc = models.CharField(max_length=200, unique=True)
     razon_social = models.CharField(max_length=100)
     telefono = models.CharField(max_length=20)
@@ -47,7 +47,7 @@ class MateriaPrima(models.Model):
 class FacturaCompra(models.Model):
     nro_factura = models.CharField(max_length=200, unique=True)
     tipo_factura = models.BooleanField()  # true: contado false: credito
-    id_proveedor = models.ForeignKey(Proveedores, on_delete=models.PROTECT)
+    id_proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT)
     estado = models.CharField(max_length=12, choices=ESTADOS_FACTURA, default=ESTADOS_FACTURA[0])
     monto_iva1 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)  # 5%
     monto_iva2 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)  # 10% preguntar si esta bien
@@ -62,13 +62,15 @@ class FacturaCompra(models.Model):
         verbose_name = 'Factura Compra'
         verbose_name_plural = 'Facturas Compras'
 
+
 TIPO_IVA = [
     ('IVA5', '5%'),
     ('IVA10', '10%'),
     ('EXENTA', 'Exenta')
 ]
 
-class FacturaConDet(models.Model):
+
+class FacturaDet(models.Model):
     id_factura = models.ForeignKey(FacturaCompra, on_delete=models.CASCADE)
     cod_materia = models.ForeignKey(MateriaPrima, on_delete=models.CASCADE)
     cantidad = models.IntegerField(default=1)
