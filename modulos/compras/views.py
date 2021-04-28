@@ -63,7 +63,7 @@ class ProveedorCreateView(CreateView):
 
 class ProveedorListView(ListView):
     model = Proveedor
-
+    template_name = 'compras/proveedores.html'
 
 class ProveedorUpdateView(UpdateView):
     model = Proveedor
