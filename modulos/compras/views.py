@@ -63,7 +63,14 @@ class ProveedorCreateView(CreateView):
 
 class ProveedorListView(ListView):
     model = Proveedor
-    template_name = 'compras/proveedores.html'
+    template_name = 'proveedores.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Proveedores'
+        context['subtitle'] = 'Lista de Proveedores'
+        context['route'] = reverse_lazy('compras:proveedor_list')
+        return context
 
 class ProveedorUpdateView(UpdateView):
     model = Proveedor

@@ -17,11 +17,6 @@
     {% include 'home/sidebar.html' %}
 {% endblock sidebar %}
 
-{% block css %}
-    <!-- Animacion CSS notify-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-{% endblock css %}
-
 
 {% block content %}
     <div class="row">
@@ -52,7 +47,7 @@
                                     <td>{{ user.username }}</td>
                                     <td>{{ user.date_joined | date:'d/m/Y' }}</td>
                                     <td>{{ user.email }}</td>
-                                    <td><img class="img-fluid mx-auto d-block" src="{{ user.get_profile }}" width="30px"
+                                    <td><img alt="perfil" class="img-fluid mx-auto d-block" src="{{ user.get_profile }}" width="30px"
                                              height="30px"></td>
                                     <td>
                                         <a class="btn btn-success p-2" href="{% url 'edit_user' user.id %}"
@@ -77,12 +72,6 @@
 
 
 {% block scripts %}
-    <script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
-    <script type="text/javascript" src="{% static "js/plugins/sweetalert.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
-
     <script>
 
         $('.del').click(function () {
@@ -143,8 +132,8 @@
                             align: "right"
                         },
                         animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
+                            enter: 'animate__animated animate__fadeInDown',
+                            exit: 'animate__animated animate__fadeOutUp'
                         },
                     });
                 }, 1000);
