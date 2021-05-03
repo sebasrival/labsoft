@@ -12,7 +12,7 @@ def allowed_users(perm, redirect_url=None):
 			if request.user.has_perms(perms):
 				return view_func(request, *args, **kwargs)
 			else:
-				messages.error(request, "¡Acceso Bloqueado, no tiene los permisos requeridos!")
+				messages.error(request, "¡Acceso Restringido, no tiene los permisos requeridos!")
 				if redirect_url is None:
 					return redirect('/')
 				else:
