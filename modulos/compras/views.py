@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
@@ -69,6 +69,29 @@ class ProveedorCreateView(CreateView):
     form_class = ProveedorForm
     template_name = 'proveedores_add.html'
     success_url = reverse_lazy('compras:proveedor_list')
+
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            data = {}
+            response = ''
+            try:
+                form = self.get_form()
+                if form.is_valid():
+                    form.save()
+                    data['message'] = f'¡{self.model.__name__} registrado correctamente!'
+                    data['error'] = '¡Sin errores!'
+                    response = JsonResponse(data, safe=False)
+                    response.status_code = 201 #codigo de que esta bien
+                else:
+                    data['message'] = '¡Los datos ingresados no son validos!'
+                    data['error'] = form.errors
+                    response = JsonResponse(data, safe=False)
+                    response.status_code = 400  # codigo de que hay algo malo xd
+            except Exception as e:
+                data['error']= str(e)
+            return response
+        else:
+            return redirect('compras:proveedor_list')
 
 @method_decorator(allowed_users('compras.view_proveedor'), name='dispatch')
 class ProveedorListView(LoginRequiredMixin, ListView):
