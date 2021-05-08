@@ -19,9 +19,6 @@
     {% include 'home/sidebar.html' %}
 {% endblock sidebar %}
 
-{% block css %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-{% endblock css %}
 
 {% block content %}
     <div class="container-fluid">
@@ -93,8 +90,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/plugins/select2.min.js" %}"></script>
+
     <script>
         $('.group_select').select2({
             placeholder: 'Seleccione el Grupo',

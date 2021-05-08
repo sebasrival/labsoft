@@ -7,11 +7,11 @@ class ProveedorForm(forms.ModelForm):
         model = Proveedor
         fields = '__all__'
         widgets = {
-            'ruc': forms.TextInput(attrs={'class': 'form-control'}),
-            'razon_social': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.TextInput(attrs={'class': 'form-control'}),
-            'telefono': forms.TextInput(attrs={'class': 'form-control'}),
-            'direccion': forms.TextInput(attrs={'class': 'form-control'}),
+            'ruc': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'}),
+            'razon_social': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'autocomplete': 'off'}),
+            'telefono': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'}),
+            'direccion': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'}),
         }
 
 

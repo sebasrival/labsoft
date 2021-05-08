@@ -10,98 +10,21 @@
         </div>
     </div>
     <ul class="app-menu">
-{#        {% if perms.clientes %}#}
-{#            <li class="treeview">#}
-{#                <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-user"></i><span#}
-{#                        class="app-menu__label">Clientes</span><i class="treeview-indicator fa fa-angle-right"></i></a>#}
-{#                <ul class="treeview-menu">#}
-{#                    <li><a class="treeview-item" href="{% url 'add_cliente' %}">Registrar Cliente</a></li>#}
-{#                    <li><a class="treeview-item" href="{% url 'lista_cliente' %}">Lista de Clientes</a></li>#}
-{#                </ul>#}
-{#            </li>#}
-{#        {% endif %}#}
-{#        {% if perms.productos or perms.equipos or perms.orden %}#}
-{#            <li class="treeview">#}
-{#                <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fas fa-industry"></i><span#}
-{#                        class="app-menu__label">Producción</span><i#}
-{#                        class="treeview-indicator fa fa-angle-right"></i></a>#}
-{#                <ul class="treeview-menu">#}
-{#                    {% if perms.productos %}#}
-{#                        <li><a class="treeview-item" href="{% url 'add_producto' %}">Registrar Productos</a></li>#}
-{#                        <li><a class="treeview-item" href="{% url 'lista_producto' %}">Lista de Productos</a></li>#}
-{#                    {% endif %}#}
-{#                    {% if perms.equipos %}#}
-{#                        <li><a class="treeview-item" href="{% url 'add_equipo' %}">Registrar Equipo</a></li>#}
-{#                        <li><a class="treeview-item" href="{% url 'lista_equipos' %}">Lista de Equipos</a></li>#}
-{#                    {% endif %}#}
-{#                    {% if perms.orden %}#}
-{#                        <li><a class="treeview-item" href="{% url 'add_orden' %}">Registrar Orden</a></li>#}
-{#                        <li><a class="treeview-item" href="{% url 'lista_orden' %}">Lista de Ordenes</a></li>#}
-{#                    {% endif %}#}
-{#                </ul>#}
-{#            </li>#}
-{#        {% endif %}#}
-{#        {% if perms.pedidos %}#}
-{#            <li class="treeview">#}
-{#                <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-book"></i><span#}
-{#                        class="app-menu__label">Pedidos</span><i class="treeview-indicator fa fa-angle-right"></i></a>#}
-{#                <ul class="treeview-menu">#}
-{#                    <li>#}
-{#                        <a class="treeview-item" href="{% url 'list_pedido' %}">Listar Pedidos</a>#}
-{#                    </li>#}
-{#                    <li>#}
-{#                        <a class="treeview-item" href="{% url 'add_pedido' %}">Registrar Pedido</a>#}
-{#                    </li>#}
-{#                </ul>#}
-{#            </li>#}
-{#        {% endif %}#}
-{#        {% if perms.ventas %}#}
-{#            <li class="treeview">#}
-{#                <a class="app-menu__item" href="#" data-toggle="treeview"><i#}
-{#                        class="app-menu__icon fa fa-money"></i><span#}
-{#                        class="app-menu__label">Ventas</span><i class="treeview-indicator fa fa-angle-right"></i></a>#}
-{#                <ul class="treeview-menu">#}
-{#                    <li>#}
-{#                        <a class="treeview-item" href="{% url 'add_factura' %}">Facturación</a>#}
-{#                        <a class="treeview-item" href="{% url 'list_factura' %}">Lista de Facturas</a>#}
-{#                    </li>#}
-{#                    {% if perms.pagos %}#}
-{#                        <li class="treeview">#}
-{#                            <a class="app-menu__item" href="#" data-toggle="treeview"><i#}
-{#                                    class="app-menu__icon fa fa-credit-card"></i><span#}
-{#                                    class="app-menu__label">Pagos</span><i#}
-{#                                    class="treeview-indicator fa fa-angle-right"></i></a>#}
-{#                            <ul class="treeview-menu">#}
-{#                                <li>#}
-{#                                    <a class="treeview-item" href="{% url 'add_pago' %}">Registrar Pago</a>#}
-{#                                </li>#}
-{#                                <li>#}
-{#                                    <a class="treeview-item" href="{% url 'lista_pagos' %}">Lista de Pagos</a>#}
-{#                                </li>#}
-{#                            </ul>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-{#                </ul>#}
-{##}
-{##}
-{#            </li>#}
-{#        {% endif %}#}
-{#        {% if perms.proveedores %}#}
-{#            <li class="treeview">#}
-{#                <a class="app-menu__item" href="#" data-toggle="treeview"><i#}
-{#                        class="app-menu__icon fa fa-truck"></i><span#}
-{#                        class="app-menu__label">Proveedores</span><i#}
-{#                        class="treeview-indicator fa fa-angle-right"></i></a>#}
-{#                <ul class="treeview-menu">#}
-{#                    <li>#}
-{#                        <a class="treeview-item" href="{% url 'add_proveedor' %}">Registrar Proveedor</a>#}
-{#                    </li>#}
-{#                    <li>#}
-{#                        <a class="treeview-item" href="{% url 'lista_proveedor' %}">Lista de Proveedores</a>#}
-{#                    </li>#}
-{#                </ul>#}
-{#            </li>#}
-{#        {% endif %}#}
+        {% if perms.compras %}
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview"><i class="fas fa-shopping-cart"> </i><span
+                        class="app-menu__label">&nbsp;&nbsp;&nbsp;Compras</span><i
+                        class="treeview-indicator fa fa-angle-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a class="treeview-item" href="">Registrar Compra</a></li>
+                    <li><a class="treeview-item" href="">Facturas Compras</a></li>
+                    <li><a class="treeview-item" href="">Stock Materia Prima</a></li>
+                    {% if perms.compras.view_proveedor or perms.compras.add_proveedor or perms.compras.delete_proveedor or perms.compras.change_proveedor%}
+                        <li><a class="treeview-item" href="{% url 'compras:proveedor_list' %}">Proveedores</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+        {% endif %}
         {% if perms.accounts %}
             <li class="treeview">
                 <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-cog"></i><span
@@ -118,7 +41,7 @@
                             <a class="treeview-item" href="{% url 'add_user' %}">Agregar Usuario</a>
                         </li>
                     {% endif %}
-                    {% if perms.auth.add_group%}
+                    {% if perms.auth.add_group %}
                         <li>
                             <a class="treeview-item" href="{% url 'add_rol' %}">Gestionar Roles</a>
                         </li>

@@ -19,9 +19,6 @@
     {% include 'home/sidebar.html' %}
 {% endblock sidebar %}
 
-{% block css %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-{% endblock css %}
 
 {% block content %}
     <div class="container-fluid">
@@ -99,11 +96,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
-    <script type="text/javascript" src="{% static "js/plugins/sweetalert.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
 
     <script>
         $('.del').click(function () {
@@ -154,8 +146,8 @@
                             align: "right"
                         },
                         animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
+                            enter: 'animated__fadeInDown',
+                            exit: 'animated__fadeOutUp'
                         },
                     });
                 }, 1000);
