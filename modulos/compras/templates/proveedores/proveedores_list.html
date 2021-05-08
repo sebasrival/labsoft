@@ -41,6 +41,7 @@
                                 <button onclick="abrir_modal('{% url 'compras:proveedor_add' %}')"
                                         class="btn btn-primary btn-sm">+ Agregar Proveedor</button>
                                 </span>
+                                {% csrf_token %}
                             {% endif %}
                         <div style="text-align: center;">
                             <h4 style="font-size: large; margin-bottom: 0" class="tile-title">{{ subtitle }}</h4>
@@ -85,6 +86,6 @@
     <script type="text/javascript" src="{% static "js/functions/functions.js" %}"></script>
     <script type="text/javascript" src="{% static "js/compras/index.js" %}"></script>
     <script>
-        list_proveedor('{% url 'compras:proveedor_list' %}');
+        list_proveedor('/modulos/compras/proveedores/list/', '/modulos/compras/proveedores/edit/', '/modulos/compras/proveedores/del/');
     </script>
 {% endblock %}

@@ -11,17 +11,8 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="bs-component">
-                        {% if form.errors %}
-                            <div class="alert alert-dismissible alert-danger">
-                                <button class="close" type="button" data-dismiss="alert">×</button>
-                                {% for field  in form %}
-                                    {% for error in field.errors %}
-                                        <p>{{ error }}</p>
-                                    {% endfor %}
-                                {% endfor %}
-
-                            </div>
-                        {% endif %}
+                        <div class="show-errors">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Ruc: </label>
