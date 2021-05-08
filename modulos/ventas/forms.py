@@ -1,6 +1,6 @@
 from django import forms
-from .models import Proveedor, Pago, MateriaPrima, StockMateriaPrima
 
+from modulos.ventas.models import Cobro, Cuota, FacturaVenta, Producto
 
 
 class CobroForm(forms.ModelForm):
@@ -25,6 +25,7 @@ class CuotaForm(forms.ModelForm):
             'fecha_vencimiento': forms.DateInput(attrs={'class': 'form-control'}),
         }
 
+
 class FacturaVentaForm(forms.ModelForm):
     class Meta:
         model = FacturaVenta
@@ -37,8 +38,10 @@ class FacturaVentaForm(forms.ModelForm):
             'fecha_emision': forms.NumberInput(attrs={'class': 'form-control'}),
 
         }
+
+
 class ProductoForm(forms.ModelForm):
-    class Meta():
+    class Meta:
         model = Producto
         fields = '__all__'
         widgets = {
@@ -50,4 +53,3 @@ class ProductoForm(forms.ModelForm):
             'precio': forms.NumberInput(attrs={'class': 'form-control'}),
             'cantidad_contenido': forms.NumberInput(attrs={'class': 'form-control'}),
         }
-

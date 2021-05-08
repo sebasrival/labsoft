@@ -1,7 +1,5 @@
 from django.db import models
 
-from modulos.ventas.clientes.models import Cliente
-from modulos.produccion.productos.models import Producto
 
 
 ESTADOS_FACTURA = [
