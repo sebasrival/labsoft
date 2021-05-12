@@ -36,7 +36,7 @@
             <div class="tile">
                 <div class="tile-body">
                     <div class="table-responsive">
-                            {% if perms.compras.proveedor_add %}
+                            {% if perms.compras.add_proveedor %}
                                 <span>
                                 <button onclick="abrir_modal('{% url 'compras:proveedor_add' %}')"
                                         class="btn btn-primary btn-sm">+ Agregar Proveedor</button>
