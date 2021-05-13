@@ -47,7 +47,8 @@
                                     <td>{{ user.username }}</td>
                                     <td>{{ user.date_joined | date:'d/m/Y' }}</td>
                                     <td>{{ user.email }}</td>
-                                    <td><img alt="perfil" class="img-fluid mx-auto d-block" src="{{ user.get_profile }}" width="30px"
+                                    <td><img alt="perfil" class="img-fluid mx-auto d-block" src="{{ user.get_profile }}"
+                                             width="30px"
                                              height="30px"></td>
                                     <td>
                                         <a class="btn btn-success p-2" href="{% url 'edit_user' user.id %}"
@@ -76,22 +77,19 @@
 
         $('.del').click(function () {
             const href = $(this).attr('href');
-            swal({
-                title: "¿Está seguro de eliminar este usuario?",
-                text: "",
-                type: "warning",
+            Swal.fire({
+                title: '¿Estás se seguro de querer eliminar éste usuario?',
+                text: "Este cambio no puede ser revertido",
+                icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: "Si, eliminar!",
-                cancelButtonText: "Cancelar!",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            }, function (isConfirm) {
-                if (isConfirm) {
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
                     window.location.href = href;
-                } else {
-                    swal("Cancelado", "", "error");
                 }
-            });
+            })
         });
 
 
@@ -99,14 +97,15 @@
 
         {% if confirm %}
             {% if confirm == True %}
-                swal({
+                Swal.fire({
                     title: "Eliminado",
-                    type: "success"
-                }, function (isConfirm) {
-                    if (isConfirm) {
-                        window.location.href = "{% url 'list_user' %}";
+                    icon: "success"
+                }).then((result) => {
+                    if(result.isConfirmed){
+                        window.location.href = '{% url 'list_user' %}';
                     }
-                });
+                })
+
             {% endif %}
         {% endif %}
 
