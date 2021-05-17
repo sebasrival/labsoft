@@ -1,6 +1,6 @@
 from django import forms
 
-from modulos.ventas.models import Cobro, Cuota, FacturaVenta, Producto
+from modulos.ventas.models import Cobro, Cuota, FacturaVenta,Cliente
 
 
 class CobroForm(forms.ModelForm):
@@ -40,16 +40,19 @@ class FacturaVentaForm(forms.ModelForm):
         }
 
 
-class ProductoForm(forms.ModelForm):
+class ClienteForm(forms.ModelForm):
     class Meta:
-        model = Producto
+        model = Cliente
         fields = '__all__'
         widgets = {
-            'codigo_producto': forms.TextInput(attrs={'class': 'form-control'}),
+            'ruc': forms.TextInput(attrs={'class': 'form-control'}),
+            'cedula': forms.NumberInput(attrs={'class': 'form-control'}),
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
-            'tipo': forms.Textarea(attrs={'class': 'form-control'}),
-            'volumen': forms.NumberInput(attrs={'class': 'form-control'}),
-            'color': forms.TextInput(attrs={'class': 'form-control'}),
-            'precio': forms.NumberInput(attrs={'class': 'form-control'}),
-            'cantidad_contenido': forms.NumberInput(attrs={'class': 'form-control'}),
+            'apellido': forms.TextInput(attrs={'class': 'form-control'}),
+            'razon_social': forms.TextInput(attrs={'class': 'form-control'}),
+            'telefono': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.TextInput(attrs={'class': 'form-control'}),
+            'direccion': forms.TextInput(attrs={'class': 'form-control'}),
+
         }
+

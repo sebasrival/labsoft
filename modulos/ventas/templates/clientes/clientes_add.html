@@ -1,0 +1,57 @@
+<div class="modal-dialog" role="document">
+    <form id="clienteForm" method="POST" action="{% url 'ventas:cliente_add' %}">
+        {% csrf_token %}
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">Agregar un Cliente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="bs-component">
+                        <div class="show-errors">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Ruc: </label>
+                        {{ form.ruc }}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Cedula: </label>
+                        {{ form.cedula }}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Nombre: </label>
+                        {{ form.nombre }}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Apellido: </label>
+                        {{ form.apellido }}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Razón Social: </label>
+                        {{ form.razon_social }}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Teléfono: </label>
+                        {{ form.telefono }}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Email: </label>
+                        {{ form.email }}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Dirección: </label>
+                        {{ form.direccion }}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="create_ajax_cliente()">Registrar Cliente</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </form>
+</div>

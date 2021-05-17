@@ -36,6 +36,10 @@ urlpatterns = [
     #módulo compras
     path('modulos/compras/', include('modulos.compras.urls')),
 
+    #módulo ventas
+    path('modulos/ventas/', include('modulos.ventas.urls')),
+    #módulo produccion
+    path('modulos/produccion/', include('modulos.produccion.urls')),
     # #usuarios
     path('user/list/', lista_usuarios, name='list_user'),
     path('user/add/', agregar_usuario, name='add_user'),
