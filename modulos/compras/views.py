@@ -11,11 +11,15 @@ from ..accounts.decorators import allowed_users
 
 
 # Vistas de Proveedores
-class ProveedorCreateView(LoginRequiredMixin, CreateView):
+from ..accounts.mixins import PermissionMixin
+
+
+class ProveedorCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
     model = Proveedor
     form_class = ProveedorForm
     template_name = 'proveedores/proveedores_add.html'
     success_url = reverse_lazy('compras:proveedor_list')
+    permission_required = 'compras.add_proveedor'
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -48,9 +52,10 @@ class ProveedorCreateView(LoginRequiredMixin, CreateView):
             return redirect('compras:proveedor_list')
 
 
-class ProveedorListView(LoginRequiredMixin, ListView):
+class ProveedorListView(LoginRequiredMixin, PermissionMixin, ListView):
     model = Proveedor
     template_name = 'proveedores/proveedores_list.html'
+    permission_required = 'compras.view_proveedor'
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -80,11 +85,13 @@ class ProveedorListView(LoginRequiredMixin, ListView):
             return render(request, self.template_name, context)
 
 
-class ProveedorUpdateView(LoginRequiredMixin, UpdateView):
+class ProveedorUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
     model = Proveedor
     form_class = ProveedorForm
     template_name = 'proveedores/proveedores_edit.html'
-    success_url = reverse_lazy('compras:proveedor_list')
+    #success_url = reverse_lazy('compras:proveedor_list')
+    permission_required = 'compras.change_proveedor'
+    url_redirect = reverse_lazy('index')
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -108,7 +115,7 @@ class ProveedorUpdateView(LoginRequiredMixin, UpdateView):
                 data['error'] = str(e)
             return response
         else:
-            return reverse_lazy('compras:proveedor_list')
+            return redirect('compras:proveedor_list')
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -118,10 +125,12 @@ class ProveedorUpdateView(LoginRequiredMixin, UpdateView):
             return redirect('compras:proveedor_list')
 
 
-class ProveedorDeleteView(LoginRequiredMixin, DeleteView):
+class ProveedorDeleteView(LoginRequiredMixin, PermissionMixin, DeleteView):
     model = Proveedor
     form_class = ProveedorForm
     success_url = reverse_lazy('compras:proveedor_list')
+    permission_required = 'compras.delete_proveedor'
+    url_redirect = reverse_lazy('index')
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():

@@ -63,3 +63,16 @@ function show_notify_success(message) {
         },
     });
 }
+
+function alert_error(messages) {
+    var par = '<p style="text-align: left">';
+    $.each(messages, function (key, value) {
+        par += value + '<br>';
+    })
+    par += '</p>';
+    Swal.fire({
+        title: 'Error de Permisos',
+        html: par,
+        icon: 'error'
+    });
+}
