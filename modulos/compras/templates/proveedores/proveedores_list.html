@@ -84,8 +84,10 @@
 
 {% block scripts %}
     <script type="text/javascript" src="{% static "js/functions/functions.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/compras/index.js" %}"></script>
+    <script id="index-compra" type="text/javascript" src="{% static "js/compras/index.js" %}"></script>
     <script>
-        list_proveedor('/modulos/compras/proveedores/list/', '/modulos/compras/proveedores/edit/', '/modulos/compras/proveedores/del/');
+        //console.log({{ perms.compras.change_proveedor | safe | lower}});
+        //console.log({{ perms.compras.delete_proveedor | safe | lower}});
+        list_proveedor('/modulos/compras/proveedores/list/', '/modulos/compras/proveedores/edit/', '/modulos/compras/proveedores/del/', {{ perms.compras.change_proveedor | safe | lower}}, {{ perms.compras.delete_proveedor | safe | lower}});
     </script>
 {% endblock %}
