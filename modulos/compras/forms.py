@@ -1,5 +1,5 @@
 from django import forms
-from .models import Proveedor, Pago, MateriaPrima, StockMateriaPrima
+from .models import Proveedor, Pago, MateriaPrima, StockMateriaPrima, FacturaCompra, FacturaDet
 
 
 class ProveedorForm(forms.ModelForm):
@@ -45,4 +45,31 @@ class StockMateriaPrimaForm(forms.ModelForm):
         widgets = {
             'cod_materia': forms.TextInput(attrs={'class': 'form-control'}),
             'cantidad': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+
+class FacturaCompraForm(forms.ModelForm):
+    class Meta:
+        model = FacturaCompra
+        exclude = ['estado', 'pago']
+        widgets = {
+            'nro_factura' : forms.TextInput(attrs={'class': 'form-control'}),
+            'proveedor': forms.Select(attrs={'class': 'form-control',
+                                                'id': 'proveedor_select',
+                                                'style': 'width: 100%'}),
+            'fecha_factura': forms.DateInput(attrs={
+                'class': 'form-control',
+                'id':'date_compra',
+                'style': 'font-weight: bold;',
+                'autocomplete': 'off',
+            })
+        }
+
+class FacturaDetalleCompraForm(forms.ModelForm):
+    class Meta:
+        model = FacturaDet
+        fields = ['materia', 'cantidad']
+        widgets = {
+            'materia': forms.Select(attrs={'class': 'form-control'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control'})
         }

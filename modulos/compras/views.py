@@ -4,16 +4,13 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import MateriaPrima, Proveedor, StockMateriaPrima, Pago
-from .forms import MateriaPrimaForm, StockMateriaPrimaForm, ProveedorForm
 
-from ..accounts.decorators import allowed_users
-
-
-# Vistas de Proveedores
+from .models import MateriaPrima, Proveedor, StockMateriaPrima, Pago, FacturaCompra
+from .forms import MateriaPrimaForm, StockMateriaPrimaForm, ProveedorForm, FacturaCompraForm
 from ..accounts.mixins import PermissionMixin
 
 
+# Proveedores
 class ProveedorCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
     model = Proveedor
     form_class = ProveedorForm
@@ -89,7 +86,7 @@ class ProveedorUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
     model = Proveedor
     form_class = ProveedorForm
     template_name = 'proveedores/proveedores_edit.html'
-    #success_url = reverse_lazy('compras:proveedor_list')
+    # success_url = reverse_lazy('compras:proveedor_list')
     permission_required = 'compras.change_proveedor'
     url_redirect = reverse_lazy('index')
 
@@ -138,6 +135,20 @@ class ProveedorDeleteView(LoginRequiredMixin, PermissionMixin, DeleteView):
         else:
             # redirectcciona si se hace una peticion que no sea ajax
             return redirect('compras:proveedor_list')
+
+
+# Factura
+class FacturaCompraCreateView(LoginRequiredMixin, CreateView):
+    model = FacturaCompra
+    form_class = FacturaCompraForm
+    template_name = 'factura/factura_add.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Factura Compra'
+        context['subtitle'] = 'Registrar Factura Compra'
+        context['route'] = reverse_lazy('compras:factura_add')
+        return context
 
 
 # Vistas Materia Prima

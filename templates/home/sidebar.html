@@ -16,7 +16,7 @@
                         class="app-menu__label">&nbsp;&nbsp;&nbsp;Compras</span><i
                         class="treeview-indicator fa fa-angle-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a class="treeview-item" href="">Registrar Compra</a></li>
+                    <li><a class="treeview-item" href="{% url 'compras:factura_add' %}">Registrar Compra</a></li>
                     <li><a class="treeview-item" href="">Facturas Compras</a></li>
                     <li><a class="treeview-item" href="">Stock Materia Prima</a></li>
                     {% if perms.compras.view_proveedor or perms.compras.add_proveedor or perms.compras.delete_proveedor or perms.compras.change_proveedor%}
