@@ -21,3 +21,129 @@
     <li class="breadcrumb-item"><a href="{{ route }}">{{ title }}</a></li>
 {% endblock %}
 
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="tile mb-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="page-header">
+                        <h5 class="mb-3 line-head" id="typography">{{ subtitle }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="card">
+                        <h6 class="card-header">Factura</h6>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label> <strong> Buscar Materia Prima:</strong> </label>
+                                <span class="input-group-append">
+                                <select class="form-control" id="search"></select>
+                            </span>
+                            </div>
+                            <div class="table-responsive">
+                                <button type="button" class="mb-2 py-0 btn btn-danger btn-sm btnDelete"
+                                        style="height: 20px; align-content: center">
+                                    <label>Eliminar todo</label>
+                                </button>
+                                <table class="table table-bordered"
+                                       id="tFacturaCompra" style="width: 100%;">
+                                    <thead>
+                                    <tr>
+                                        <td>CODIGO</td>
+                                        <td>DESCRIPCION</td>
+                                        <td>PRECIO</td>
+                                        <td>CANTIDAD</td>
+                                        <td>IVA</td>
+                                        <td>SUBTOTAL</td>
+                                        <td>ELIMINAR</td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card">
+                        <h6 class="card-header">Datos Factura</h6>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label><strong>Número Factura:</strong></label>
+                                {{ form.nro_factura }}
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Tipo de compra:</strong></label>
+                                <div style="display: inline-block">
+                                    {% for radio in form.tipo_factura %}
+                                        <b>{{ radio }}&nbsp;&nbsp;</b>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Proveedor:</strong></label>
+                                {{ form.proveedor }}
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Fecha Factura:</strong></label>
+                                {{ form.fecha_factura }}
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Descuento:</strong></label>
+                                {{ form.descuento }}
+                            </div>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <label><strong>Total Iva: </strong></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
+                                        </div>
+                                        <input type="text" class="form-control" id="totalIva"
+                                               style="font-weight: bold;">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label><strong>Total a pagar IVA incluído: </strong></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
+                                        </div>
+                                        <input type="text" class="form-control" id="total"
+                                               style="font-weight: bold;">
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tile-footer">
+                <button type="submit" class="btn btn-primary" style="color: white"><i
+                        class="fa fa-fw fa-lg fa-check-circle"></i>Registrar Factura
+                </button>&nbsp;&nbsp;&nbsp;
+                <a class="btn btn-secondary" href="">
+                    <i class="fa fa-fw fa-lg fa-times-circle"></i>Cancelar</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        //inicializacion de la fecha
+        $('#date_compra').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            todayHighlight: true,
+            language: 'es',
+        });
+
+        $('#proveedor_select').select2({
+            placeholder: 'Seleccione un Proveedor',
+            language: "es",
+        });
+    </script>
+{% endblock %}

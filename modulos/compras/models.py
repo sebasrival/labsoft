@@ -12,7 +12,7 @@ class Proveedor(models.Model):
     direccion = models.CharField(max_length=150, blank=True)
 
     def __str__(self):
-        return '%s %s' % (self.ruc, self.razon_social)
+        return '%s' % (self.razon_social)
 
     class Meta:
         verbose_name = "Proveedor"

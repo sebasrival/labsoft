@@ -56,13 +56,15 @@ class FacturaCompraForm(forms.ModelForm):
             'nro_factura' : forms.TextInput(attrs={'class': 'form-control'}),
             'proveedor': forms.Select(attrs={'class': 'form-control',
                                                 'id': 'proveedor_select',
-                                                'style': 'width: 100%'}),
+                                                'style': 'width: 100%; '}),
             'fecha_factura': forms.DateInput(attrs={
                 'class': 'form-control',
                 'id':'date_compra',
                 'style': 'font-weight: bold;',
                 'autocomplete': 'off',
-            })
+            }),
+            'tipo_factura' : forms.RadioSelect(choices=((True, 'Contado',), (False, 'Credito',))),
+            'descuento': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
 class FacturaDetalleCompraForm(forms.ModelForm):

@@ -10,8 +10,8 @@
 
 <head>
     <!-- Open Graph Meta-->
-    {% block title%}
-    <title>Labsoft</title>
+    {% block title %}
+        <title>Labsoft</title>
     {% endblock %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,66 +24,70 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     {% block head %}
-    {% endblock%}
+    {% endblock %}
 
     <!-- Font-icon css-->
     <link rel="stylesheet" type="text/css"
-        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 </head>
 <body class="app sidebar-mini">
 
-    {% block navbar %}
-    {% endblock %}
+{% block navbar %}
+{% endblock %}
 
-    {% block sidebar%}
-    {% endblock %}
+{% block sidebar %}
+{% endblock %}
 
-    <main class="app-content">
+<main class="app-content">
 
-        <div class="app-title">
-            {% block head-app %}
-                <div>
-                    <h1><i class="fas fa-atom"> </i> Labsoft</h1>
-                    <p>Sistema de Gestion - Labsoft</p>
-                </div>
+    <div class="app-title">
+        {% block head-app %}
+            <div>
+                <h1><i class="fas fa-atom"> </i> Labsoft</h1>
+                <p>Sistema de Gestion - Labsoft</p>
+            </div>
+        {% endblock %}
+
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="fa fa-home fa-lg"></i></a></li>
+            {% block breadcrumbs %}
             {% endblock %}
+        </ul>
 
-                <ul class="app-breadcrumb breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'index' %}"><i class="fa fa-home fa-lg"></i></a></li>
-                    {% block breadcrumbs %}
-                    {% endblock %}
-                </ul>
-
-        </div>
+    </div>
 
 
-        {% block content %}
-        {% endblock content %}
-    </main>
+    {% block content %}
+    {% endblock content %}
+</main>
 
-    <!-- Essential javascripts for application to work-->
-    <script src="{% static "js/jquery-3.3.1.min.js" %}"></script>
-    <script src="{% static "js/popper.min.js" %}"></script>
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
-    <script src="{% static "js/main.js" %}"></script>
+<!-- Essential javascripts for application to work-->
+<script src="{% static "js/jquery-3.3.1.min.js" %}"></script>
+<script src="{% static "js/popper.min.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+<script src="{% static "js/main.js" %}"></script>
 
-    <!-- The javascript plugin to display page loading on top-->
-    <script src="{% static "js/plugins/pace.min.js" %}"></script>
+<!-- The javascript plugin to display page loading on top-->
+<script src="{% static "js/plugins/pace.min.js" %}"></script>
 
-    <!--Para las tablas y otros plugins-->
-    <script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
-    <script type="text/javascript" src="{% static "js/plugins/sweetalert.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/plugins/select2.min.js" %}"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<!--Para las tablas y otros plugins-->
+<script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
+<script type="text/javascript" src="{% static "js/plugins/sweetalert.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/bootstrap-notify.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/select2.min.js" %}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.es.js" %}"></script>
+<script type="text/javascript"
+        src="{% static "lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js" %} "></script>
 
 
-    {% block scripts %}
-    {% endblock %}
+{% block scripts %}
+{% endblock %}
 </body>
 
 </html>
