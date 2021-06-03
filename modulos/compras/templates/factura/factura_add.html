@@ -40,7 +40,7 @@
                             <div class="form-group">
                                 <label> <strong> Buscar Materia Prima:</strong> </label>
                                 <span class="input-group-append">
-                                <select class="form-control" id="search"></select>
+                                <select class="form-control" id="#"></select>
                             </span>
                             </div>
                             <div class="table-responsive">
@@ -96,7 +96,7 @@
                             </div>
                             <fieldset disabled>
                                 <div class="form-group">
-                                    <label><strong>Total Iva: </strong></label>
+                                    <label><strong>Total IVA 10%: </strong></label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text" style="font-weight: bold;">Gs.</div>
@@ -106,7 +106,27 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label><strong>Total a pagar IVA incluído: </strong></label>
+                                    <label><strong>Total IVA 5%: </strong></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
+                                        </div>
+                                        <input type="text" class="form-control" id="totalIva"
+                                               style="font-weight: bold;">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label><strong>Total Exenta: </strong></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
+                                        </div>
+                                        <input type="text" class="form-control" id="totalIva"
+                                               style="font-weight: bold;">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label><strong>Total a pagar: </strong></label>
                                     <div class="input-group mb-2 mr-sm-2">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text" style="font-weight: bold;">Gs.</div>
@@ -143,7 +163,30 @@
 
         $('#proveedor_select').select2({
             placeholder: 'Seleccione un Proveedor',
-            language: "es",
+            ajax: {
+                type: 'GET',
+                url: '{% url 'compras:search_proveedor' %}',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        term: params.term,
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    }
+                },
+            },
+            minimumInputLength: 1,
+            language: {
+                inputTooShort: function () {
+                    return '';
+                },
+                searching: function () {
+                    return 'Buscando...'
+                }
+            }
         });
     </script>
 {% endblock %}

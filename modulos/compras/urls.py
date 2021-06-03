@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import ProveedorListView, ProveedorCreateView, ProveedorDeleteView, ProveedorUpdateView, \
-    FacturaCompraCreateView
+    FacturaCompraCreateView, SearchProveedor
 
 app_name='compras'
 
@@ -10,6 +10,8 @@ urlpatterns = [
     path('proveedores/add/', ProveedorCreateView.as_view(), name='proveedor_add'),
     path('proveedores/edit/<int:pk>/', ProveedorUpdateView.as_view(), name='proveedor_edit'),
     path('proveedores/del/<int:pk>/', ProveedorDeleteView.as_view(), name='proveedor_del'),
+
+    path('proveedores/search/', SearchProveedor.as_view(), name='search_proveedor'),
 
     #factura
     path('compras/factura/add', FacturaCompraCreateView.as_view(), name='factura_add')

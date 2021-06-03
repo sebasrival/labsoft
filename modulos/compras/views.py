@@ -1,8 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import MateriaPrima, Proveedor, StockMateriaPrima, Pago, FacturaCompra
@@ -11,6 +12,8 @@ from ..accounts.mixins import PermissionMixin
 
 
 # Proveedores
+
+
 class ProveedorCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
     model = Proveedor
     form_class = ProveedorForm
@@ -135,6 +138,28 @@ class ProveedorDeleteView(LoginRequiredMixin, PermissionMixin, DeleteView):
         else:
             # redirectcciona si se hace una peticion que no sea ajax
             return redirect('compras:proveedor_list')
+
+
+class SearchProveedor(TemplateView):
+    """Clase para buscar proveedor por ajax y devielvo un JsonResponse"""
+
+    def get(self, request, *args, **kwargs):
+        data = {}
+        if request.is_ajax():
+            try:
+                term = request.GET['term']
+                query = Proveedor.objects.filter(Q(razon_social__icontains=term) | Q(ruc__icontains=term))[0:10]
+                data = []
+                for prov in query:
+                    item = {}
+                    item['id'] = prov.ruc
+                    item['text'] = prov.razon_social
+                    data.append(item)
+            except Exception as   e:
+                data['error'] = str(e)
+        else:
+            data['error'] = 'Solo peticiones ajax'
+        return JsonResponse(data, safe=False)
 
 
 # Factura
