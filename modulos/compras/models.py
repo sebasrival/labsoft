@@ -12,7 +12,7 @@ class Proveedor(models.Model):
     direccion = models.CharField(max_length=150, blank=True)
 
     def __str__(self):
-        return '%s' % (self.razon_social)
+        return '%s' % self.razon_social
 
     class Meta:
         verbose_name = "Proveedor"
@@ -25,7 +25,7 @@ class Pago(models.Model):
 
     class Meta:
         verbose_name = "Pago"
-        verbose_name_plural = "Plural"
+        verbose_name_plural = "Pagos"
 
 
 ESTADOS_FACTURA = [
@@ -35,11 +35,12 @@ ESTADOS_FACTURA = [
 
 
 class MateriaPrima(models.Model):
-    materia = models.CharField(max_length=100)
+    codigo = models.CharField(max_length=200, unique=True)
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
     inci = models.CharField(max_length=100)
     um = models.CharField(max_length=5)  # unidad de medida
+    cantidadCont = models.FloatField(null=True)  # el null solo para crear rapido
 
     class Meta:
         verbose_name = 'Materia Prima'
@@ -57,7 +58,7 @@ class FacturaCompra(models.Model):
     exenta = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     pago = models.ForeignKey(Pago, on_delete=models.PROTECT)
     fecha_factura = models.DateTimeField(default=datetime.now)
-    descuento = models.FloatField(default=0)
+    descuento = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return 'Factura Compra: %s - Proveedor: %s' % (self.nro_factura, self.proveedor.razon_social)
@@ -70,7 +71,6 @@ class FacturaCompra(models.Model):
 TIPO_IVA = [
     (5, '5%'),
     (10, '10%'),
-    (0, 'Exenta')
 ]
 
 

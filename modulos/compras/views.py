@@ -13,7 +13,6 @@ from ..accounts.mixins import PermissionMixin
 
 # Proveedores
 
-
 class ProveedorCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
     model = Proveedor
     form_class = ProveedorForm
@@ -151,11 +150,9 @@ class SearchProveedor(TemplateView):
                 query = Proveedor.objects.filter(Q(razon_social__icontains=term) | Q(ruc__icontains=term))[0:10]
                 data = []
                 for prov in query:
-                    item = {}
-                    item['id'] = prov.ruc
-                    item['text'] = prov.razon_social
+                    item = {'id': prov.ruc, 'text': prov.razon_social}
                     data.append(item)
-            except Exception as   e:
+            except Exception as e:
                 data['error'] = str(e)
         else:
             data['error'] = 'Solo peticiones ajax'
@@ -173,6 +170,7 @@ class FacturaCompraCreateView(LoginRequiredMixin, CreateView):
         context['title'] = 'Factura Compra'
         context['subtitle'] = 'Registrar Factura Compra'
         context['route'] = reverse_lazy('compras:factura_add')
+        context['form_mat'] = MateriaPrimaForm
         return context
 
 

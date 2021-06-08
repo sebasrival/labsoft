@@ -30,10 +30,11 @@ class MateriaPrimaForm(forms.ModelForm):
         model = MateriaPrima
         fields = '__all__'
         widgets = {
-            'cod_materia': forms.TextInput(attrs={'class': 'form-control'}),
-            'nombre ': forms.TextInput(attrs={'class': 'form-control'}),
-            'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
-            'inci ': forms.TextInput(attrs={'class': 'form-control'}),
+            'codigo': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows':2}),
+            'cantidadCont': forms.NumberInput(attrs={'class': 'form-control', 'min':1}),
+            'inci': forms.TextInput(attrs={'class': 'form-control'}),
             'um': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
@@ -64,7 +65,7 @@ class FacturaCompraForm(forms.ModelForm):
                 'autocomplete': 'off',
             }),
             'tipo_factura' : forms.RadioSelect(choices=((True, 'Contado',), (False, 'Credito',))),
-            'descuento': forms.NumberInput(attrs={'class': 'form-control'}),
+            'descuento': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 100}),
         }
 
 class FacturaDetalleCompraForm(forms.ModelForm):
@@ -73,5 +74,5 @@ class FacturaDetalleCompraForm(forms.ModelForm):
         fields = ['materia', 'cantidad']
         widgets = {
             'materia': forms.Select(attrs={'class': 'form-control'}),
-            'cantidad': forms.NumberInput(attrs={'class': 'form-control'})
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': 0})
         }

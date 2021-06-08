@@ -7,10 +7,19 @@
 {% endblock navbar %}
 
 {% block head-app %}
+    <!--suppress ALL -->
     <div>
         <h1><i class="fas fa-atom"> </i> {{ title }}</h1>
         <p>Sistema de Gestion - Labsoft</p>
     </div>
+{% endblock %}
+
+{% block head %}
+<style>
+    th, td {
+        font-size: x-small;
+    }
+</style>
 {% endblock %}
 
 {% block sidebar %}
@@ -37,28 +46,37 @@
                     <div class="card">
                         <h6 class="card-header">Factura</h6>
                         <div class="card-body">
-                            <div class="form-group">
-                                <label> <strong> Buscar Materia Prima:</strong> </label>
-                                <span class="input-group-append">
-                                <select class="form-control" id="#"></select>
-                            </span>
+                            <div class="row">
+                                <div class="form-group col-sm-8">
+                                    <label> <strong> Buscar Materia Prima:</strong> </label>
+                                    <span class="input-group-append">
+                                        <select class="form-control" id="searchMateria"></select>
+                                    </span>
+                                </div>
+                                <div class="d-flex align-items-center col-sm-4 mt-3">
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary btn-modal">
+                                        Añadir Materia
+                                    </button>
+                                </div>
                             </div>
+
+                            <button type="button" class="mb-2 py-0 btn btn-danger btn-sm btnDelete"
+                                    style="height: 20px; align-content: center">
+                                <label>Eliminar todo</label>
+                            </button>
                             <div class="table-responsive">
-                                <button type="button" class="mb-2 py-0 btn btn-danger btn-sm btnDelete"
-                                        style="height: 20px; align-content: center">
-                                    <label>Eliminar todo</label>
-                                </button>
                                 <table class="table table-bordered"
                                        id="tFacturaCompra" style="width: 100%;">
                                     <thead>
                                     <tr>
-                                        <td>CODIGO</td>
-                                        <td>DESCRIPCION</td>
+                                        <td>COD.</td>
+                                        <td>NOM.</td>
                                         <td>PRECIO</td>
-                                        <td>CANTIDAD</td>
+                                        <td>CANT.</td>
                                         <td>IVA</td>
                                         <td>SUBTOTAL</td>
-                                        <td>ELIMINAR</td>
+                                        <td><b>X</b></td>
                                     </tr>
                                     </thead>
                                 </table>
@@ -91,7 +109,7 @@
                                 {{ form.fecha_factura }}
                             </div>
                             <div class="form-group">
-                                <label><strong>Descuento:</strong></label>
+                                <label><strong>Descuento %:</strong></label>
                                 {{ form.descuento }}
                             </div>
                             <fieldset disabled>
@@ -101,7 +119,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text" style="font-weight: bold;">Gs.</div>
                                         </div>
-                                        <input type="text" class="form-control" id="totalIva"
+                                        <input type="number" value="0"  class="form-control" id="totalIva"
                                                style="font-weight: bold;">
                                     </div>
                                 </div>
@@ -111,7 +129,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text" style="font-weight: bold;">Gs.</div>
                                         </div>
-                                        <input type="text" class="form-control" id="totalIva"
+                                        <input type="number" value="0" class="form-control" id="totalIva"
                                                style="font-weight: bold;">
                                     </div>
                                 </div>
@@ -121,7 +139,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text" style="font-weight: bold;">Gs.</div>
                                         </div>
-                                        <input type="text" class="form-control" id="totalIva"
+                                        <input type="number" value="0"  class="form-control" id="totalIva"
                                                style="font-weight: bold;">
                                     </div>
                                 </div>
@@ -131,7 +149,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text" style="font-weight: bold;">Gs.</div>
                                         </div>
-                                        <input type="text" class="form-control" id="total"
+                                        <input type="number" value="0"  class="form-control" id="total"
                                                style="font-weight: bold;">
                                     </div>
                                 </div>
@@ -149,9 +167,59 @@
             </div>
         </div>
     </form>
+    <!-- Modal para agregar materia prima -->
+    <div class="modal fade" id="materiaModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Añadir Materia Prima</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="nombreMateria">Codigo:</label>
+                            {{ form_mat.codigo }}
+                            <div id="mdCodigo" class="form-control-feedback text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nombreMateria">Nombre:</label>
+                            {{ form_mat.nombre }}
+                            <div id="mdNombre" class="form-control-feedback text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="descMateria">Descripción:</label>
+                            {{ form_mat.descripcion }}
+                        </div>
+                        <div class="form-group">
+                            <label for="iniciMateria">INCI:</label>
+                            {{ form_mat.inci }}
+                        </div>
+                        <div class="form-group">
+                            <label for="cantCMateria">Cantidad Contenido:</label>
+                            {{ form_mat.cantidadCont }}
+                            <div id="mdCantidad" class="form-control-feedback text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="umMateria">Unidad de medida:</label>
+                            {{ form_mat.um }}
+                            <div id="mdUM" class="form-control-feedback text-danger"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="frm-materia" class="btn btn-primary" type="submit">Añadir a detalle</button>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block scripts %}
+    <script type="text/javascript" src="{% static "js/compras/form.js" %}"></script>
     <script type="text/javascript">
         //inicializacion de la fecha
         $('#date_compra').datepicker({
@@ -187,6 +255,18 @@
                     return 'Buscando...'
                 }
             }
+        });
+
+        $('#searchMateria').select2({
+            placeholder: 'Buscar Materia prima'
+        });
+
+        $('#tFacturaCompra').dataTable({
+            ordering: false,
+        });
+
+        $('.btn-modal').click(function (){
+            $('#materiaModal').modal('show');
         });
     </script>
 {% endblock %}

@@ -38,7 +38,7 @@
                     <div class="table-responsive">
                             {% if perms.compras.add_proveedor %}
                                 <span>
-                                <button onclick="abrir_modal('{% url 'compras:proveedor_add' %}')"
+                                <button onclick="abrir_modal_prov('{% url 'compras:proveedor_add' %}')"
                                         class="btn btn-primary btn-sm">+ Agregar Proveedor</button>
                                 </span>
                                 {% csrf_token %}
@@ -83,8 +83,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script type="text/javascript" src="{% static "js/functions/functions.js" %}"></script>
-    <script id="index-compra" type="text/javascript" src="{% static "js/compras/index.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/compras/index.js" %}"></script>
     <script>
         //console.log({{ perms.compras.change_proveedor | safe | lower}});
         //console.log({{ perms.compras.delete_proveedor | safe | lower}});

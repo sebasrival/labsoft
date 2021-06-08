@@ -36,13 +36,13 @@ function list_proveedor(url_list, url_edit, url_del, perm_change, perm_delete) {
     });
 }
 
-function abrir_modal(url) {
+function abrir_modal_prov(url) {
     $('#proveedorModal').load(url, function () {
         $(this).modal('show');
     });
 }
 
-function cerrar_modal() {
+function cerrar_modal_prov() {
     $('#proveedorModal').modal('hide');
 }
 
@@ -52,7 +52,7 @@ function create_ajax_prov() {
         url: $('#provForm').attr('action'),
         type: $('#provForm').attr('method'),
         success: function (response) {
-            cerrar_modal();
+            cerrar_modal_prov();
             show_notify_success(response.message);
         },
         error: function (error) {
@@ -70,7 +70,7 @@ function editar_ajax_prov() {
         url: $('#provFormUpdate').attr('action'),
         type: $('#provFormUpdate').attr('method'),
         success: function (response) {
-            cerrar_modal();
+            cerrar_modal_prov();
             show_notify_success(response.message);
         },
         error: function (error) {
