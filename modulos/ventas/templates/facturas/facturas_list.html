@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+    {% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i> {{ title }}</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+{% block head %}
+    <style>
+        #Table td, th {
+            vertical-align: inherit;
+            padding: 0.4rem;
+        }
+    </style>
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{{ route }}">{{ title }}</a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div class="table-responsive">
+                            {% if perms.ventas.cliente_add %}
+                           
+                                <a class="btn btn-success p-2" href="{% url 'ventas:factura_add' %}"
+                                           title="Editar">
+                                            <i class="fas fa-plus"></i>
+                                        </a>
+                                {% csrf_token %}
+                            {% endif %}
+                        <div style="text-align: center;">
+                            <h4 style="font-size: large; margin-bottom: 0" class="tile-title">{{ subtitle }}</h4>
+                        </div>
+                        <table class="table table-hover table-bordered" id="facturaTable" style="max-width: 100%; width: 100%">
+                            <thead>
+                            <tr style="font-size: 0.7rem">
+                                <th>Número Factura</th>
+                                <th>Cliente</th>
+                                <th>Fecha de Emisión</th>
+                                <th>Estado</th>
+                                <th>Total Factura</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="font-size: 0.75rem;">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="text-align: center;">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+
+<div class="modal fade" id="modalCobro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><b><i class="fas fa-shopping-cart"></i> Gestionar cuotas</b></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" id="cobroDet">
+                    <thead>
+                    <tr>
+                        <th>Nro Cuota</th>
+                        <th>Monto</th>
+                        <th>Estado</th>
+                        <th>Fecha vencimiento</th>
+                        <th>Fecha pago</th>
+                        <th>Acciones</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+       
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{% static "js/functions/functions.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/ventas/index.js" %}"></script>
+    <script>
+        list_factura('/modulos/ventas/facturas/list/','/modulos/ventas/facturas/del/');
+    </script>
+{% endblock %}

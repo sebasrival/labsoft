@@ -1,6 +1,6 @@
 from django import forms
-
-from modulos.ventas.models import Cobro, Cuota, FacturaVenta,Cliente
+from modulos.ventas.models import Cobro, Cuota, FacturaVenta,Cliente,FacturaVentaDetalle
+from datetime import datetime
 
 
 class CobroForm(forms.ModelForm):
@@ -35,8 +35,31 @@ class FacturaVentaForm(forms.ModelForm):
             'monto_iva1': forms.NumberInput(attrs={'class': 'form-control'}),
             'monto_iva2': forms.NumberInput(attrs={'class': 'form-control'}),
             'total': forms.NumberInput(attrs={'class': 'form-control'}),
-            'fecha_emision': forms.NumberInput(attrs={'class': 'form-control'}),
+            'fecha_emision': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={
+                    'value': datetime.now().strftime('%Y-%m-%d'),
+                    'autocomplete': 'off',
+                    'class': 'form-control datetimepicker-input',
+                    'id': 'date_joined',
+                    'data-target': '#date_joined',
+                    'data-toggle': 'datetimepicker'
+                }
+            ),
+            'cliente': forms.TextInput(attrs={'class': 'form-control'}),
+            'nro_factura': forms.TextInput(attrs={'class': 'form-control'}),
 
+
+
+        }
+
+class FacturaVentaDetalleform(forms.ModelForm):
+    class Meta:
+        model = FacturaVentaDetalle
+        fields = ['producto', 'cantidad']
+        widgets = {
+            'producto': forms.Select(attrs={'class': 'form-control'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control'})
         }
 
 

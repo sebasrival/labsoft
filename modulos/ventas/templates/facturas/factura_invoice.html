@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<style>
+    .img-invoice {
+        width: 50px;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .head {
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    #invoice thead tr th {
+        text-align: left;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        padding-top: 4px;
+    }
+
+    #invoice thead tr {
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    #invoice tbody tr {
+        padding: 0;
+    }
+
+    .text-center{
+        text-align: center;
+    }
+</style>
+<body>
+<img src="{{ icon }}" class="img-invoice">
+<p class="head">
+    {{ comp.name|upper }}<br>
+    {{ comp.ruc }}<br>
+    {{ comp.address|upper }}
+</p>
+<p>
+    <b>FACTURA:</b> {{ factura.nro_factura }}<br>
+    <b>FECHA DE VENTA:</b> {{ factura.fecha_vencimiento }}<br>
+    <b>CLIENTE:</b> {{ factura.cliente.razon_social|upper }}<br>
+    <b>RUC:</b> {{ factura.cliente.ruc }}<br>
+</p>
+<table id="invoice">
+    <thead>
+    <tr>
+        <th style="width: 10%;">CANT</th>
+        <th style="width: 15%;">PRECIO UNITARIO</th>
+        <th style="width: 20%;">CODIGO</th>
+        <th style="width: 40%;">PRODUCTO</th>
+        <th style="width: 10%;">TOTAL</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for d in factura.facturaventadetalle_set.all %}
+        <tr {% if forloop.first %}style="padding-top: 3px;" {% endif %}>
+            <td class="text-center" id="cantidadProducto">{{ d.cantidad }}</td>
+            <td class="text-center" id="precioProducto">Gs. {{ d.precio}}</td>
+            <td>{{ d.producto.codigo_producto }}</td>
+            <td>{{ d.producto.nombre }}</td>
+            <td style="text-align: right;" id="subtotalProducto">Gs. {{ d.obtener_subtotal }}</td>
+        </tr>
+    {% endfor %}
+    <tr style="border-top: 1px solid black; padding-top: 4px;">
+        <td colspan="4"><b>SUBTOTAL</b></td>
+        <td style="text-align: right">{{ factura.total }}</td>
+    </tr>
+    <tr style="padding-top: 0px;">
+        <td colspan="4"><b>IVA 10%</b></td>
+        <td style="text-align: right">{{ factura.monto_iva1 }}</td>
+    </tr>
+    <tr style="padding-top: 0px;">
+        <td colspan="4"><b>IVA 5%</b></td>
+        <td style="text-align: right">{{ factura.monto_iva2 }}</td>
+    </tr>
+    <tr style="padding-top: 0px;">
+        <td colspan="4"><b>TOTAL A PAGAR</b></td>
+        <td style="text-align: right">{{ factura.total }}</td>
+    </tr>
+    </tbody>
+</table>
+<table style="margin-top: 250px;">
+    <thead>
+    <tr>
+        <th>****GRACIAS POR SU COMPRA****</th>
+    </tr>
+    <tr>
+        <th>NOSE ACEPTAN CAMBIOS NI DEVOLUCIONES</th>
+    </tr>
+    </thead>
+</table>
+</body>
+</html>

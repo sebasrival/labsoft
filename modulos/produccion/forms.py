@@ -13,4 +13,8 @@ class ProductoForm(forms.ModelForm):
             'color': forms.TextInput(attrs={'class': 'form-control'}),
             'precio': forms.NumberInput(attrs={'class': 'form-control','min':1}),
             'cantidad_contenido': forms.NumberInput(attrs={'class': 'form-control','min':1}),
+            'tasa_iva': forms.Select(attrs={'class': 'form-control'}),
         }
+
+
+

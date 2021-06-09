@@ -36,6 +36,11 @@
                 <li><a class="treeview-item" href="{% url 'ventas:cliente_list' %}">Clientes</a></li>
             {% endif %}
             </ul>
+            <ul class="treeview-menu">
+                {% if perms.ventas.view_cliente or perms.ventas.add_cliente or perms.ventas.delete_cliente or perms.ventas.change_cliente%}
+                <li><a class="treeview-item" href="{% url 'ventas:factura_list' %}">Ventas</a></li>
+            {% endif %}
+            </ul>
         </li>
     {% endif %}
     {% if perms.produccion %}

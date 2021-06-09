@@ -1,5 +1,6 @@
 from django.db import models
 from modulos.produccion.models import Producto
+from django.forms import model_to_dict
 
 
 
@@ -23,17 +24,26 @@ TIPO_IVA = [
 # Modelo de Cliente.
 class Cliente (models.Model):
     ruc = models.CharField(max_length=15, unique=True)
-    cedula = models.CharField(max_length=15, unique=True)
+    cedula = models.CharField(max_length=15, unique=True, blank=True)
     nombre = models.CharField(max_length=50, blank=True)
     apellido = models.CharField(max_length=50, blank=True)
     razon_social = models.CharField(max_length=100, blank=True)
-    telefono = models.CharField(max_length=20)
+    telefono = models.CharField(max_length=20,blank=True)
     email = models.CharField(max_length=100, blank=True)
     direccion = models.CharField(max_length=150, blank=True)
 
     def __str__(self):
         return '%s %s' % (self.nombre, self.apellido)
 
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['id']=self.id
+        item['nombre'] = self.nombre
+        item['ruc'] = self.ruc
+        item['apellido'] = self.apellido
+        item['razon_social'] = self.razon_social
+        item['cedula'] = self.cedula
+        return item
 
     class Meta():
         verbose_name = "Cliente"
@@ -43,8 +53,16 @@ class Cliente (models.Model):
 class Cobro(models.Model):
     metodo_cobro = models.CharField(max_length=100)
     descripcion = models.TextField()
-    tipo_cobro = models.TextField()
+    medio_cobro = models.TextField()
     cantidad_cuotas=models.IntegerField(default=1)
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['id']=self.id
+        item['tipo_cobro'] = self.metodo_cobro
+        item['medio_cobro']=self.medio_cobro
+        item['cantidad_cuotas'] = self.cantidad_cuotas
+        return item
     class Meta:
         verbose_name = "Cobro"
         verbose_name_plural = "Plural"
@@ -52,18 +70,31 @@ class Cobro(models.Model):
         
 class FacturaVenta(models.Model):
     nro_factura = models.CharField(max_length=20, blank=False)
-    id_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     tipo_venta = models.CharField(max_length=200, blank=True)
     monto_iva1 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)  # 5%
     monto_iva2 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)  # 10% preguntar si esta bien
     total = models.FloatField(default=0)
-    exenta = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
+    estado=models.CharField(max_length=200, blank=True)
+    exenta = models.DecimalField( default=0.00, decimal_places=2, max_digits=9)
     fecha_emision = models.DateField()
-    id_cobro = models.ForeignKey(Cobro, on_delete=models.PROTECT)
+    cobro = models.ForeignKey(Cobro, on_delete=models.PROTECT)
 
     def __str__(self):
         return 'Nro Factura: %s - Cliente: %s' % (self.nro_factura, self.cliente)
-
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['id']=self.id
+        item['nro_factura'] = self.nro_factura
+        item['cliente'] = self.cliente.razon_social
+        item['cliente_ruc']=self.cliente.ruc
+        item['fecha_emision'] = self.fecha_emision
+        item['estado'] = self.estado
+        item['total'] = self.total
+        item['tipo_venta'] = self.tipo_venta
+        item['cobro_id']=self.cobro.id
+        return item
+  
     class Meta:
         verbose_name = 'FacturaVenta'
         verbose_name_plural = 'Facturas'
@@ -71,27 +102,37 @@ class FacturaVenta(models.Model):
 
 
 class FacturaVentaDetalle(models.Model):
-    id_factura = models.ForeignKey(FacturaVenta, on_delete=models.CASCADE)
-    id_producto= models.ForeignKey(Producto, on_delete=models.CASCADE)
+    factura = models.ForeignKey(FacturaVenta, on_delete=models.CASCADE)
+    producto= models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField(default=1)
     precio = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
-    descripcion = models.CharField(max_length=200, blank=True)
-    tipo_iva = models.CharField(max_length=10, choices=TIPO_IVA, default=TIPO_IVA[1])
-
+    def obtener_subtotal(self):
+        return int(self.cantidad)*int(self.precio)
+        
     class Meta:
         ordering = ['id']
 
 
 
 
-
 class Cuota(models.Model):
-    id_cobro = models.ForeignKey(Cobro, on_delete=models.CASCADE)
+    cobro = models.ForeignKey(Cobro, on_delete=models.CASCADE)
     estado = models.CharField(max_length=100)
     nro_cuota=models.IntegerField(default=1)
     fecha_vencimiento = models.DateField()
-    fecha_pago_cuota = models.DateField()
+    fecha_pago_cuota = models.DateField(null=True)
+    monto_cuota=models.IntegerField(default=0)
 
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['id']=self.id
+        item['cobro_id'] = self.cobro.id
+        item['nro_cuota'] = self.nro_cuota
+        item['estado'] = self.estado
+        item['fecha_vencimiento'] = self.fecha_vencimiento
+        item['fecha_pago'] = self.fecha_pago_cuota
+        item['monto_cuota'] = self.monto_cuota
+        return item
     class Meta:
         verbose_name = "Cuota"
         verbose_name_plural = "Plural"
