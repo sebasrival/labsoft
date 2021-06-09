@@ -115,3 +115,19 @@ function delete_ajax_prov(url) {
         }
     })
 }
+
+function alert_delete_custom(title, text, func){
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            func();
+        }
+    })
+}

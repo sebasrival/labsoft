@@ -15,11 +15,11 @@
 {% endblock %}
 
 {% block head %}
-<style>
-    th, td {
-        font-size: x-small;
-    }
-</style>
+    <style>
+        th, td {
+            font-size: x-small;
+        }
+    </style>
 {% endblock %}
 
 {% block sidebar %}
@@ -61,17 +61,17 @@
                                 </div>
                             </div>
 
-                            <button type="button" class="mb-2 py-0 btn btn-danger btn-sm btnDelete"
+                            <button type="button" class="mb-2 py-0 btn btn-danger btn-sm" id="btnDelete"
                                     style="height: 20px; align-content: center">
                                 <label>Eliminar todo</label>
                             </button>
                             <div class="table-responsive">
                                 <table class="table table-bordered"
-                                       id="tFacturaCompra" style="width: 100%;">
+                                       id="tFacturaCompra">
                                     <thead>
                                     <tr>
-                                        <td>COD.</td>
-                                        <td>NOM.</td>
+                                        <td>COD</td>
+                                        <td>NOM</td>
                                         <td>PRECIO</td>
                                         <td>CANT.</td>
                                         <td>IVA</td>
@@ -119,7 +119,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text" style="font-weight: bold;">Gs.</div>
                                         </div>
-                                        <input type="number" value="0"  class="form-control" id="totalIva"
+                                        <input type="number" value="0" class="form-control" id="totalIva10"
                                                style="font-weight: bold;">
                                     </div>
                                 </div>
@@ -129,17 +129,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text" style="font-weight: bold;">Gs.</div>
                                         </div>
-                                        <input type="number" value="0" class="form-control" id="totalIva"
-                                               style="font-weight: bold;">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label><strong>Total Exenta: </strong></label>
-                                    <div class="input-group mb-2 mr-sm-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
-                                        </div>
-                                        <input type="number" value="0"  class="form-control" id="totalIva"
+                                        <input type="number" value="0" class="form-control" id="totalIva5"
                                                style="font-weight: bold;">
                                     </div>
                                 </div>
@@ -149,7 +139,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text" style="font-weight: bold;">Gs.</div>
                                         </div>
-                                        <input type="number" value="0"  class="form-control" id="total"
+                                        <input type="number" value="0" class="form-control" id="total"
                                                style="font-weight: bold;">
                                     </div>
                                 </div>
@@ -177,7 +167,7 @@
                             aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="formMateria">
                         <div class="form-group">
                             <label for="nombreMateria">Codigo:</label>
                             {{ form_mat.codigo }}
@@ -220,6 +210,7 @@
 
 {% block scripts %}
     <script type="text/javascript" src="{% static "js/compras/form.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/compras/index.js" %}"></script>
     <script type="text/javascript">
         //inicializacion de la fecha
         $('#date_compra').datepicker({
@@ -265,7 +256,14 @@
             ordering: false,
         });
 
-        $('.btn-modal').click(function (){
+        $('.btn-modal').click(function () {
+            //limpiar frm
+            $('#id_codigo').val('');
+            $('#id_nombre').val('');
+            $('#id_descripcion').val('');
+            $('#id_inci').val('');
+            $('#id_cantidadCont').val('');
+            $('#id_um').val('');
             $('#materiaModal').modal('show');
         });
     </script>
