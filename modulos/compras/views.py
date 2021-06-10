@@ -141,7 +141,6 @@ class ProveedorDeleteView(LoginRequiredMixin, PermissionMixin, DeleteView):
 
 class SearchProveedor(TemplateView):
     """Clase para buscar proveedor por ajax y devielvo un JsonResponse"""
-
     def get(self, request, *args, **kwargs):
         data = {}
         if request.is_ajax():
@@ -151,6 +150,33 @@ class SearchProveedor(TemplateView):
                 data = []
                 for prov in query:
                     item = {'id': prov.ruc, 'text': prov.razon_social}
+                    data.append(item)
+            except Exception as e:
+                data['error'] = str(e)
+        else:
+            data['error'] = 'Solo se admiten peticiones ajax'
+        return JsonResponse(data, safe=False)
+
+
+class SearchMateriaPrima(TemplateView):
+    """Clase para buscar materia prima por ajax y devielvo un JsonResponse"""
+    def get(self, request, *args, **kwargs):
+        data = {}
+        if request.is_ajax():
+            try:
+                term = request.GET['term']
+                query = MateriaPrima.objects.filter(Q(codigo__icontains=term) | Q(nombre__icontains=term))[0:10]
+                data = []
+                for mat in query:
+                    item = {
+                        'id': mat.id,
+                        'text': '%s | %s' % (mat.codigo, mat.nombre), # para el select
+                        'codigo': mat.codigo,
+                        'nombre': mat.descripcion,
+                        'inci': mat.inci,
+                        'um': mat.um,
+                        'cantidadCont': mat.cantidadCont
+                    }
                     data.append(item)
             except Exception as e:
                 data['error'] = str(e)

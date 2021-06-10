@@ -65,7 +65,7 @@ class FacturaCompraForm(forms.ModelForm):
                 'autocomplete': 'off',
             }),
             'tipo_factura' : forms.RadioSelect(choices=((True, 'Contado',), (False, 'Credito',))),
-            'descuento': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 100}),
+            'descuento': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 100, 'step':5}),
         }
 
 class FacturaDetalleCompraForm(forms.ModelForm):

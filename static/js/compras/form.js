@@ -29,7 +29,9 @@ var factura_compra = {
             }
         });
         this.itemsFactura.total_compra = subtotal.toFixed(2);
-        $('#total').val(this.itemsFactura.total_compra);
+        $('#total').val((this.itemsFactura.total_compra - ((this.itemsFactura.total_compra * this.itemsFactura.descuento) / 100)).toFixed(2));
+        this.itemsFactura.totalIva10 = iva10;
+        this.itemsFactura.totalIva5 = iva5;
         $('#totalIva5').val(iva5.toFixed(2));
         $('#totalIva10').val(iva10.toFixed(2));
     },
@@ -157,6 +159,19 @@ $(function () {
         }
         console.log(materia);
     });
+
+    $('#materia_select').on('select2:select', function (e) {
+        var data = e.params.data;
+        data['cantidad'] = 1;
+        data['subtotal'] = 0.00;
+        data['precio'] = 0 // se le agrega por ahora puede que en el modelo materia tenga precio
+        data['iva'] = 10
+        //se agrega los datos a la estructura
+        factura_compra.add(data)
+        // borra luego de la seleccion
+        $(this).val('').trigger('change.select2');
+    });
+
     $('#btnDelete').on('click', function () {
         if (factura_compra.itemsFactura.materias.length === 0) return false;
         alert_delete_custom('Notificación', '¿Estás seguro de eliminar todos los detalles de compras', function () {
@@ -164,6 +179,14 @@ $(function () {
             factura_compra.list();
         });
     });
+
+    $('#id_descuento').on('change keyup paste', function () {
+        if (factura_compra.itemsFactura.materias.length === 0) return false;
+        factura_compra.itemsFactura.descuento = $(this).val();
+        factura_compra.calc_invoice();
+    });
+
+
     $('#tFacturaCompra').on('click', '#btnRemove', function () {
         var tr = tblCompra.cell($(this).closest('td, li')).index();
         factura_compra.itemsFactura.materias.splice(tr.row, 1);
