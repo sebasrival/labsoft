@@ -64,15 +64,48 @@ function show_notify_success(message) {
     });
 }
 
-function alert_error(messages) {
-    var par = '<p style="text-align: left">';
-    $.each(messages, function (key, value) {
-        par += value + '<br>';
-    })
-    par += '</p>';
+function show_error_json(title, messages) {
+
+    let html = "";
+    for (let i in messages.responseJSON.error) {
+        html += '<div' + '<strong>' + i.toUpperCase() + ': </strong>' + errors.responseJSON.error[i] + '<button class="close" type="button" data-dismiss="alert">×</button>' + '</div>'
+    }
+
     Swal.fire({
-        title: 'Error de Permisos',
-        html: par,
+        title: title,
+        html: html,
         icon: 'error'
     });
+}
+
+function mensaje_error(title, text){
+     Swal.fire({
+        title: title,
+        text: text,
+        icon: 'error',
+    });
+}
+
+function mensaje_success(title, text){
+     Swal.fire({
+        title: title,
+        text: text,
+        icon: 'success',
+    });
+}
+
+function alert_delete_custom(title, text, func){
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            func();
+        }
+    })
 }

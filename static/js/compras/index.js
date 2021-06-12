@@ -24,10 +24,10 @@ function list_proveedor(url_list, url_edit, url_del, perm_change, perm_delete) {
             orderable: false,
             render: function (data, type, row) {
                 var buttons = ''
-                if(perm_change){
+                if (perm_change) {
                     buttons += '<button onclick="abrir_modal(\'' + url_edit + row.id + '/\')" class="btn btn-warning btn-sm" title="Editar"><i class="fas fa-edit"></i></button> ';
                 }
-                if(perm_delete){
+                if (perm_delete) {
                     buttons += '<button onclick="delete_ajax_prov(\'' + url_del + row.id + '/\')" title="Borrar" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
                 }
                 return buttons;
@@ -116,18 +116,35 @@ function delete_ajax_prov(url) {
     })
 }
 
-function alert_delete_custom(title, text, func){
+/*
+ * Funcion para crear factura compra por medio de ajax
+ * */
+function create_ajax_factura(url, type, data, redirect) {
     Swal.fire({
-        title: title,
-        text: text,
-        icon: 'warning',
+        title: 'Registro Factura',
+        text: "¿Desea guardar la factura?",
+        icon: 'info',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminar!'
+        confirmButtonText: '¡Si, guardar!'
     }).then((result) => {
         if (result.isConfirmed) {
-            func();
+            $.ajax({
+                type: 'POST',
+                data: data,
+                datatype: type,
+                url: url,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    mensaje_success('Factura Compra', response.message);
+                    location.href = redirect;
+                },
+                error: function (error) {
+                    show_error_json(error);
+                }
+            });
         }
-    })
+    });
 }

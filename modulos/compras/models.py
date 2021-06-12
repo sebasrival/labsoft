@@ -49,7 +49,7 @@ class MateriaPrima(models.Model):
 
 class FacturaCompra(models.Model):
     nro_factura = models.CharField(max_length=200, unique=True)
-    tipo_factura = models.BooleanField()  # true: contado false: credito
+    tipo_factura = models.BooleanField(default=True)  # true: contado false: credito
     proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT)
     estado = models.CharField(max_length=12, choices=ESTADOS_FACTURA, default=ESTADOS_FACTURA[0])
     monto_iva1 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)  # 5%

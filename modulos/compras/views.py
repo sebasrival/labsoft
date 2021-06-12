@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import JsonResponse
@@ -190,6 +192,16 @@ class FacturaCompraCreateView(LoginRequiredMixin, CreateView):
     model = FacturaCompra
     form_class = FacturaCompraForm
     template_name = 'factura/factura_add.html'
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        if request.is_ajax():
+            try:
+                factura = json.loads(request.POST['factura_compra'])
+                print(factura)
+            except Exception as e:
+                data['error'] = str(e)
+            return JsonResponse(data, safe=False)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

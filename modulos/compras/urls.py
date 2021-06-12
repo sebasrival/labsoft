@@ -18,5 +18,5 @@ urlpatterns = [
 
 
     #factura
-    path('compras/factura/add', FacturaCompraCreateView.as_view(), name='factura_add')
+    path('compras/factura/add/', FacturaCompraCreateView.as_view(), name='factura_add')
 ]
