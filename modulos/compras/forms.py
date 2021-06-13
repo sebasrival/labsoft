@@ -20,8 +20,8 @@ class PagoForm(forms.ModelForm):
         model = Pago
         fields = '__all__'
         widgets = {
-            'metodo_pago': forms.TextInput(attrs={'class': 'form-control'}),
-            'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
+            'metodo_pago': forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Ingrese un método de pago'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Escriba una descripción sobre el pago', 'rows':2}),
         }
 
 

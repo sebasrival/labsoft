@@ -64,11 +64,11 @@ function show_notify_success(message) {
     });
 }
 
-function show_error_json(title, messages) {
+function show_error_json(title, errors) {
 
     let html = "";
-    for (let i in messages.responseJSON.error) {
-        html += '<div' + '<strong>' + i.toUpperCase() + ': </strong>' + errors.responseJSON.error[i] + '<button class="close" type="button" data-dismiss="alert">×</button>' + '</div>'
+    for (let i in errors.responseJSON.error) {
+        html += '<p>' + '<strong>' + i.toUpperCase() + ': </strong>' + errors.responseJSON.error[i]  + '</p>'
     }
 
     Swal.fire({
@@ -92,6 +92,16 @@ function mensaje_success(title, text){
         text: text,
         icon: 'success',
     });
+}
+
+function mensaje_succes_func(title, text, func){
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: 'success',
+    }).then(function () {
+         func();
+     });
 }
 
 function alert_delete_custom(title, text, func){

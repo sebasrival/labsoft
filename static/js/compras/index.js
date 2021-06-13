@@ -138,11 +138,13 @@ function create_ajax_factura(url, type, data, redirect) {
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    mensaje_success('Factura Compra', response.message);
-                    location.href = redirect;
+                    mensaje_succes_func('Factura Compra', response.message, function () {
+                        location.href = '/'
+                    });
                 },
                 error: function (error) {
-                    show_error_json(error);
+                    console.log(error);
+                    mensaje_error('Error al Registrar', error.responseJSON.error);
                 }
             });
         }

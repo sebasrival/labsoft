@@ -16,7 +16,6 @@ urlpatterns = [
     # materia prima
     path('materiaprima/search/', SearchMateriaPrima.as_view(), name='search_materia'),
 
-
     #factura
-    path('compras/factura/add/', FacturaCompraCreateView.as_view(), name='factura_add')
+    path('factura/add/', FacturaCompraCreateView.as_view(), name='factura_add')
 ]

@@ -1,7 +1,9 @@
-var tblCompra;
+// noinspection JSUnresolvedFunction,JSUnusedLocalSymbols
+
+let tblCompra;
 
 // Estructura para el detalle de pedidos
-var factura_compra = {
+let factura_compra = {
     itemsFactura: {
         proveedor: '',
         nro_factura: '',
@@ -11,12 +13,14 @@ var factura_compra = {
         totalIva10: 0.00,
         totalIva5: 0.00,
         total_compra: 0.00,
+        metodo_pago: '',
+        descripcion_pago: '',
         materias: []
     },
     calc_invoice: function () {
-        var subtotal = 0.00;
-        var iva10 = 0.00;
-        var iva5 = 0.00;
+        let subtotal = 0.00;
+        let iva10 = 0.00;
+        let iva5 = 0.00;
         $.each(this.itemsFactura.materias, function (pos, dict) {
             dict.subtotal = dict.cantidad * dict.precio;
             subtotal += dict.subtotal;
@@ -101,14 +105,14 @@ var factura_compra = {
             ]
         });
     }
-}
+};
 
 $(function () {
     /**
      * Funcion para agregar Materia prima a detalle
      **/
     $('#frm-materia').click(function () {
-        materia = {};
+        let materia = {};
         //obteniendo datos del modal
         materia['codigo'] = $('#id_codigo').val();
         materia['nombre'] = $('#id_nombre').val();
@@ -151,7 +155,7 @@ $(function () {
             materia['id'] = '';
 
             //validar si existe esa materia en el detalle
-            var ban = false;
+            let ban = false;
             $.each(factura_compra.itemsFactura.materias, function (key, value) {
                 if (value.codigo === materia['codigo']) {
                     //cerrar modal
@@ -174,14 +178,14 @@ $(function () {
     });
 
     $('#materia_select').on('select2:select', function (e) {
-        var data = e.params.data;
+        let data = e.params.data;
         data['cantidad'] = 1;
         data['subtotal'] = 0.00;
         data['precio'] = 0 // se le agrega por ahora puede que en el modelo materia tenga precio
         data['iva'] = 10
 
         //validar si existe esa materia en el detalle
-        var ban = false;
+        let ban = false;
         $.each(factura_compra.itemsFactura.materias, function (key, value) {
             if (value.codigo === data['codigo']) {
                 $('#materia_select').val('');
@@ -214,24 +218,24 @@ $(function () {
 
 
     $('#tFacturaCompra').on('click', 'a[rel="btnRemove"]', function () {
-        var tr = tblCompra.cell($(this).closest('td, li')).index();
+        let tr = tblCompra.cell($(this).closest('td, li')).index();
         factura_compra.itemsFactura.materias.splice(tr.row, 1);
         factura_compra.list();
     }).on('change keyup paste', 'input[name="ipCant"]', function () {
-        var cant = parseInt($(this).val());
-        var tr = tblCompra.cell($(this).closest('td, li')).index();
+        let cant = parseInt($(this).val());
+        let tr = tblCompra.cell($(this).closest('td, li')).index();
         factura_compra.itemsFactura.materias[tr.row].cantidad = cant;
         factura_compra.calc_invoice();
         $('td:eq(5)', tblCompra.row(tr.row).node()).html('$' + factura_compra.itemsFactura.materias[tr.row].subtotal);
     }).on('change keyup paste', 'input[name="ipPrecio"]', function () {
-        var precio = parseFloat($(this).val());
-        var tr = tblCompra.cell($(this).closest('td, li')).index();
+        let precio = parseFloat($(this).val());
+        let tr = tblCompra.cell($(this).closest('td, li')).index();
         factura_compra.itemsFactura.materias[tr.row].precio = precio.toFixed(2);
         factura_compra.calc_invoice();
         $('td:eq(5)', tblCompra.row(tr.row).node()).html('$' + factura_compra.itemsFactura.materias[tr.row].subtotal);
     }).on('change', 'input[name="ipIva"]', function () {
-        var iva = parseInt($(this).val());
-        var tr = tblCompra.cell($(this).closest('td, li')).index();
+        let iva = parseInt($(this).val());
+        let tr = tblCompra.cell($(this).closest('td, li')).index();
         factura_compra.itemsFactura.materias[tr.row].iva = iva;
         factura_compra.calc_invoice();
         //preguntar si esto debe afectar el iva del subtotal
@@ -248,10 +252,12 @@ $(function () {
         factura_compra.itemsFactura.nro_factura = $('#id_nro_factura').val();
         factura_compra.itemsFactura.tipo_compra = $('input:radio[name="tipo_factura"]:checked').val();
         factura_compra.itemsFactura.fecha_factura = $('#date_compra').val();
+        factura_compra.itemsFactura.metodo_pago = $('#id_metodo_pago').val();
+        factura_compra.itemsFactura.descripcion_pago = $('#id_descripcion').val();
         console.log(factura_compra.itemsFactura.fecha_factura);
-        var parameters = new FormData();
+        let parameters = new FormData();
         parameters.append('factura_compra', JSON.stringify(factura_compra.itemsFactura));
-        var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+        let csrf = $('input[name="csrfmiddlewaretoken"]').val();
         console.log(csrf);
         parameters.append('csrfmiddlewaretoken', csrf);
         console.log(factura_compra.itemsFactura);

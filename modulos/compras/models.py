@@ -1,9 +1,12 @@
-from datetime import datetime, timezone
+from datetime import date
 
 from django.db import models
 
 
 # Create your models here.
+from django.utils import timezone
+
+
 class Proveedor(models.Model):
     ruc = models.CharField(max_length=200, unique=True)
     razon_social = models.CharField(max_length=100)
@@ -21,7 +24,7 @@ class Proveedor(models.Model):
 
 class Pago(models.Model):
     metodo_pago = models.CharField(max_length=100)
-    descripcion = models.TextField()
+    descripcion = models.TextField(blank=True)
 
     class Meta:
         verbose_name = "Pago"
@@ -51,13 +54,13 @@ class FacturaCompra(models.Model):
     nro_factura = models.CharField(max_length=200, unique=True)
     tipo_factura = models.BooleanField(default=True)  # true: contado false: credito
     proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT)
-    estado = models.CharField(max_length=12, choices=ESTADOS_FACTURA, default=ESTADOS_FACTURA[0])
+    estado = models.CharField(max_length=12, choices=ESTADOS_FACTURA, default=ESTADOS_FACTURA[0][0])
     monto_iva1 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)  # 5%
     monto_iva2 = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)  # 10% preguntar si esta bien
     total = models.FloatField(default=0)
     exenta = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     pago = models.ForeignKey(Pago, on_delete=models.PROTECT)
-    fecha_factura = models.DateTimeField(default=datetime.now)
+    fecha_factura = models.DateField(default=date.today)
     descuento = models.PositiveIntegerField(default=0)
 
     def __str__(self):

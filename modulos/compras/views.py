@@ -1,6 +1,8 @@
 import json
+from datetime import datetime
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -9,7 +11,7 @@ from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import MateriaPrima, Proveedor, StockMateriaPrima, Pago, FacturaCompra
-from .forms import MateriaPrimaForm, StockMateriaPrimaForm, ProveedorForm, FacturaCompraForm
+from .forms import MateriaPrimaForm, StockMateriaPrimaForm, ProveedorForm, FacturaCompraForm, PagoForm
 from ..accounts.mixins import PermissionMixin
 
 
@@ -197,11 +199,43 @@ class FacturaCompraCreateView(LoginRequiredMixin, CreateView):
         data = {}
         if request.is_ajax():
             try:
-                factura = json.loads(request.POST['factura_compra'])
-                print(factura)
+                with transaction.atomic():
+                    # Factura
+                    fc = json.loads(request.POST['factura_compra'])
+                    factura = FacturaCompra()
+
+                    factura.proveedor = Proveedor.objects.get(ruc=fc['proveedor'])
+                    factura.nro_factura = fc['nro_factura']
+                    factura.fecha_factura = datetime.strptime(fc['fecha_factura'], '%d/%m/%Y')
+                    factura.tipo_factura = fc['tipo_compra']
+                    factura.descuento = fc['descuento']
+                    factura.monto_iva1 =fc['totalIva5']
+                    factura.monto_iva2 = fc['totalIva10']
+                    factura.total = fc['total_compra']
+
+                    pago = Pago()
+                    pago.metodo_pago = fc['metodo_pago']
+                    pago.descripcion = fc['descripcion_pago']
+                    pago.save()
+
+                    factura.pago = pago
+                    if FacturaCompra.objects.filter(nro_factura=factura.nro_factura).exists():
+                        raise Exception('El número '+ factura.nro_factura +' de factura ya existe')
+                    factura.save()
+
+                    # Factura Detalle
+
+                    data['message'] = 'La factura se ha registrado agregado correctamente!'
+                    data['error'] = '¡Sin errores!'
+                    response = JsonResponse(data, safe=False)
+                    response.status_code = 201
             except Exception as e:
                 data['error'] = str(e)
-            return JsonResponse(data, safe=False)
+                response = JsonResponse(data, safe=False)
+                response.status_code = 400
+            return response
+        else:
+            return redirect('index')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -209,6 +243,7 @@ class FacturaCompraCreateView(LoginRequiredMixin, CreateView):
         context['subtitle'] = 'Registrar Factura Compra'
         context['route'] = reverse_lazy('compras:factura_add')
         context['form_mat'] = MateriaPrimaForm
+        context['form_pago'] = PagoForm
         return context
 
 
