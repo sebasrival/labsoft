@@ -74,7 +74,7 @@ let factura_compra = {
                     width: "11%",
                     class: 'text-center',
                     render: function (data, type, row) {
-                        return '<input type="number" name="ipIva" min="0" value="10" max="10" step="5" class="form-control form-control-sm input-sm">'
+                        return '<input type="number" name="ipIva" min="0" value="'+ row.iva + '" max="10" step="5" class="form-control form-control-sm input-sm">'
                     }
                 },
                 {
@@ -90,7 +90,7 @@ let factura_compra = {
                     width: "13%",
                     orderable: false,
                     render: function (data, type, row) {
-                        return '<input type="number" name="ipCant"  min="1" value="1" class="form-control form-control-sm input-sm" autocomplete="off" value="' + row.cantidad + '">';
+                        return '<input type="number" name="ipCant"  min="1" value="'+ row.cantidad +'" class="form-control form-control-sm input-sm" autocomplete="off">';
                     }
                 },
                 {
@@ -112,14 +112,16 @@ $(function () {
      * Funcion para agregar Materia prima a detalle
      **/
     $('#frm-materia').click(function () {
-        let materia = {};
+        var materia = {};
         //obteniendo datos del modal
         materia['codigo'] = $('#id_codigo').val();
         materia['nombre'] = $('#id_nombre').val();
-        materia['descripcion'] = $('#id_descripcion').val();
+        materia['desc'] = $('#id_desc').val();
         materia['inci'] = $('#id_inci').val();
         materia['cantidadCont'] = $('#id_cantidadCont').val();
         materia['um'] = $('#id_um').val();
+
+        console.log(materia);
 
         //validacion
         if (materia['codigo'] === "") {

@@ -10,13 +10,12 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from .models import MateriaPrima, Proveedor, StockMateriaPrima, Pago, FacturaCompra
+from .models import MateriaPrima, Proveedor, StockMateriaPrima, Pago, FacturaCompra, FacturaDet
 from .forms import MateriaPrimaForm, StockMateriaPrimaForm, ProveedorForm, FacturaCompraForm, PagoForm
 from ..accounts.mixins import PermissionMixin
 
 
 # Proveedores
-
 class ProveedorCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
     model = Proveedor
     form_class = ProveedorForm
@@ -174,9 +173,9 @@ class SearchMateriaPrima(TemplateView):
                 for mat in query:
                     item = {
                         'id': mat.id,
-                        'text': '%s | %s' % (mat.codigo, mat.nombre), # para el select
+                        'text': '%s | %s' % (mat.codigo, mat.nombre),  # para el select
                         'codigo': mat.codigo,
-                        'nombre': mat.descripcion,
+                        'nombre': mat.nombre,
                         'inci': mat.inci,
                         'um': mat.um,
                         'cantidadCont': mat.cantidadCont
@@ -209,7 +208,7 @@ class FacturaCompraCreateView(LoginRequiredMixin, CreateView):
                     factura.fecha_factura = datetime.strptime(fc['fecha_factura'], '%d/%m/%Y')
                     factura.tipo_factura = fc['tipo_compra']
                     factura.descuento = fc['descuento']
-                    factura.monto_iva1 =fc['totalIva5']
+                    factura.monto_iva1 = fc['totalIva5']
                     factura.monto_iva2 = fc['totalIva10']
                     factura.total = fc['total_compra']
 
@@ -217,14 +216,42 @@ class FacturaCompraCreateView(LoginRequiredMixin, CreateView):
                     pago.metodo_pago = fc['metodo_pago']
                     pago.descripcion = fc['descripcion_pago']
                     pago.save()
-
                     factura.pago = pago
+
                     if FacturaCompra.objects.filter(nro_factura=factura.nro_factura).exists():
-                        raise Exception('El número '+ factura.nro_factura +' de factura ya existe')
+                        raise Exception('El número ' + factura.nro_factura + ' de factura ya existe')
                     factura.save()
 
                     # Factura Detalle
-
+                    for f in fc['materias']:
+                        det = FacturaDet()
+                        print(f)
+                        det.factura = factura
+                        if MateriaPrima.objects.filter(codigo=f['codigo']).exists():
+                            materia = MateriaPrima.objects.get(codigo=f['codigo'])
+                            det.materia = materia
+                            #  traemos el stock para actualizar
+                            stock = StockMateriaPrima.objects.get(materia=materia)
+                            stock.cantidad += f['cantidad']
+                            stock.save()
+                        else:
+                            # si no existe se crea la materia prima
+                            mat = MateriaPrima(codigo=f['codigo'],
+                                               nombre=f['nombre'],
+                                               descripcion=f['desc'],
+                                               inci=f['inci'],
+                                               um=f['um'],
+                                               cantidadCont=f['cantidadCont'])
+                            mat.save()
+                            # se crea la materia prima antes y luego se guarda en stock
+                            stock = StockMateriaPrima(materia=mat, cantidad=f['cantidad'])
+                            stock.save()
+                            det.materia = mat
+                        det.cantidad = f['cantidad']
+                        det.precio = f['precio']
+                        det.descripcion = f['nombre']
+                        det.tipo_iva = f['iva']
+                        det.save()
                     data['message'] = 'La factura se ha registrado agregado correctamente!'
                     data['error'] = '¡Sin errores!'
                     response = JsonResponse(data, safe=False)

@@ -23,8 +23,11 @@ class Proveedor(models.Model):
 
 
 class Pago(models.Model):
-    metodo_pago = models.CharField(max_length=100)
+    metodo_pago = models.CharField(max_length=100, default='EFECTIVO')
     descripcion = models.TextField(blank=True)
+
+    def __str__(self):
+        return f'{self.metodo_pago}'
 
     class Meta:
         verbose_name = "Pago"
@@ -44,6 +47,9 @@ class MateriaPrima(models.Model):
     inci = models.CharField(max_length=100)
     um = models.CharField(max_length=5)  # unidad de medida
     cantidadCont = models.FloatField(null=True)  # el null solo para crear rapido
+
+    def __str__(self):
+        return '%s - %s' % (self.codigo, self.nombre)
 
     class Meta:
         verbose_name = 'Materia Prima'
@@ -71,10 +77,11 @@ class FacturaCompra(models.Model):
         verbose_name_plural = 'Facturas Compras'
 
 
-TIPO_IVA = [
+TIPO_IVA = (
+    (0, 'Exenta'),
     (5, '5%'),
     (10, '10%'),
-]
+)
 
 
 class FacturaDet(models.Model):
@@ -83,15 +90,15 @@ class FacturaDet(models.Model):
     cantidad = models.IntegerField(default=1)
     precio = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     descripcion = models.CharField(max_length=200, blank=True)
-    tipo_iva = models.CharField(max_length=10, choices=TIPO_IVA, default=TIPO_IVA[1])
+    tipo_iva = models.IntegerField(choices=TIPO_IVA, default=10)
 
     class Meta:
         ordering = ['id']
 
 
 class StockMateriaPrima(models.Model):
-    cod_materia = models.ForeignKey(MateriaPrima, on_delete=models.PROTECT)
-    cantidad = models.IntegerField(default=1)
+    materia = models.ForeignKey(MateriaPrima, on_delete=models.PROTECT)
+    cantidad = models.PositiveIntegerField(default=1)
 
     class Meta:
         verbose_name = 'Stock de Materia Prima'

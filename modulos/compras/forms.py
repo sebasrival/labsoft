@@ -32,7 +32,7 @@ class MateriaPrimaForm(forms.ModelForm):
         widgets = {
             'codigo': forms.TextInput(attrs={'class': 'form-control'}),
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
-            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows':2}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows':2, 'id':'id_desc'}),
             'cantidadCont': forms.NumberInput(attrs={'class': 'form-control', 'min':1}),
             'inci': forms.TextInput(attrs={'class': 'form-control'}),
             'um': forms.TextInput(attrs={'class': 'form-control'}),
