@@ -1,0 +1,307 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+    {% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+{% block head-app %}
+    <!--suppress ALL -->
+    <div>
+        <h1><i class="fas fa-atom"> </i> {{ title }}</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+{% block head %}
+    <style>
+        th, td {
+            font-size: x-small;
+        }
+    </style>
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{{ route }}">{{ title }}</a></li>
+{% endblock %}
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="tile mb-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="page-header">
+                        <h5 class="mb-3 line-head" id="typography">{{ subtitle }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="card">
+                        <h6 class="card-header">Factura</h6>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="form-group col-sm-8">
+                                    <label> <strong> Buscar Materia Prima:</strong> </label>
+                                    <span class="input-group-append">
+                                        <select class="form-control" id="materia_select"></select>
+                                    </span>
+                                </div>
+                                <div class="d-flex align-items-center col-sm-4 mt-3">
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary btn-modal">
+                                        Añadir Materia
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="button" class="mb-2 py-0 btn btn-danger btn-sm" id="btnDelete"
+                                    style="height: 20px; align-content: center">
+                                <label>Eliminar todo</label>
+                            </button>
+                            <div class="table-responsive">
+                                <table class="table table-bordered"
+                                       id="tFacturaCompra">
+                                    <thead>
+                                    <tr>
+                                        <td>COD</td>
+                                        <td>NOM</td>
+                                        <td>PRECIO</td>
+                                        <td>CANT.</td>
+                                        <td>IVA</td>
+                                        <td>SUBTOTAL</td>
+                                        <td><b>X</b></td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h6 class="card-header">Cobro:</h6>
+                        <div class="card-body" style="max-width: 70%">
+                            <div class="form-group">
+                                <label><strong>Método de Pago:</strong></label>
+                                {{ form_pago.metodo_pago }}
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Descripción:</strong></label>
+                                {{ form_pago.descripcion }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card">
+                        <h6 class="card-header">Datos Factura</h6>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label><strong>Número Factura:</strong></label>
+                                {{ form.nro_factura }}
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Tipo de compra:</strong></label>
+                                <div style="display: inline-block">
+                                    {% for radio in form.tipo_factura %}
+                                        <b>{{ radio }}&nbsp;&nbsp;</b>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Proveedor:</strong></label>
+                                {{ form.proveedor }}
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Fecha Factura:</strong></label>
+                                {{ form.fecha_factura }}
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Descuento %:</strong></label>
+                                {{ form.descuento }}
+                            </div>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <label><strong>Total IVA 10%: </strong></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
+                                        </div>
+                                        <input type="number" value="0" class="form-control" id="totalIva10"
+                                               style="font-weight: bold;">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label><strong>Total IVA 5%: </strong></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
+                                        </div>
+                                        <input type="number" value="0" class="form-control" id="totalIva5"
+                                               style="font-weight: bold;">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label><strong>Total a pagar: </strong></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
+                                        </div>
+                                        <input type="number" value="0" class="form-control" id="total"
+                                               style="font-weight: bold;">
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tile-footer">
+                <button type="submit" class="btn btn-primary" style="color: white"><i
+                        class="fa fa-fw fa-lg fa-check-circle"></i>Registrar Factura
+                </button>&nbsp;&nbsp;&nbsp;
+                <a class="btn btn-secondary" href="">
+                    <i class="fa fa-fw fa-lg fa-times-circle"></i>Cancelar</a>
+            </div>
+        </div>
+    </form>
+    <!-- Modal para agregar materia prima -->
+    <div class="modal fade" id="materiaModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Añadir Materia Prima</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formMateria">
+                        <div class="form-group">
+                            <label for="nombreMateria">Codigo:</label>
+                            {{ form_mat.codigo }}
+                            <div id="mdCodigo" class="form-control-feedback text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nombreMateria">Nombre:</label>
+                            {{ form_mat.nombre }}
+                            <div id="mdNombre" class="form-control-feedback text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="descMateria">Descripción:</label>
+                            {{ form_mat.descripcion }}
+                        </div>
+                        <div class="form-group">
+                            <label for="iniciMateria">INCI:</label>
+                            {{ form_mat.inci }}
+                        </div>
+                        <div class="form-group">
+                            <label for="cantCMateria">Cantidad Contenido:</label>
+                            {{ form_mat.cantidadCont }}
+                            <div id="mdCantidad" class="form-control-feedback text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="umMateria">Unidad de medida:</label>
+                            {{ form_mat.um }}
+                            <div id="mdUM" class="form-control-feedback text-danger"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="frm-materia" class="btn btn-primary" type="submit">Añadir a detalle</button>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{% static "js/compras/form.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/compras/index.js" %}"></script>
+    <script type="text/javascript">
+        //inicializacion de la fecha
+        $('#date_compra').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            todayHighlight: true,
+            language: 'es',
+        });
+
+        $('#proveedor_select').select2({
+            placeholder: 'Seleccione un Proveedor',
+            ajax: {
+                type: 'GET',
+                url: '{% url 'compras:search_proveedor' %}',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        term: params.term,
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    }
+                },
+            },
+            minimumInputLength: 1,
+            language: {
+                inputTooShort: function () {
+                    return '';
+                },
+                searching: function () {
+                    return 'Buscando...'
+                }
+            }
+        });
+
+        $('#materia_select').select2({
+            placeholder: 'Seleccione una Materia Prima',
+            ajax: {
+                type: 'GET',
+                url: '{% url 'compras:search_materia' %}',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        term: params.term,
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    }
+                },
+            },
+            minimumInputLength: 1,
+            language: {
+                inputTooShort: function () {
+                    return '';
+                },
+                searching: function () {
+                    return 'Buscando...'
+                }
+            }
+        });
+
+        $('#tFacturaCompra').dataTable({
+            ordering: false,
+        });
+
+        $('.btn-modal').click(function () {
+            //limpiar frm
+            $('#id_codigo').val('');
+            $('#id_nombre').val('');
+            $('#id_descripcion').val('');
+            $('#id_inci').val('');
+            $('#id_cantidadCont').val('');
+            $('#id_um').val('');
+            $('#materiaModal').modal('show');
+        });
+    </script>
+{% endblock %}

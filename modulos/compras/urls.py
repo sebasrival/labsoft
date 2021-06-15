@@ -1,8 +1,9 @@
 from django.urls import path
 from .views import ProveedorListView, ProveedorCreateView, ProveedorDeleteView, ProveedorUpdateView, \
-    FacturaCompraCreateView, SearchProveedor, SearchMateriaPrima
+    FacturaCompraCreateView, SearchProveedor, SearchMateriaPrima, FacturaCompraListView, FacturaCompraDeleteView, \
+    FacturaCompraUpdateView
 
-app_name='compras'
+app_name = 'compras'
 
 urlpatterns = [
     # proveedores
@@ -16,6 +17,9 @@ urlpatterns = [
     # materia prima
     path('materiaprima/search/', SearchMateriaPrima.as_view(), name='search_materia'),
 
-    #factura
-    path('factura/add/', FacturaCompraCreateView.as_view(), name='factura_add')
+    # factura
+    path('factura/add/', FacturaCompraCreateView.as_view(), name='factura_add'),
+    path('factura/list/', FacturaCompraListView.as_view(), name='factura_list'),
+    path('factura/del/<int:pk>/', FacturaCompraDeleteView.as_view(), name='factura_del'),
+    path('factura/update/<int:pk>/', FacturaCompraUpdateView.as_view(), name='factura_edit'),
 ]
