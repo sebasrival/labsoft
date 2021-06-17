@@ -1,5 +1,5 @@
 from django import forms
-from modulos.ventas.models import Cobro, Cuota, FacturaVenta,Cliente,FacturaVentaDetalle
+from modulos.ventas.models import Cobro, Cuota, FacturaVenta,Cliente,FacturaVentaDetalle,Pedido,PedidoDetalle
 from datetime import datetime
 
 
@@ -79,3 +79,31 @@ class ClienteForm(forms.ModelForm):
 
         }
 
+class PedidoForm(forms.ModelForm):
+    class Meta:
+        model = Pedido
+        fields = '__all__'
+        widgets = {
+            'cliente':  forms.TextInput(attrs={'class': 'form-control'}),
+            'fecha_entrega': forms.DateInput(attrs={'class': 'form-control',
+                                              'id': 'datePick',
+                                              'placeholder': 'Selecciona la fecha a entregar',
+                                              'style': 'font-weight: bold;',
+                                              'autocomplete': 'off'}),
+            'fecha_pedido': forms.DateInput(attrs={
+                'class': 'form-control',
+                'value': datetime.now().strftime('%d/%m/%Y'),
+            }),
+            'estado': forms.Select(attrs={'class': 'form-control'}),
+
+        }
+
+
+class PedidoDetalleForm(forms.ModelForm):
+    class Meta:
+        model = PedidoDetalle
+        fields = ['producto', 'cantidad']
+        widgets = {
+            'producto': forms.Select(attrs={'class': 'form-control'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control'})
+        }

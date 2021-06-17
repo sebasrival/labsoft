@@ -276,3 +276,110 @@ function delete_ajax_factura(url) {
     })
 }
 
+
+
+function list_pedido(url_list,url_del) {
+    $('#pedidoTable').DataTable({
+        responsive: true,
+        pageLength: 6,
+        lengthMenu: [6, 10, 20],
+        ajax: {
+            url: url_list,
+            type: 'POST',
+            data: {
+                'action': 'searchdata'
+            },
+            dataSrc: ""
+        },
+        columns: [
+            {"data": "cliente"},
+            {"data": "fecha_pedido"},
+            {"data": "fecha_entrega"},
+            {"data": "estado"},
+            {"data": "total"},
+            {"data": "id"},
+        ],
+        columnDefs: [{
+        targets: [-1],
+        orderable: false,
+        render: function (data, type, row) {
+            var buttons = '<a href="/modulos/ventas/pedidos/edit/' + row.id + '/" class="btn btn-warning btn-xs btn-sm"><i class="fas fa-edit"></i></a> ';
+
+            buttons += '<button onclick="abrir_modal_pedido(\''+ row.id + '\')" title="Detalles" class="btn btn-success btn-sm"><i class="fas fa-search"></i></button>';
+            buttons += '<a href="/modulos/ventas/facturas/add/' + row.id + '/"title="Generar factura" class="btn btn-secondary btn-xs btn-sm"><i class="fas fa-spinner "></i></a> ';
+            buttons += '<button onclick="delete_ajax_pedido(\'' + url_del + row.id + '/\')" title="Borrar" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
+
+
+           return buttons;
+        }
+        }]
+    });
+
+   
+}
+function abrir_modal_pedido(row) {
+    $('#pedidoDet').DataTable({
+        responsive: true,
+        autoWidth: false,
+        destroy: true,
+        deferRender: true,
+        //data: data.det,
+        ajax: {
+            url: window.location.pathname,
+            type: 'POST',
+            data: {
+                'action': 'search_details_pedido',
+                'id': row
+            },
+            dataSrc: ""
+        },
+        columns: [
+            {"data": "codigo_producto"},
+            {"data": "descripcion_producto"},
+            {"data": "cantidad"},
+            {"data": "precio"},
+            {"data": "total"},
+        ],
+        columnDefs: [],
+        initComplete: function (settings, json) {
+
+        }
+    });
+    $('#modalpedido').modal('show');
+
+
+}
+
+function delete_ajax_pedido(url) {
+    Swal.fire({
+        title: '¿Estás se seguro de querer eliminar éste pedido?',
+        text: "Este cambio no puede ser revertido",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let csrf = {}
+            csrf['csrfmiddlewaretoken'] = $('input[name="csrfmiddlewaretoken"]').val();
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: csrf,
+                success: function () {
+                    $('#pedidoTable').DataTable().ajax.reload();
+                    Swal.fire(
+                        '¡Eliminado!',
+                        'Este pedido ha sido eliminada',
+                        'success'
+                    );
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+
+        }
+    })
+}

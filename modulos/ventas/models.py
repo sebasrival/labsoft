@@ -2,6 +2,11 @@ from django.db import models
 from modulos.produccion.models import Producto
 from django.forms import model_to_dict
 
+ESTADOS_PEDIDOS = [
+    ('PENDIENTE', 'Pendiente'),
+    ('CANCELADO', 'Cancelado'),
+    ('FINALIZADO', 'Finalizado'),
+]
 
 
 ESTADOS_FACTURA = [
@@ -108,7 +113,7 @@ class FacturaVentaDetalle(models.Model):
     precio = models.DecimalField(default=0.00, decimal_places=2, max_digits=9)
     def obtener_subtotal(self):
         return int(self.cantidad)*int(self.precio)
-        
+
     class Meta:
         ordering = ['id']
 
@@ -138,3 +143,40 @@ class Cuota(models.Model):
         verbose_name_plural = "Plural"
 
 
+# Create your models here.
+class Pedido(models.Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    fecha_pedido = models.DateField()
+    fecha_entrega = models.DateField(null=True)
+    estado = models.CharField(max_length=100, choices=ESTADOS_PEDIDOS)
+    total = models.IntegerField(default=0)
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['id']=self.id
+        item['cliente_id'] = self.cliente.id
+        item['cliente'] = self.cliente.razon_social
+        item['cliente_ruc']=self.cliente.ruc
+        item['estado'] = self.estado
+        item['total'] = self.total
+        return item
+    class Meta:
+        verbose_name = 'Pedido'
+        verbose_name_plural = 'Pedidos'
+
+
+
+class PedidoDetalle(models.Model):
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.IntegerField(blank=False)
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['id']=self.id
+        item['codigo_producto'] = self.producto.codigo_producto
+        item['descripcion_producto']=self.producto.nombre
+        item['cantidad'] = self.cantidad
+        item['precio'] = self.producto.precio
+        item['total'] = self.producto.precio * self.cantidad
+        return item
+    class Meta:
+        ordering = ['id']

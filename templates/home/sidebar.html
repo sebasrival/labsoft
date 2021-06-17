@@ -37,8 +37,13 @@
             {% endif %}
             </ul>
             <ul class="treeview-menu">
-                {% if perms.ventas.view_cliente or perms.ventas.add_cliente or perms.ventas.delete_cliente or perms.ventas.change_cliente%}
+                {% if perms.ventas.view_facturaventa or perms.ventas.add_facturaventa or perms.ventas.delete_facturaventa or perms.ventas.change_facturaventa%}
                 <li><a class="treeview-item" href="{% url 'ventas:factura_list' %}">Ventas</a></li>
+            {% endif %}
+            </ul>
+            <ul class="treeview-menu">
+                {% if perms.ventas.view_pedido or perms.ventas.add_pedido or perms.ventas.delete_pedido or perms.ventas.change_pedido%}
+                <li><a class="treeview-item" href="{% url 'ventas:pedido_list' %}">Pedidos</a></li>
             {% endif %}
             </ul>
         </li>

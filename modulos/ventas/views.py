@@ -7,9 +7,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView,View
-from .models import Cliente,FacturaVenta,FacturaVentaDetalle,Cobro,Cuota
+from .models import Cliente,FacturaVenta,FacturaVentaDetalle,Cobro,Cuota, Pedido,PedidoDetalle
 from modulos.produccion.models import Producto, StockProductos
-from .forms import ClienteForm,FacturaVentaForm
+from .forms import ClienteForm,FacturaVentaForm,PedidoForm
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
@@ -238,13 +238,50 @@ class FacturaVentaCreateView(LoginRequiredMixin, CreateView):
                     stock=StockProductos.objects.get(producto_id=i['id'])
                     stock.cantidad=stock.cantidad- int(i['cantidad'])
                     stock.save()
-
+            
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data, safe=False)
+    
+    def get_details_product(self,id):
+        data = []
+        try:
+            for i in PedidoDetalle.objects.filter(pedido_id=id):
+                item = i.producto.toJSON()
+                item['cantidad'] = i.cantidad
+                stock=StockProductos.objects.get(producto_id=i.producto.id)
+                item['cantidad_stock']=stock.cantidad
+                data.append(item)
+        except:
+            pass
+        return data
+
+    def get_details_pedido(self,pedido_id):
+        data = []
+        try:
+            pedido=Pedido.objects.get(id=pedido_id)
+            item = pedido.toJSON()
+            item['fecha_pedido']=None
+            item['fecha_entrega']=None
+
+            data.append(item)
+        except:
+            pass
+        return data
+    
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id_pedido= self.kwargs.get('pedidoid')
+        if (id_pedido!=''):
+            context['det'] = json.dumps(self.get_details_product(id_pedido))
+            context['pedidodet'] = json.dumps(self.get_details_pedido(id_pedido))
+
+        return context
         
+ 
     
 
 class FacturaVentaListView(LoginRequiredMixin, ListView):
@@ -427,9 +464,6 @@ class FacturaVentaUpdateView(LoginRequiredMixin, UpdateView):
         except:
             pass
         return data
-    
-
-    
 
     def get_details_cobro(self):
         data = []
@@ -518,3 +552,227 @@ class FacturaPdfView(View):
         except:
             pass
         return HttpResponseRedirect(reverse_lazy('ventas:factura_list'))
+
+
+class PedidoCreateView(LoginRequiredMixin, CreateView):
+    model = Pedido
+    form_class = PedidoForm
+    template_name = 'pedidos/pedidos_add.html'
+    success_url = reverse_lazy('ventas:pedido_list')
+    url_redirect = success_url
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'search_products':
+                data = []
+                prods = Producto.objects.filter(nombre__icontains=request.POST['term'])
+                for i in prods:
+                    item = i.toJSON()
+                    stock=StockProductos.objects.get(producto_id=i.id)
+                    item['value'] = i.nombre
+                    item['cantidad_stock']=stock.cantidad
+                    data.append(item)
+    
+            elif action == 'search_clientes':
+                data = []
+                clients = Cliente.objects.filter(ruc__icontains=request.POST['term'])
+                for i in clients:
+                    item = i.toJSON()
+                    item['value'] = i.ruc
+                    data.append(item)
+            elif action == 'add':
+                pedido= json.loads(request.POST['factura'])
+                pedidov = Pedido()
+                pedidov.fecha_pedido = datetime.now()
+                pedidov.fecha_entrega=None
+                pedidov.estado=pedido['estado_pedido']
+                if (pedido['cliente_ruc']==''):
+                    pedidov.cliente_id = pedido['cliente']
+                else:
+                    c=Cliente()
+                    c.ruc=pedido['cliente_ruc']
+                    c.razon_social=pedido['cliente_razon_social']
+                    c.cedula=pedido['cliente_ruc']
+                    c.save()
+                    print('Se agrego el cliente')
+                    pedidov.cliente_id =c.id
+                pedidov.total=int(pedido['total_factura'])
+                print(pedidov.total)
+                print(pedidov.fecha_pedido)
+                print(pedidov.fecha_entrega)
+                print(pedidov.estado)
+                print(pedidov.cliente_id)
+                pedidov.save()
+                for i in pedido['productos']:
+                    det = PedidoDetalle()
+                    det.pedido_id = pedidov.id
+                    det.producto_id= i['id']
+                    det.cantidad = int(i['cantidad'])
+                    det.save()
+
+            else:
+                data['error'] = 'No ha ingresado a ninguna opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)    
+
+
+class PedidoUpdateView(LoginRequiredMixin, UpdateView):
+    model = Pedido
+    form_class = PedidoForm
+    template_name = 'pedidos/pedidos_edit.html'
+    success_url = reverse_lazy('ventas:pedido_list')
+    url_redirect = success_url
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'search_products':
+                data = []
+                prods = Producto.objects.filter(nombre__icontains=request.POST['term'])
+                for i in prods:
+                    item = i.toJSON()
+                    stock=StockProductos.objects.get(producto_id=i.id)
+                    item['value'] = i.nombre
+                    item['cantidad_stock']=stock.cantidad
+                    data.append(item)
+    
+            elif action == 'search_clientes':
+                data = []
+                clients = Cliente.objects.filter(ruc__icontains=request.POST['term'])
+                for i in clients:
+                    item = i.toJSON()
+                    item['value'] = i.ruc
+                    data.append(item)
+            elif action == 'edit':
+                print('entro')
+                pedido= json.loads(request.POST['factura'])
+                pedidov = Pedido.objects.get(id=self.get_object().id)
+                print(pedido['estado_pedido'])
+
+                if (pedido['estado_pedido']=='FINALIZADO'):      
+                    pedidov.fecha_entrega=datetime.now()
+            
+                pedidov.estado=pedido['estado_pedido']
+                if (pedido['cliente_ruc']==''):
+                    pedidov.cliente_id = pedido['cliente']
+                else:
+                    c=Cliente()
+                    c.ruc=pedido['cliente_ruc']
+                    c.razon_social=pedido['cliente_razon_social']
+                    c.cedula=pedido['cliente_ruc']
+                    c.save()
+                    print('Se agrego el cliente')
+                    pedidov.cliente_id =c.id
+                pedidov.total=int(pedido['total_factura'])
+                print('entro')
+
+                pedidov.save()
+                PedidoDetalle.objects.filter(pedido_id=pedidov.id).delete()
+                for i in pedido['productos']:
+                    det = PedidoDetalle()
+                    det.pedido_id = pedidov.id
+                    det.producto_id= i['id']
+                    det.cantidad = int(i['cantidad'])
+                    det.save()
+
+            else:
+                data['error'] = 'No ha ingresado a ninguna opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)    
+    def get_details_product(self):
+        data = []
+        try:
+            for i in PedidoDetalle.objects.filter(pedido_id=self.get_object().id):
+                item = i.producto.toJSON()
+                item['cantidad'] = i.cantidad
+                stock=StockProductos.objects.get(producto_id=i.producto.id)
+                item['cantidad_stock']=stock.cantidad
+                data.append(item)
+        except:
+            pass
+        return data
+
+    def get_details_pedido(self):
+        data = []
+        try:
+            pedido=Pedido.objects.get(id=self.get_object().id)
+            item = pedido.toJSON()
+            item['fecha_pedido']=None
+            item['fecha_entrega']=None
+
+            data.append(item)
+        except:
+            pass
+        return data
+    
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id_pedido= self.kwargs.get('pedidoid')
+        if (id_pedido!=''):
+            context['det'] = json.dumps(self.get_details_product())
+            context['pedidodet'] = json.dumps(self.get_details_pedido())
+
+        return context
+
+
+
+class PedidoListView(LoginRequiredMixin, ListView):
+    model = Pedido
+    template_name = 'pedidos/pedidos_list.html'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'searchdata':
+                data = []
+                for i in Pedido.objects.all():
+                    data.append(i.toJSON())
+            elif action == 'search_details_pedido':
+                data = []
+                print(request.POST['id'])
+                for i in PedidoDetalle.objects.filter(pedido_id=request.POST['id']):
+                    data.append(i.toJSON())
+            else:
+                data['error'] = 'Ha ocurrido un error'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Listado de Pedidos'
+        context['create_url'] = reverse_lazy('ventas:pedido_add')
+        context['list_url'] = reverse_lazy('ventas:pedido_list')
+        return context
+
+
+class PedidoDeleteView(LoginRequiredMixin, DeleteView):
+    model = Pedido
+    form_class = PedidoForm
+    success_url = reverse_lazy('ventas:factura_list')
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super().get(self, request, *args, **kwargs)
+        else:
+            # redirectcciona si se hace una peticion que no sea ajax
+            return redirect('ventas:pedido_list')

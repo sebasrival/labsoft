@@ -34,18 +34,51 @@
     }
 </style>
 <body>
+    
 <img src="{{ icon }}" class="img-invoice">
-<p class="head">
-    {{ comp.name|upper }}<br>
-    {{ comp.ruc }}<br>
-    {{ comp.address|upper }}
-</p>
-<p>
-    <b>FACTURA:</b> {{ factura.nro_factura }}<br>
-    <b>FECHA DE VENTA:</b> {{ factura.fecha_vencimiento }}<br>
-    <b>CLIENTE:</b> {{ factura.cliente.razon_social|upper }}<br>
-    <b>RUC:</b> {{ factura.cliente.ruc }}<br>
-</p>
+<table border="1" style="width: 300px;">
+    <tbody>
+    <tr style="height: 164px;">
+    <td style="width: 415.172px; height: 164px;">
+    <h1 style="text-align: center;"><strong>LABORATORIOS OCAMPOS</strong></h1>
+    <h2 style="text-align: center;"><strong>SOCIEDAD DE RESPONSABILIDAD LIMITADA</strong></h2>
+    <h2 style="text-align: center;"><strong>Produccion de Cosméticos.</strong></h2>
+    <h2 style="text-align: center;">Dr. Waldino Lovera c/ Juan Motta N° 581. Tel.: (021) 584 585.</h2>
+    <h3 style="text-align: center;"><strong>SAN LORENZO, PARAGUAY</strong></h3>
+    <p></p>
+    </td>
+    <td style="width: 323.828px; height: 164px; text-align: center;">
+    <p><strong></strong></p>
+    <h1><p><strong>TIMBRADO N° 13306401</strong></p></h1>
+
+    <h1><p><strong>RUC 80006177-2</strong></p></h1>
+    <h1><p><strong>FACTURA</strong></p></h1>
+
+    <h1><p style="text-align: center;"><strong>N° 001-001- {{ factura.nro_factura }}</strong></p></h1>
+    <p></p>
+    <p></p>
+    <p></p>
+    </td>
+    </tr>
+    <tr style="height: 85px;">
+    <td style="width: 415.172px; height: 85px;" colspan="2">
+    <h3 style="text-align: center;"><strong></strong></h3>
+        <b>&nbsp; &nbsp;FECHA DE EMISION:</b> {{ factura.fecha_emision}}<br>
+        <b>&nbsp; &nbsp; &nbsp;CONDICION DE VENTA:</b> {{ factura.cobro.metodo_cobro}}<br>
+
+        <b>&nbsp; &nbsp;&nbsp;NOMBRE O RAZON SOCIAL:</b> {{ factura.cliente.razon_social|upper }}<br>
+        <b>&nbsp; &nbsp;&nbsp;RUC:</b> {{ factura.cliente.ruc }}<br>
+        <b>&nbsp; &nbsp;&nbsp;DIRECCION:</b> {{ factura.cliente.direccion}}<br>
+
+    </td>
+    </tr>
+    </tbody>
+    </table>
+    <table style="width: 345px;">
+        <tbody>
+        
+        </tbody>
+        </table>
 <table id="invoice">
     <thead>
     <tr>
