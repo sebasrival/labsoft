@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+    {% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i> {{ title }}</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+{% block head %}
+    <style>
+        #Table td, th {
+            vertical-align: inherit;
+            padding: 0.4rem;
+        }
+    </style>
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{{ route }}">{{ title }}</a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div class="table-responsive">
+                            {% if perms.ventas.cliente_add %}
+                                <span>
+                                <button onclick="abrir_modal('{% url 'ventas:cliente_add' %}')"
+                                        class="btn btn-primary btn-sm">+ Agregar Cliente</button>
+                                </span>
+                                {% csrf_token %}
+                            {% endif %}
+                        <div style="text-align: center;">
+                            <h4 style="font-size: large; margin-bottom: 0" class="tile-title">{{ subtitle }}</h4>
+                        </div>
+                        <table class="table table-hover table-bordered" id="clienteTable" style="max-width: 100%; width: 100%">
+                            <thead>
+                            <tr style="font-size: 0.7rem">
+                                <th>RUC</th>
+                                <th>CEDULA</th>
+                                <th>NOMBRE</th>
+                                <th>APELLIDO</th>
+                                <th>RAZÓN SOCIAL</th>
+                                <th>TELEFONO</th>
+                                <th>EMAIL</th>
+                                <th>DIRECCIÓN</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="font-size: 0.75rem;">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="text-align: center;">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal para agregar cliente -->
+    <div class="modal fade" id="clienteModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{% static "js/functions/functions.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/ventas/index.js" %}"></script>
+    <script>
+        list_cliente('/modulos/ventas/clientes/list/', '/modulos/ventas/clientes/edit/', '/modulos/ventas/clientes/del/');
+    </script>
+{% endblock %}

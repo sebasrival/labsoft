@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block navbar %}
+    {% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+{% block head %}
+
+    
+    <link type="text/css" href="{% static "lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.css" %}"
+          rel="stylesheet"/>
+    <link href="{% static "lib/jquery-ui-1.12.1/jquery-ui.min.css" %}" rel="stylesheet"/>
+ 
+    
+
+
+{% endblock %}
+
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i> Facturación</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block content %}
+<form method="post">
+            {% csrf_token %}
+        <div class="tile mb-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="page-header">
+                        <h5 class="mb-3 line-head" id="typography">Realizar Factura</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="card">
+                        <h6 class="card-header">Factura</h6>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label> <strong> Buscar Producto:</strong> </label>
+                                <span class="input-group-append">
+                                    <input type="text" class="form-control" id="search"
+                                    placeholder="Ingrese una descripción de producto" autocomplete="off">
+                                    <span class="input-group-append">
+                                        <button type="button" class="btn btn-danger btn-flat">
+                                            <i class="fas fa-times"></i></button>
+                                    </span>                          
+                                </span>
+                            </div>
+                            <div class="table-responsive">
+                                <button type="button" class="mb-2 py-0 btn btn-danger btn-sm btnRemoveAll"
+                                        style="height: 20px; align-content: center">
+                                    <label>Eliminar todo</label>
+                                </button>
+                                <table class="table table-bordered"
+                                       id="tblFactura" style="width: 100%;">
+                                    <thead>
+                                    <tr>
+                                        <td>Cod</td>
+                                        <td>Descripción</td>
+                                        <td>Precio</td>
+                                        <td>Cantidad</td>
+                                        <td>Tasa IVA</td>
+                                        <td>SubTotal</td>
+                                        <td>Eliminar</td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        
+                            <div class="card">
+                                <h6 class="card-header">Forma de cobro</h6>
+                                <div class="card-body">
+                                <div class="row">
+                                    <div class="form-group col">
+                                        <label><strong>Tipo de cobro : </strong></label>
+                                        <select class="form-control" id="tipoCobro">
+                                            <option>Contado</option>
+                                            <option>Financiado</option>
+                                            
+                                        </select>
+                                  
+                                       
+                                    </div>
+                                    <div class="form-group col">
+                                        <label><strong>Cantidad de cuotas : </strong></label>
+                                        
+                                                <input type="number" class="form-control" id="cuotas"
+                                                min=1 max=2 value=0
+                                                style="font-weight: bold;" disabled="true">
+                                       
+                                    </div>
+                                    <div class="form-group col">
+                                        <label><strong>Medio de cobro: </strong></label>
+                                        
+                                                <input type="text" class="form-control" id="medioCobro"
+                                                
+                                                style="font-weight: bold;" >
+                                       
+                                    </div>
+                                   
+                                </div>
+                                    <span>
+                                    <href id="botonCobro"
+                                            class="btn btn-primary btn-sm">+ Registrar cobro</href>
+                                    </span>
+                                    <div class="table-responsive">
+                                        <button type="button" class="mb-2 py-0 btn btn-danger btn-sm btnRemoveAllCobro"
+                                                style="height: 20px; align-content: center">
+                                            <label>Eliminar todo</label>
+                                        </button>
+                                        <table class="table table-bordered"
+                                               id="tblCobro" style="width: 100%;">
+                                            <thead>
+                                            <tr>
+                    
+                                                <td>Tipo de cobro</td>
+                                                <td>Monto </td>
+                                                <td>Medio de cobro</td>
+                                                <td>Estado</td>
+                                                <td>Cantidad de cuotas</td>
+                                                <td>Fecha de registro</td>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                    </div>
+                    
+
+                </div>
+             
+                <div class="col-lg-3">
+                    <div class="card">
+                        <h6 class="card-header">Datos Factura</h6>
+                        <div class="card-body">
+                            <input type="hidden" name="action" value="add">
+
+                            <div class="form-group">
+                                <label><strong>Número Factura:</strong></label>
+                                {{ form.nro_factura }}
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Ruc del cliente:</strong></label>
+                                {{ form.cliente }}
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Razon Social : </strong></label>
+                                <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group-prepend">
+                                    </div>
+                                    <input type="text" class="form-control" id="razonSocial"
+                                           style="font-weight: bold;">
+                                </div>
+                            </div>
+                            <fieldset disabled>
+                            <div class="form-group">
+                                <label><strong>Fecha Emision:</strong></label>
+                                {{ form.fecha_emision }}
+                            </div>
+                      
+                           
+                                <div class="form-group">
+                                    <label><strong>Total Iva 10%: </strong></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
+                                        </div>
+                                        <input type="text" class="form-control" id="totalIva10"
+                                               style="font-weight: bold;">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label><strong>Total Iva 5%: </strong></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
+                                        </div>
+                                        <input type="text" class="form-control" id="totalIva5"
+                                               style="font-weight: bold;">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label><strong>Total Exenta: </strong></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
+                                        </div>
+                                        <input type="text" class="form-control" id="totalExenta"
+                                               style="font-weight: bold;">
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <label><strong>Total a pagar IVA incluído: </strong></label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-weight: bold;">Gs.</div>
+                                        </div>
+                                        <input type="text" class="form-control" id="total"
+                                               style="font-weight: bold;">
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>   
+            </div>
+ 
+            <div class="tile-footer">
+                <button type="submit" class="btn btn-primary" style="color: white"><i
+                        class="fa fa-fw fa-lg fa-check-circle"></i>Registrar Factura
+                </button>&nbsp;&nbsp;&nbsp;
+                <a class="btn btn-secondary" href="{% url 'index' %}">
+                    <i class="fa fa-fw fa-lg fa-times-circle"></i>Cancelar</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static "lib/jquery-ui-1.12.1/jquery-ui.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/select2.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
+    <script type="text/javascript" src="{% static "js/plugins/sweetalert.min.js" %}"></script>
+    <script type="text/javascript"
+            src="{% static "lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js" %} "></script>
+    <!--Lenguage español-->
+    <script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.es.js" %}"></script>
+    <script type="text/javascript" src= {% static "js/functions/functions.js " %}></script>
+    <script type="text/javascript" src= {% static "js/ventas/forms.js" %}></script>
+    <script>
+        factura.items.productos = {{ det|safe }};
+        factura.items.datos_pedido= {{ pedidodet|safe }};
+        factura.list();
+        factura.setDatosPedido();
+        // Se removio el vents.list(); para calcular bien el iva en el editar. Revisar al final del archivo form.js se lo puso.
+    </script>
+{% endblock %}

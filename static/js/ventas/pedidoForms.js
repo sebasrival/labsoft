@@ -16,12 +16,12 @@ var factura = {
         metodo_cobro:'',
         tipo_cobro: '',
         cuotas:[],
-        datos_pedido:'',
         cant_cuotas:0,
         productos: [],
         cliente_razon_social:'',
         cliente_ruc:'',
         cobro_edit: 0,
+        estado_pedido:'',
 
     },
     itemCobro: {
@@ -51,9 +51,6 @@ var factura = {
         })
 
         this.items.total_factura = Math.round(subtotal);
-        this.items.total_iva5 = Math.round(iva5);
-        this.items.total_iva10 = Math.round(iva10);
-        this.items.total_exenta=Math.round(exenta);
 
         $('#totalIva10').val(this.items.total_iva10); // el iva en el template
         $('#totalIva5').val(this.items.total_iva5); // el iva en el template
@@ -77,13 +74,6 @@ var factura = {
         factura.items.cliente=factura.items.cuotas[0].cliente_id;
 
     },
-    setDatosPedido: function () {
-        $('#razonSocial').val(factura.items.datos_pedido[0].cliente);
-        $('input[name="cliente"]').val(factura.items.datos_pedido[0].cliente_ruc);
-        factura.items.cliente=factura.items.datos_pedido[0].cliente_id;
-
-    },
-    
     
     addCobro: function(){
         factura.items.cant_cuotas = $('#cuotas').val();
@@ -216,6 +206,13 @@ var factura = {
             },
         });
     },
+    setDatosPedido: function () {
+        $('#razonSocial').val(factura.items.datos_pedido[0].cliente);
+        $('input[name="cliente"]').val(factura.items.datos_pedido[0].cliente_ruc);
+        factura.items.cliente=factura.items.datos_pedido[0].cliente_id;
+
+    },
+    
     listCobro: function () {
         tblCobro = $('#tblCobro').DataTable({
             responsive: true,
@@ -233,6 +230,7 @@ var factura = {
  
         });
     },
+
 
 
 
@@ -379,17 +377,32 @@ $(function () {
             message_error('Debe al menos tener un item en su detalle de venta');
             return false;
         }
-        if(factura.items.cuotas.length === 0){
-            message_error('Debe especificar los datos del cobro.');
+        factura.items.fecha_emision = $('input[name="fecha_pedido"]').val();
+        factura.items.estado_pedido=$('select[name="estado"]').val();
+        console.log(factura.items.estado_pedido);
+        if (factura.items.cliente==''){
+            factura.items.cliente_razon_social=$('#razonSocial').val();
+            factura.items.cliente_ruc=$('input[name="cliente"]').val();
+            
+        }
+        var parameters = new FormData();
+        parameters.append('action', $('input[name="action"]').val());
+        parameters.append('factura', JSON.stringify(factura.items));
+        submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
+            location.href = '/modulos/ventas/pedidos/list/';
+        });
+    });
+    $('#pedidoForm').on('submit', function (e) {
+        e.preventDefault();
+
+        if(factura.items.productos.length === 0){
+            message_error('Debe al menos tener un item en su detalle de venta');
             return false;
         }
+     
 
         factura.items.fecha_emision = $('input[name="fecha_emision"]').val();
-        factura.items.nro_factura = $('input[name="nro_factura"]').val();
-        factura.items.metodo_cobro=$('#medioCobro').val();
-        factura.items.cant_cuotas = $('#cuotas').val();
-        factura.items.tipo_cobro=$('#tipoCobro').val();
-
+  
         if (factura.items.cliente==''){
             factura.items.cliente_razon_social=$('#razonSocial').val();
             factura.items.cliente_ruc=$('input[name="cliente"]').val();
@@ -402,7 +415,6 @@ $(function () {
             location.href = '/modulos/ventas/facturas/list/';
         });
     });
-
     $('#fecha_emision').datetimepicker({
         format: 'YYYY-MM-DD',
         date: moment().format("YYYY-MM-DD"),

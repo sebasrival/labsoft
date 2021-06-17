@@ -22,9 +22,44 @@
                     {% if perms.compras.view_proveedor or perms.compras.add_proveedor or perms.compras.delete_proveedor or perms.compras.change_proveedor%}
                         <li><a class="treeview-item" href="{% url 'compras:proveedor_list' %}">Proveedores</a></li>
                     {% endif %}
+                
                 </ul>
             </li>
         {% endif %}
+    {% if perms.ventas %}
+        <li class="treeview">
+            <a class="app-menu__item" href="#" data-toggle="treeview"><i class="fas fa-cash-register"> </i><span
+                    class="app-menu__label">&nbsp;&nbsp;&nbsp;Ventas</span><i
+                    class="treeview-indicator fa fa-angle-right"></i></a>
+            <ul class="treeview-menu">
+                {% if perms.ventas.view_cliente or perms.ventas.add_cliente or perms.ventas.delete_cliente or perms.ventas.change_cliente%}
+                <li><a class="treeview-item" href="{% url 'ventas:cliente_list' %}">Clientes</a></li>
+            {% endif %}
+            </ul>
+            <ul class="treeview-menu">
+                {% if perms.ventas.view_facturaventa or perms.ventas.add_facturaventa or perms.ventas.delete_facturaventa or perms.ventas.change_facturaventa%}
+                <li><a class="treeview-item" href="{% url 'ventas:factura_list' %}">Ventas</a></li>
+            {% endif %}
+            </ul>
+            <ul class="treeview-menu">
+                {% if perms.ventas.view_pedido or perms.ventas.add_pedido or perms.ventas.delete_pedido or perms.ventas.change_pedido%}
+                <li><a class="treeview-item" href="{% url 'ventas:pedido_list' %}">Pedidos</a></li>
+            {% endif %}
+            </ul>
+        </li>
+    {% endif %}
+    {% if perms.produccion %}
+    <li class="treeview">
+        <a class="app-menu__item" href="#" data-toggle="treeview"><i class="fas fa-cash-register"> </i><span
+                class="app-menu__label">&nbsp;&nbsp;&nbsp;Produccion</span><i
+                class="treeview-indicator fa fa-angle-right"></i></a>
+        <ul class="treeview-menu">
+            {% if perms.produccion.view_producto or perms.produccion.add_producto or perms.produccion.delete_producto or perms.produccion.change_producto%}
+            <li><a class="treeview-item" href="{% url 'produccion:producto_list' %}">Stock de Productos</a></li>
+        {% endif %}
+        </ul>
+    </li>
+    {% endif %}
         {% if perms.accounts %}
             <li class="treeview">
                 <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-cog"></i><span

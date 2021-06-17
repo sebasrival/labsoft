@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<style>
+    .img-invoice {
+        width: 50px;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .head {
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    #invoice thead tr th {
+        text-align: left;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        padding-top: 4px;
+    }
+
+    #invoice thead tr {
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    #invoice tbody tr {
+        padding: 0;
+    }
+
+    .text-center{
+        text-align: center;
+    }
+</style>
+<body>
+    
+<img src="{{ icon }}" class="img-invoice">
+<table border="1" style="width: 300px;">
+    <tbody>
+    <tr style="height: 164px;">
+    <td style="width: 415.172px; height: 164px;">
+    <h1 style="text-align: center;"><strong>LABORATORIOS OCAMPOS</strong></h1>
+    <h2 style="text-align: center;"><strong>SOCIEDAD DE RESPONSABILIDAD LIMITADA</strong></h2>
+    <h2 style="text-align: center;"><strong>Produccion de Cosméticos.</strong></h2>
+    <h2 style="text-align: center;">Dr. Waldino Lovera c/ Juan Motta N° 581. Tel.: (021) 584 585.</h2>
+    <h3 style="text-align: center;"><strong>SAN LORENZO, PARAGUAY</strong></h3>
+    <p></p>
+    </td>
+    <td style="width: 323.828px; height: 164px; text-align: center;">
+    <p><strong></strong></p>
+    <h1><p><strong>TIMBRADO N° 13306401</strong></p></h1>
+
+    <h1><p><strong>RUC 80006177-2</strong></p></h1>
+    <h1><p><strong>FACTURA</strong></p></h1>
+
+    <h1><p style="text-align: center;"><strong>N° 001-001- {{ factura.nro_factura }}</strong></p></h1>
+    <p></p>
+    <p></p>
+    <p></p>
+    </td>
+    </tr>
+    <tr style="height: 85px;">
+    <td style="width: 415.172px; height: 85px;" colspan="2">
+    <h3 style="text-align: center;"><strong></strong></h3>
+        <b>&nbsp; &nbsp;FECHA DE EMISION:</b> {{ factura.fecha_emision}}<br>
+        <b>&nbsp; &nbsp; &nbsp;CONDICION DE VENTA:</b> {{ factura.cobro.metodo_cobro}}<br>
+
+        <b>&nbsp; &nbsp;&nbsp;NOMBRE O RAZON SOCIAL:</b> {{ factura.cliente.razon_social|upper }}<br>
+        <b>&nbsp; &nbsp;&nbsp;RUC:</b> {{ factura.cliente.ruc }}<br>
+        <b>&nbsp; &nbsp;&nbsp;DIRECCION:</b> {{ factura.cliente.direccion}}<br>
+
+    </td>
+    </tr>
+    </tbody>
+    </table>
+    <table style="width: 345px;">
+        <tbody>
+        
+        </tbody>
+        </table>
+<table id="invoice">
+    <thead>
+    <tr>
+        <th style="width: 10%;">CANT</th>
+        <th style="width: 15%;">PRECIO UNITARIO</th>
+        <th style="width: 20%;">CODIGO</th>
+        <th style="width: 40%;">PRODUCTO</th>
+        <th style="width: 10%;">TOTAL</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for d in factura.facturaventadetalle_set.all %}
+        <tr {% if forloop.first %}style="padding-top: 3px;" {% endif %}>
+            <td class="text-center" id="cantidadProducto">{{ d.cantidad }}</td>
+            <td class="text-center" id="precioProducto">Gs. {{ d.precio}}</td>
+            <td>{{ d.producto.codigo_producto }}</td>
+            <td>{{ d.producto.nombre }}</td>
+            <td style="text-align: right;" id="subtotalProducto">Gs. {{ d.obtener_subtotal }}</td>
+        </tr>
+    {% endfor %}
+    <tr style="border-top: 1px solid black; padding-top: 4px;">
+        <td colspan="4"><b>SUBTOTAL</b></td>
+        <td style="text-align: right">{{ factura.total }}</td>
+    </tr>
+    <tr style="padding-top: 0px;">
+        <td colspan="4"><b>IVA 10%</b></td>
+        <td style="text-align: right">{{ factura.monto_iva1 }}</td>
+    </tr>
+    <tr style="padding-top: 0px;">
+        <td colspan="4"><b>IVA 5%</b></td>
+        <td style="text-align: right">{{ factura.monto_iva2 }}</td>
+    </tr>
+    <tr style="padding-top: 0px;">
+        <td colspan="4"><b>TOTAL A PAGAR</b></td>
+        <td style="text-align: right">{{ factura.total }}</td>
+    </tr>
+    </tbody>
+</table>
+<table style="margin-top: 250px;">
+    <thead>
+    <tr>
+        <th>****GRACIAS POR SU COMPRA****</th>
+    </tr>
+    <tr>
+        <th>NOSE ACEPTAN CAMBIOS NI DEVOLUCIONES</th>
+    </tr>
+    </thead>
+</table>
+</body>
+</html>
