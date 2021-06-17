@@ -152,7 +152,7 @@ class SearchProveedor(TemplateView):
                 query = Proveedor.objects.filter(Q(razon_social__icontains=term) | Q(ruc__icontains=term))[0:10]
                 data = []
                 for prov in query:
-                    item = {'id': prov.ruc, 'text': prov.razon_social}
+                    item = {'id': prov.id, 'text': prov.razon_social}
                     data.append(item)
             except Exception as e:
                 data['error'] = str(e)
@@ -175,6 +175,7 @@ class SearchMateriaPrima(TemplateView):
                         'id': mat.id,
                         'text': '%s | %s' % (mat.codigo, mat.nombre),  # para el select
                         'codigo': mat.codigo,
+                        'desc': mat.descripcion,
                         'nombre': mat.nombre,
                         'inci': mat.inci,
                         'um': mat.um,
@@ -194,6 +195,7 @@ class FacturaCompraCreateView(LoginRequiredMixin, CreateView):
     form_class = FacturaCompraForm
     template_name = 'factura/factura_add.html'
 
+    # noinspection DuplicatedCode
     def post(self, request, *args, **kwargs):
         data = {}
         if request.is_ajax():
@@ -203,7 +205,7 @@ class FacturaCompraCreateView(LoginRequiredMixin, CreateView):
                     fc = json.loads(request.POST['factura_compra'])
                     factura = FacturaCompra()
 
-                    factura.proveedor = Proveedor.objects.get(ruc=fc['proveedor'])
+                    factura.proveedor = Proveedor.objects.get(id=fc['proveedor'])
                     factura.nro_factura = fc['nro_factura']
                     factura.fecha_factura = datetime.strptime(fc['fecha_factura'], '%d/%m/%Y')
                     factura.tipo_factura = fc['tipo_compra']
@@ -317,11 +319,13 @@ class FacturaCompraUpdateView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Factura Compra'
         context['subtitle'] = 'Editar Factura Compra'
-        context['route'] = reverse_lazy('compras:factura_edit', kwargs = {'pk': self.get_object().id })
+        context['route'] = reverse_lazy('compras:factura_edit', kwargs={'pk': self.get_object().id})
         context['form_mat'] = MateriaPrimaForm
-        context['form_pago'] = PagoForm
+        context['detalle_fact'] = json.dumps(self.get_detalle_fact())
+        context['form_pago'] = PagoForm(instance=self.get_object().pago)
         return context
 
+    # noinspection DuplicatedCode
     def post(self, request, *args, **kwargs):
         data = {}
         if request.is_ajax():
@@ -329,9 +333,9 @@ class FacturaCompraUpdateView(LoginRequiredMixin, UpdateView):
                 with transaction.atomic():
                     # Factura
                     fc = json.loads(request.POST['factura_compra'])
-                    factura = FacturaCompra()
-
-                    factura.proveedor = Proveedor.objects.get(ruc=fc['proveedor'])
+                    # Traemos de nuevo el obj factura
+                    factura = FacturaCompra.objects.get(id=self.get_object().id)
+                    factura.proveedor = Proveedor.objects.get(id=fc['proveedor'])
                     factura.nro_factura = fc['nro_factura']
                     factura.fecha_factura = datetime.strptime(fc['fecha_factura'], '%d/%m/%Y')
                     factura.tipo_factura = fc['tipo_compra']
@@ -340,28 +344,34 @@ class FacturaCompraUpdateView(LoginRequiredMixin, UpdateView):
                     factura.monto_iva2 = fc['totalIva10']
                     factura.total = fc['total_compra']
 
-                    pago = Pago()
+                    pago = Pago.objects.get(id=factura.pago.id)
                     pago.metodo_pago = fc['metodo_pago']
                     pago.descripcion = fc['descripcion_pago']
                     pago.save()
-                    factura.pago = pago
-
-                    if FacturaCompra.objects.filter(nro_factura=factura.nro_factura).exists():
-                        raise Exception('El número ' + factura.nro_factura + ' de factura ya existe')
                     factura.save()
 
+                    # se vuelve al stock anterior
+                    for f in FacturaDet.objects.filter(factura=factura):
+                        if StockMateriaPrima.objects.filter(materia=f.materia).exists() == True:
+                            materia = MateriaPrima.objects.get(id=f.materia.id)
+                            stock = StockMateriaPrima.objects.get(materia=materia)
+                            print(stock)
+                            stock.cantidad = stock.cantidad - f.cantidad
+
+                    factura.facturadet_set.all().delete()
                     # Factura Detalle
                     for f in fc['materias']:
                         det = FacturaDet()
                         print(f)
                         det.factura = factura
-                        if MateriaPrima.objects.filter(codigo=f['codigo']).exists():
+                        if MateriaPrima.objects.filter(codigo=f['codigo']).exists() == True:
                             materia = MateriaPrima.objects.get(codigo=f['codigo'])
                             det.materia = materia
                             #  traemos el stock para actualizar
-                            stock = StockMateriaPrima.objects.get(materia=materia)
-                            stock.cantidad += f['cantidad']
-                            stock.save()
+                            if StockMateriaPrima.objects.filter(materia__codigo=f['codigo']).exists() == True:
+                                stock = StockMateriaPrima.objects.get(materia=materia)
+                                stock.cantidad += f['cantidad']
+                                stock.save()
                         else:
                             # si no existe se crea la materia prima
                             mat = MateriaPrima(codigo=f['codigo'],
@@ -380,7 +390,7 @@ class FacturaCompraUpdateView(LoginRequiredMixin, UpdateView):
                         det.descripcion = f['nombre']
                         det.tipo_iva = f['iva']
                         det.save()
-                    data['message'] = 'La factura se ha registrado agregado correctamente!'
+                    data['message'] = 'La factura ha sido editado correctamente!'
                     data['error'] = '¡Sin errores!'
                     response = JsonResponse(data, safe=False)
                     response.status_code = 201
@@ -392,12 +402,24 @@ class FacturaCompraUpdateView(LoginRequiredMixin, UpdateView):
         else:
             return redirect('index')
 
-    def get_detail_materia(self):
+    def get_detalle_fact(self):
+        data = []
         try:
             for f in FacturaDet.objects.filter(factura=self.get_object().id):
-                print(f)
+                print(f.tipo_iva)
+                data.append(
+                    {
+                        'codigo': f.materia.codigo,
+                        'nombre': f.materia.nombre,
+                        'cantidad': int(f.cantidad),
+                        'precio': float(f.precio),
+                        'iva': int(f.tipo_iva),
+                        'id': f.materia.id
+                    }
+                )
+            return data
         except Exception as e:
-            pass
+            raise(str(e))
 
 
 class FacturaCompraDeleteView(LoginRequiredMixin, DeleteView):

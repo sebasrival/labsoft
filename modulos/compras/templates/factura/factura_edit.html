@@ -163,7 +163,7 @@
             </div>
             <div class="tile-footer">
                 <button type="submit" class="btn btn-primary" style="color: white"><i
-                        class="fa fa-fw fa-lg fa-check-circle"></i>Registrar Factura
+                        class="fa fa-fw fa-lg fa-check-circle"></i>Editar Factura
                 </button>&nbsp;&nbsp;&nbsp;
                 <a class="btn btn-secondary" href="">
                     <i class="fa fa-fw fa-lg fa-times-circle"></i>Cancelar</a>
@@ -303,5 +303,9 @@
             $('#id_um').val('');
             $('#materiaModal').modal('show');
         });
+
+        factura_compra.itemsFactura.materias = {{ detalle_fact | safe }}
+        //factura_compra.itemsFactura.descuento = $('#id_descuento').val();
+        factura_compra.list();
     </script>
 {% endblock %}

@@ -21,7 +21,7 @@ class PagoForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'metodo_pago': forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Ingrese un método de pago'}),
-            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Escriba una descripción sobre el pago', 'rows':2}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Escriba una descripción sobre el pago', 'rows':2 , 'id':'descripcion_pago'}),
         }
 
 
@@ -57,15 +57,16 @@ class FacturaCompraForm(forms.ModelForm):
             'nro_factura' : forms.TextInput(attrs={'class': 'form-control', 'autocomplete':'off'}),
             'proveedor': forms.Select(attrs={'class': 'form-control',
                                                 'id': 'proveedor_select',
-                                                'style': 'width: 100%; '}),
+                                                'style': 'width: 100%; ',
+                                                }),
             'fecha_factura': forms.DateInput(attrs={
                 'class': 'form-control',
                 'id':'date_compra',
                 'style': 'font-weight: bold;',
                 'autocomplete': 'off',
             }),
-            'tipo_factura' : forms.RadioSelect(choices=((True, 'Contado',), (False, 'Credito',))),
-            'descuento': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 100, 'step':5}),
+            'tipo_factura': forms.RadioSelect(choices=((True, 'Contado',), (False, 'Credito',))),
+            'descuento': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 100, 'step': 5}),
         }
 
 class FacturaDetalleCompraForm(forms.ModelForm):

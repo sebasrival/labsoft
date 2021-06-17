@@ -21,10 +21,11 @@ let factura_compra = {
         let subtotal = 0.00;
         let iva10 = 0.00;
         let iva5 = 0.00;
+        factura_compra.itemsFactura.descuento = $('#id_descuento').val();
         $.each(this.itemsFactura.materias, function (pos, dict) {
             dict.subtotal = dict.cantidad * dict.precio;
             subtotal += dict.subtotal;
-
+            console.log(dict.iva);
             if (dict.iva === 10) {
                 iva10 += dict.subtotal.toFixed(2) / 11
             } else if (dict.iva === 5) {
@@ -212,12 +213,10 @@ $(function () {
         });
     });
 
-    $('#id_descuento').on('change keyup paste', function () {
+    $('#id_descuento').on('change keyup paste ready', function () {
         if (factura_compra.itemsFactura.materias.length === 0) return false;
-        factura_compra.itemsFactura.descuento = $(this).val();
         factura_compra.calc_invoice();
     });
-
 
     $('#tFacturaCompra').on('click', 'a[rel="btnRemove"]', function () {
         let tr = tblCompra.cell($(this).closest('td, li')).index();
@@ -255,7 +254,7 @@ $(function () {
         factura_compra.itemsFactura.tipo_compra = $('input:radio[name="tipo_factura"]:checked').val();
         factura_compra.itemsFactura.fecha_factura = $('#date_compra').val();
         factura_compra.itemsFactura.metodo_pago = $('#id_metodo_pago').val();
-        factura_compra.itemsFactura.descripcion_pago = $('#id_descripcion').val();
+        factura_compra.itemsFactura.descripcion_pago = $('#descripcion_pago').val();
         console.log(factura_compra.itemsFactura.fecha_factura);
         let parameters = new FormData();
         parameters.append('factura_compra', JSON.stringify(factura_compra.itemsFactura));
@@ -263,6 +262,6 @@ $(function () {
         console.log(csrf);
         parameters.append('csrfmiddlewaretoken', csrf);
         console.log(factura_compra.itemsFactura);
-        create_ajax_factura(window.location.pathname, 'JSON', parameters, '/');
+        create_ajax_factura(window.location.pathname, 'JSON', parameters, '/modulos/compras/factura/list/');
     });
 });
