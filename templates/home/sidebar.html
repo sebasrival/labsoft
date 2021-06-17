@@ -18,7 +18,7 @@
                 <ul class="treeview-menu">
                     <li><a class="treeview-item" href="{% url 'compras:factura_add' %}">Registrar Compra</a></li>
                     <li><a class="treeview-item" href="{% url 'compras:factura_list' %}">Facturas Compras</a></li>
-                    <li><a class="treeview-item" href="">Stock Materia Prima</a></li>
+                    <li><a class="treeview-item" href="{% url 'compras:stock_list' %}">Stock Materia Prima</a></li>
                     {% if perms.compras.view_proveedor or perms.compras.add_proveedor or perms.compras.delete_proveedor or perms.compras.change_proveedor%}
                         <li><a class="treeview-item" href="{% url 'compras:proveedor_list' %}">Proveedores</a></li>
                     {% endif %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+    {% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i> {{ title }}</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+{% block head %}
+    <style>
+        #Table td, th {
+            vertical-align: inherit;
+            padding: 0.4rem;
+        }
+    </style>
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{{ route }}">{{ title }}</a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div class="table-responsive">
+                            {% if perms.compras.add_stockmateriaprima %}
+                                <span>
+                                <button onclick="abrir_modal_stock('{% url 'compras:stock_add' %}')"
+                                        class="btn btn-primary btn-sm">+ Agregar Stock</button>
+                                </span>
+                                {% csrf_token %}
+                            {% endif %}
+                        <div style="text-align: center;">
+                            <h4 style="font-size: large; margin-bottom: 0" class="tile-title">{{ subtitle }}</h4>
+                        </div>
+                        <table class="table table-hover table-bordered" id="stockTable" style="max-width: 100%; width: 100%">
+                            <thead>
+                            <tr style="font-size: 0.7rem">
+                                <th>Materia Prima</th>
+                                <th>Cantidad</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="font-size: 0.75rem;">
+                                    <td></td>
+                                    <td></td>
+                                    <td style="text-align: center;">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal para agregar proveedor -->
+    <div class="modal fade" id="stockModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{% static "js/compras/index.js" %}"></script>
+    <script>
+        //console.log({{ perms.compras.change_proveedor | safe | lower}});
+        //console.log({{ perms.compras.delete_proveedor | safe | lower}});
+        list_stock('/modulos/compras/stock/materia/list/', '/modulos/compras/stock/materia/edit/', '/modulos/compras/stock/materia/del/', {{ perms.compras.change_stockmateriaprima | safe | lower}}, {{ perms.compras.delete_stockmateriaprima | safe | lower}});
+    </script>
+{% endblock %}

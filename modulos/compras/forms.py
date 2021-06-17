@@ -44,8 +44,8 @@ class StockMateriaPrimaForm(forms.ModelForm):
         model = StockMateriaPrima
         fields = '__all__'
         widgets = {
-            'cod_materia': forms.TextInput(attrs={'class': 'form-control'}),
-            'cantidad': forms.TextInput(attrs={'class': 'form-control'}),
+            'materia': forms.Select(attrs={'class': 'form-control'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, }),
         }
 
 

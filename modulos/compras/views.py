@@ -428,65 +428,135 @@ class FacturaCompraDeleteView(LoginRequiredMixin, DeleteView):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
+            # agregar para eliminar pagos
             return super().delete(self, request, *args, **kwargs)
         else:
             # redirectcciona si se hace una peticion que no sea ajax
             return redirect('compras:factura_list')
 
 
-# Vistas Materia Prima
-class MateriaPrimaCreateView(CreateView):
-    model = MateriaPrima
-    form_class = MateriaPrimaForm
-
-
-class MateriaPrimaListView(ListView):
-    model = MateriaPrima
-
-
-class MateriaPrimaUpdateView(UpdateView):
-    model = MateriaPrima
-    form_class = MateriaPrimaForm
-
-
-class MateriaPrimaDeleteView(DeleteView):
-    model = MateriaPrima
-    success_url = reverse_lazy()
-
 
 # Vistas de Stock de Materia Prima
-class StockMateriaPrimaCreateView(CreateView):
+class StockMateriaPrimaCreateView(LoginRequiredMixin, CreateView):
     model = StockMateriaPrima
     form_class = StockMateriaPrimaForm
+    template_name = 'stock/stock_materia_add.html'
+    success_url = reverse_lazy('compras:stock_list')
+    # permission_required = 'compras.add_proveedor'
+
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            data = {}
+            response = ''
+            try:
+                form = self.get_form()
+                # noinspection DuplicatedCode
+                if form.is_valid():
+                    form.save()
+                    data['message'] = f'¡{self.model.__name__} registrado correctamente!'
+                    data['error'] = '¡Sin errores!'
+                    response = JsonResponse(data, safe=False)
+                    response.status_code = 201  # codigo de que esta bien
+                else:
+                    data['message'] = '¡Los datos ingresados no son validos!'
+                    data['error'] = form.errors
+                    response = JsonResponse(data, safe=False)
+                    response.status_code = 400  # codigo de que hay algo malo xd
+            except Exception as e:
+                data['error'] = str(e)
+            return response
+        else:
+            return redirect('compras:stock_list')
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super().get(self, request, *args, **kwargs)
+        else:
+            return redirect('compras:stock_list')
 
 
-class StockMateriaPrimaListView(ListView, LoginRequiredMixin):
+class StockMateriaPrimaListView(LoginRequiredMixin, ListView):
     model = StockMateriaPrima
+    template_name = 'stock/stock_materia_list.html'
+    # permission_required = 'compras.view_proveedor'
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            data = {}
+            try:
+                data = []
+                for st in self.get_queryset():
+                    stock_materia = {
+                        'materia': st.materia.nombre,
+                        'cantidad': st.cantidad,
+                        'id': st.id
+                    }
+                    data.append(stock_materia)
+                    print(stock_materia)
+            except Exception as e:
+                data['error'] = str(e)
+            return JsonResponse(data, safe=False)
+        else:
+            context = {
+                'title': 'Stock Compras',
+                'subtitle': 'Stock Materia Prima',
+                'route': reverse_lazy('compras:stock_list'),
+                'form': StockMateriaPrimaForm()
+            }
+            return render(request, self.template_name, context)
 
 
-class StockMateriaUpdateView(UpdateView):
+class StockMateriaUpdateView(LoginRequiredMixin, UpdateView):
     model = StockMateriaPrima
     form_class = StockMateriaPrimaForm
+    template_name = 'stock/stock_materia_edit.html'
+    # success_url = reverse_lazy('compras:proveedor_list')
+    # permission_required = 'compras.change_proveedor'
+    # url_redirect = reverse_lazy('index')
+
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            data = {}
+            response = ''
+            try:
+                form = self.form_class(request.POST, instance=self.get_object())
+                # noinspection DuplicatedCode
+                if form.is_valid():
+                    form.save()
+                    data['message'] = f'¡{self.model.__name__} editado correctamente!'
+                    data['error'] = '¡Sin errores!'
+                    response = JsonResponse(data, safe=False)
+                    response.status_code = 201  # codigo de que esta bien
+                else:
+                    data['message'] = '¡Los datos ingresados no son validos!'
+                    data['error'] = form.errors
+                    response = JsonResponse(data, safe=False)
+                    response.status_code = 400  # codigo de que hay algo malo xd
+            except Exception as e:
+                data['error'] = str(e)
+            return response
+        else:
+            return redirect('compras:stock_list')
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super().get(self, request, *args, **kwargs)
+        else:
+            # redirectcciona si se hace una peticion que no sea ajax
+            return redirect('compras:proveedor_list')
 
 
-class StockMateriaPrimaDeleteView(DeleteView):
+class StockMateriaPrimaDeleteView(LoginRequiredMixin, DeleteView):
     model = StockMateriaPrima
+    form_class = StockMateriaPrimaForm
+    success_url = reverse_lazy('compras:stock_list')
+    # permission_required = 'compras.delete_proveedor'
+    url_redirect = reverse_lazy('index')
 
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super().get(self, request, *args, **kwargs)
+        else:
+            # redirectcciona si se hace una peticion que no sea ajax
+            return redirect('compras:stock_list')
 
-# Vistas de Pagos
-class PagoCreateView(CreateView):
-    model = MateriaPrima
-    form_class = MateriaPrimaForm
-
-
-class PagoListView(ListView):
-    model = Pago
-
-
-class PagoUpdateView(UpdateView):
-    model = Pago
-    form_class = MateriaPrimaForm
-
-
-class PagoDeleteView(DeleteView):
-    model = Pago
