@@ -26,6 +26,9 @@ class PagoForm(forms.ModelForm):
 
 
 class MateriaPrimaForm(forms.ModelForm):
+    cantidad = forms.IntegerField(widget=forms.NumberInput(
+        attrs={'class': 'form-control', 'min':1,}
+    ))
     class Meta:
         model = MateriaPrima
         fields = '__all__'

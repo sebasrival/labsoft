@@ -233,8 +233,11 @@ class FacturaCompraCreateView(LoginRequiredMixin, CreateView):
                             materia = MateriaPrima.objects.get(codigo=f['codigo'])
                             det.materia = materia
                             #  traemos el stock para actualizar
-                            stock = StockMateriaPrima.objects.get(materia=materia)
-                            stock.cantidad += f['cantidad']
+                            if StockMateriaPrima.objects.filter(materia=materia).exists():
+                                stock = StockMateriaPrima.objects.get(materia=materia)
+                                stock.cantidad += f['cantidad']
+                            else:
+                                stock = StockMateriaPrima(materia=det.materia, cantidad=f['cantidad'])
                             stock.save()
                         else:
                             # si no existe se crea la materia prima
@@ -348,17 +351,18 @@ class FacturaCompraUpdateView(LoginRequiredMixin, UpdateView):
                     pago.metodo_pago = fc['metodo_pago']
                     pago.descripcion = fc['descripcion_pago']
                     pago.save()
-                    factura.save()
 
                     # se vuelve al stock anterior
                     for f in FacturaDet.objects.filter(factura=factura):
                         if StockMateriaPrima.objects.filter(materia=f.materia).exists() == True:
                             materia = MateriaPrima.objects.get(id=f.materia.id)
                             stock = StockMateriaPrima.objects.get(materia=materia)
-                            print(stock)
                             stock.cantidad = stock.cantidad - f.cantidad
+                            stock.save()
+                            print("stock", stock.cantidad)
 
                     factura.facturadet_set.all().delete()
+
                     # Factura Detalle
                     for f in fc['materias']:
                         det = FacturaDet()
@@ -372,6 +376,10 @@ class FacturaCompraUpdateView(LoginRequiredMixin, UpdateView):
                                 stock = StockMateriaPrima.objects.get(materia=materia)
                                 stock.cantidad += f['cantidad']
                                 stock.save()
+                            else:
+                                stock = StockMateriaPrima(materia=det.materia, cantidad=f['cantidad'])
+                                stock.save()
+                            det.materia = materia
                         else:
                             # si no existe se crea la materia prima
                             mat = MateriaPrima(codigo=f['codigo'],
@@ -390,6 +398,7 @@ class FacturaCompraUpdateView(LoginRequiredMixin, UpdateView):
                         det.descripcion = f['nombre']
                         det.tipo_iva = f['iva']
                         det.save()
+                    factura.save()
                     data['message'] = 'La factura ha sido editado correctamente!'
                     data['error'] = '¡Sin errores!'
                     response = JsonResponse(data, safe=False)
@@ -439,7 +448,7 @@ class FacturaCompraDeleteView(LoginRequiredMixin, DeleteView):
 # Vistas de Stock de Materia Prima
 class StockMateriaPrimaCreateView(LoginRequiredMixin, CreateView):
     model = StockMateriaPrima
-    form_class = StockMateriaPrimaForm
+    form_class = MateriaPrimaForm
     template_name = 'stock/stock_materia_add.html'
     success_url = reverse_lazy('compras:stock_list')
     # permission_required = 'compras.add_proveedor'
@@ -453,6 +462,10 @@ class StockMateriaPrimaCreateView(LoginRequiredMixin, CreateView):
                 # noinspection DuplicatedCode
                 if form.is_valid():
                     form.save()
+                    materia = form.cleaned_data['codigo']
+                    cantidad = form.cleaned_data['cantidad']
+                    stock = StockMateriaPrima(materia=MateriaPrima.objects.get(codigo=materia), cantidad=cantidad)
+                    stock.save()
                     data['message'] = f'¡{self.model.__name__} registrado correctamente!'
                     data['error'] = '¡Sin errores!'
                     response = JsonResponse(data, safe=False)
@@ -489,7 +502,7 @@ class StockMateriaPrimaListView(LoginRequiredMixin, ListView):
                     stock_materia = {
                         'materia': st.materia.nombre,
                         'cantidad': st.cantidad,
-                        'id': st.id
+                        'id': st.materia.id
                     }
                     data.append(stock_materia)
                     print(stock_materia)
@@ -507,8 +520,8 @@ class StockMateriaPrimaListView(LoginRequiredMixin, ListView):
 
 
 class StockMateriaUpdateView(LoginRequiredMixin, UpdateView):
-    model = StockMateriaPrima
-    form_class = StockMateriaPrimaForm
+    model = MateriaPrima
+    form_class = MateriaPrimaForm
     template_name = 'stock/stock_materia_edit.html'
     # success_url = reverse_lazy('compras:proveedor_list')
     # permission_required = 'compras.change_proveedor'
@@ -519,9 +532,15 @@ class StockMateriaUpdateView(LoginRequiredMixin, UpdateView):
             data = {}
             response = ''
             try:
+                print('self', self.get_object())
                 form = self.form_class(request.POST, instance=self.get_object())
                 # noinspection DuplicatedCode
                 if form.is_valid():
+                    codmateria = form.cleaned_data['codigo']
+                    cantidad = form.cleaned_data['cantidad']
+                    materia = MateriaPrima.objects.get(codigo=codmateria)
+                    stock = StockMateriaPrima.objects.get(materia=materia)
+                    stock.cantidad = cantidad
                     form.save()
                     data['message'] = f'¡{self.model.__name__} editado correctamente!'
                     data['error'] = '¡Sin errores!'
@@ -543,7 +562,7 @@ class StockMateriaUpdateView(LoginRequiredMixin, UpdateView):
             return super().get(self, request, *args, **kwargs)
         else:
             # redirectcciona si se hace una peticion que no sea ajax
-            return redirect('compras:proveedor_list')
+            return redirect('compras:stock_list')
 
 
 class StockMateriaPrimaDeleteView(LoginRequiredMixin, DeleteView):

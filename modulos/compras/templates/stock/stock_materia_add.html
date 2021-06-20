@@ -15,18 +15,37 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Ruc: </label>
-                        {{ form.materia }}
+                        <label class="control-label">Codigo Materia: </label>
+                        {{ form.codigo }}
                     </div>
-
                     <div class="form-group">
-                        <label class="control-label">Razón Social: </label>
+                        <label class="control-label">Nombre: </label>
+                        {{ form.nombre }}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Descripcion: </label>
+                        {{ form.descripcion }}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Cantidad de Contenido: </label>
+                        {{ form.cantidadCont }}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">INCI: </label>
+                        {{ form.inci }}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Unidad de Medida: </label>
+                        {{ form.um }}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Cantidad (stock): </label>
                         {{ form.cantidad }}
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="create_ajax_stock()">Registrar Proveedor</button>
+                <button type="button" class="btn btn-primary" onclick="create_ajax_stock()">Agregar Stock</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
