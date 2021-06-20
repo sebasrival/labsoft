@@ -1,0 +1,33 @@
+<div class="modal-dialog" role="document">
+    <form id="equipoForm" method="POST" action="{% url 'produccion:equipo_add' %}">
+        {% csrf_token %}
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">Agregar un Equipo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="bs-component">
+                        <div class="show-errors">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Codigo: </label>
+                        {{ form.codigo}}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Nombre: </label>
+                        {{ form.nombre }}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="create_ajax_equipo()">Registrar Equipo</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </form>
+</div>
