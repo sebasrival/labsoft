@@ -1,5 +1,5 @@
 /* Seccion Cliente */
-function list_cliente(url_list, url_edit,url_del) {
+function list_cliente(url_list, url_edit, url_del, perm_change, perm_delete) {
     $('#clienteTable').DataTable({
         responsive: true,
         pageLength: 6,
@@ -25,8 +25,13 @@ function list_cliente(url_list, url_edit,url_del) {
             targets: [-1],
             orderable: false,
             render: function (data, type, row) {
-            var buttons = '<button onclick="abrir_modal(\'' + url_edit + row.id + '/\')" class="btn btn-warning btn-sm" title="Editar"><i class="fas fa-edit"></i></button> ';
-            buttons += '<button onclick="delete_ajax_cliente(\'' + url_del + row.id + '/\')" title="Borrar" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
+                let buttons = '';
+                if (perm_change) {
+                    buttons += '<button onclick="abrir_modal(\'' + url_edit + row.id + '/\')" class="btn btn-warning btn-sm" title="Editar"><i class="fas fa-edit"></i></button> ';
+                }
+                if (perm_delete) {
+                    buttons += '<button onclick="delete_ajax_cliente(\'' + url_del + row.id + '/\')" title="Borrar" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
+                }
                 return buttons;
             }
         }]
@@ -114,10 +119,9 @@ function delete_ajax_cliente(url) {
 }
 
 
-
 //SECCION VENTAS/FACTURAS
 
-function list_factura(url_list,url_del) {
+function list_factura(url_list, url_edit, url_del, perm_change, perm_delete) {
     $('#facturaTable').DataTable({
         responsive: true,
         pageLength: 6,
@@ -139,22 +143,22 @@ function list_factura(url_list,url_del) {
             {"data": "id"},
         ],
         columnDefs: [{
-        targets: [-1],
-        orderable: false,
-        render: function (data, type, row) {
-            var buttons = '<a href="/modulos/ventas/facturas/edit/' + row.id + '/" class="btn btn-warning btn-xs btn-sm"><i class="fas fa-edit"></i></a> ';
-
-            buttons += '<button onclick="abrir_modal_cobro(\''+ row.id + '\')" title="Cuotas" class="btn btn-success btn-sm"><i class="fas fa-search"></i></button>';
-            buttons += '<a href="/modulos/ventas/facturas/invoice/pdf/' + row.id + '/" class="btn btn-primary btn-xs btn-sm"><i class="fas fa-print"></i></a> ';
-            buttons += '<button onclick="delete_ajax_factura(\'' + url_del + row.id + '/\')" title="Borrar" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
-
-
-           return buttons;
-        }
+            targets: [-1],
+            orderable: false,
+            render: function (data, type, row) {
+                let buttons = '';
+                if (perm_change) {
+                    buttons += '<a href="' + url_edit + row.id + '/" class="btn btn-warning btn-xs btn-sm"><i class="fas fa-edit"></i></a> ';
+                    buttons += '<button onclick="abrir_modal_cobro(\'' + row.id + '\')" title="Cuotas" class="btn btn-success btn-sm"><i class="fas fa-search"></i></button>';
+                }
+                buttons += '<a href="/modulos/ventas/facturas/invoice/pdf/' + row.id + '/" class="btn btn-primary btn-xs btn-sm"><i class="fas fa-print"></i></a> ';
+                if (perm_delete) {
+                    buttons += '<button onclick="delete_ajax_factura(\'' + url_del + row.id + '/\')" title="Borrar" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
+                }
+                return buttons;
+            }
         }]
     });
-
-   
 }
 
 function abrir_modal_cobro(row) {
@@ -186,7 +190,7 @@ function abrir_modal_cobro(row) {
                 targets: [1],
                 class: 'text-center',
                 render: function (data, type, row) {
-                    return 'Gs ' + row.monto_cuota ;
+                    return 'Gs ' + row.monto_cuota;
                 }
             },
             {
@@ -194,7 +198,7 @@ function abrir_modal_cobro(row) {
                 class: 'text-center',
                 render: function (data, type, row) {
                     var $select = $("<select class='form-control' id='estadoCuota'><option value='PAGADA'>PAGADA</option><option value='PENDIENTE'>PENDIENTE</option></select>");
-                    $select.find('option[value="'+row.estado+'"]').attr('selected', 'selected');
+                    $select.find('option[value="' + row.estado + '"]').attr('selected', 'selected');
                     return $select[0].outerHTML
                 }
             },
@@ -202,7 +206,7 @@ function abrir_modal_cobro(row) {
                 targets: [5],
                 class: 'text-center',
                 render: function (data, type, row) {
-                    var buttons = '<button onclick="actualizar_cuota(\''+ row.id + '\')" title="Guardar" class="btn btn-success btn-sm"><i class="fas fa-save"></i></button>';
+                    var buttons = '<button onclick="actualizar_cuota(\'' + row.id + '\')" title="Guardar" class="btn btn-success btn-sm"><i class="fas fa-save"></i></button>';
                     return buttons;
                 }
             },
@@ -218,14 +222,14 @@ function abrir_modal_cobro(row) {
 }
 
 function actualizar_cuota(id) {
-    var estado=$('#estadoCuota').val();
+    var estado = $('#estadoCuota').val();
     $.ajax({
         url: window.location.pathname,
         type: 'POST',
         data: {
             'action': 'edit_cuota',
-            'cuota_id':id,
-            'estado':estado,
+            'cuota_id': id,
+            'estado': estado,
 
         },
         dataType: 'json',
@@ -277,8 +281,7 @@ function delete_ajax_factura(url) {
 }
 
 
-
-function list_pedido(url_list,url_del) {
+function list_pedido(url_list, url_edit, url_del, perm_change, perm_delete) {
     $('#pedidoTable').DataTable({
         responsive: true,
         pageLength: 6,
@@ -300,23 +303,27 @@ function list_pedido(url_list,url_del) {
             {"data": "id"},
         ],
         columnDefs: [{
-        targets: [-1],
-        orderable: false,
-        render: function (data, type, row) {
-            var buttons = '<a href="/modulos/ventas/pedidos/edit/' + row.id + '/" class="btn btn-warning btn-xs btn-sm"><i class="fas fa-edit"></i></a> ';
+            targets: [-1],
+            orderable: false,
+            render: function (data, type, row) {
+                let buttons = '';
 
-            buttons += '<button onclick="abrir_modal_pedido(\''+ row.id + '\')" title="Detalles" class="btn btn-success btn-sm"><i class="fas fa-search"></i></button>';
-            buttons += '<a href="/modulos/ventas/facturas/add/' + row.id + '/"title="Generar factura" class="btn btn-secondary btn-xs btn-sm"><i class="fas fa-spinner "></i></a> ';
-            buttons += '<button onclick="delete_ajax_pedido(\'' + url_del + row.id + '/\')" title="Borrar" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
-
-
-           return buttons;
-        }
+                if(perm_change){
+                    buttons += '<a href="'+ url_edit + row.id + '/" class="btn btn-warning btn-xs btn-sm"><i class="fas fa-edit"></i></a> ';
+                }
+                buttons += '<button onclick="abrir_modal_pedido(\'' + row.id + '\')" title="Detalles" class="btn btn-success btn-sm"><i class="fas fa-search"></i></button>';
+                buttons += '<a href="/modulos/ventas/facturas/add/' + row.id + '/"title="Generar factura" class="btn btn-secondary btn-xs btn-sm"><i class="fas fa-spinner "></i></a> ';
+                if(perm_delete){
+                    buttons += '<button onclick="delete_ajax_pedido(\'' + url_del + row.id + '/\')" title="Borrar" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
+                }
+                return buttons;
+            }
         }]
     });
 
-   
+
 }
+
 function abrir_modal_pedido(row) {
     $('#pedidoDet').DataTable({
         responsive: true,

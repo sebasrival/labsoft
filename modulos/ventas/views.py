@@ -21,11 +21,15 @@ from django.template.loader import get_template
 import json
 
 # Vistas de clientes
-class ClienteCreateView(LoginRequiredMixin, CreateView):
+from ..accounts.mixins import PermissionMixin
+
+
+class ClienteCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
     model = Cliente
     form_class = ClienteForm
     template_name = 'clientes/clientes_add.html'
     success_url = reverse_lazy('ventas:cliente_list')
+    permission_required = 'ventas.add_cliente'
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -58,9 +62,10 @@ class ClienteCreateView(LoginRequiredMixin, CreateView):
             return redirect('ventas:cliente_list')
 
 
-class ClienteListView(LoginRequiredMixin, ListView):
+class ClienteListView(LoginRequiredMixin, PermissionMixin, ListView):
     model = Cliente
     template_name = 'clientes/clientes_list.html'
+    permission_required = 'ventas.view_cliente'
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -93,11 +98,12 @@ class ClienteListView(LoginRequiredMixin, ListView):
             return render(request, self.template_name, context)
 
 
-class ClienteUpdateView(LoginRequiredMixin, UpdateView):
+class ClienteUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
     model = Cliente
     form_class = ClienteForm
     template_name = 'clientes/clientes_edit.html'
     success_url = reverse_lazy('ventas:cliente_list')
+    permission_required = 'ventas.change_cliente'
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -131,10 +137,11 @@ class ClienteUpdateView(LoginRequiredMixin, UpdateView):
             return redirect('ventas:cliente_list')
 
 
-class ClienteDeleteView(LoginRequiredMixin, DeleteView):
+class ClienteDeleteView(LoginRequiredMixin, PermissionMixin, DeleteView):
     model = Cliente
     form_class = ClienteForm
     success_url = reverse_lazy('ventas:cliente_list')
+    permission_required = 'ventas.delete_cliente'
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -144,15 +151,14 @@ class ClienteDeleteView(LoginRequiredMixin, DeleteView):
             return redirect('ventas:cliente_list')
 
 
-
 #Vistas para Facturas Venta
-
-class FacturaVentaCreateView(LoginRequiredMixin, CreateView):
+class FacturaVentaCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
     model = FacturaVenta
     form_class = FacturaVentaForm
     template_name = 'facturas/facturas_add.html'
     success_url = reverse_lazy('ventas:factura_list')
-    url_redirect = success_url
+    # url_redirect = success_url
+    permission_required = 'ventas.add_facturaventa'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -281,12 +287,11 @@ class FacturaVentaCreateView(LoginRequiredMixin, CreateView):
 
         return context
         
- 
-    
 
-class FacturaVentaListView(LoginRequiredMixin, ListView):
+class FacturaVentaListView(LoginRequiredMixin, PermissionMixin, ListView):
     model = FacturaVenta
     template_name = 'facturas/facturas_list.html'
+    permission_required = 'ventas.view_facturaventa'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -343,12 +348,13 @@ class FacturaVentaListView(LoginRequiredMixin, ListView):
         return context
 
 
-class FacturaVentaUpdateView(LoginRequiredMixin, UpdateView):
+class FacturaVentaUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
     model = FacturaVenta
     form_class = FacturaVentaForm
     template_name = 'facturas/facturas_edit.html'
     success_url = reverse_lazy('ventas:factura_list')
-    url_redirect = success_url
+    # url_redirect = success_url
+    permission_required = 'ventas.change_facturaventa'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -493,10 +499,12 @@ class FacturaVentaUpdateView(LoginRequiredMixin, UpdateView):
         context['cobro']=json.dumps(self.get_details_cobro())
         return context
 
-class FacturaVentaDeleteView(LoginRequiredMixin, DeleteView):
+
+class FacturaVentaDeleteView(LoginRequiredMixin, PermissionMixin, DeleteView):
     model = FacturaVenta
     form_class = FacturaVentaForm
     success_url = reverse_lazy('ventas:factura_list')
+    permission_required = 'ventas.delete_facturaventa'
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -504,6 +512,7 @@ class FacturaVentaDeleteView(LoginRequiredMixin, DeleteView):
         else:
             # redirectcciona si se hace una peticion que no sea ajax
             return redirect('ventas:factura_list')
+
 
 class FacturaPdfView(View):
 
@@ -554,12 +563,13 @@ class FacturaPdfView(View):
         return HttpResponseRedirect(reverse_lazy('ventas:factura_list'))
 
 
-class PedidoCreateView(LoginRequiredMixin, CreateView):
+class PedidoCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
     model = Pedido
     form_class = PedidoForm
     template_name = 'pedidos/pedidos_add.html'
     success_url = reverse_lazy('ventas:pedido_list')
-    url_redirect = success_url
+    # url_redirect = success_url
+    permission_required = 'ventas.add_pedido'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -623,12 +633,13 @@ class PedidoCreateView(LoginRequiredMixin, CreateView):
         return JsonResponse(data, safe=False)    
 
 
-class PedidoUpdateView(LoginRequiredMixin, UpdateView):
+class PedidoUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
     model = Pedido
     form_class = PedidoForm
     template_name = 'pedidos/pedidos_edit.html'
     success_url = reverse_lazy('ventas:pedido_list')
-    url_redirect = success_url
+    #url_redirect = success_url
+    permission_required = 'ventas.change_pedido'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -729,10 +740,10 @@ class PedidoUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
 
-
-class PedidoListView(LoginRequiredMixin, ListView):
+class PedidoListView(LoginRequiredMixin, PermissionMixin, ListView):
     model = Pedido
     template_name = 'pedidos/pedidos_list.html'
+    permission_required = 'ventas.view_pedido'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -765,10 +776,11 @@ class PedidoListView(LoginRequiredMixin, ListView):
         return context
 
 
-class PedidoDeleteView(LoginRequiredMixin, DeleteView):
+class PedidoDeleteView(LoginRequiredMixin, PermissionMixin, DeleteView):
     model = Pedido
     form_class = PedidoForm
     success_url = reverse_lazy('ventas:factura_list')
+    permission_required = 'ventas.delete_pedido'
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():

@@ -36,7 +36,7 @@
             <div class="tile">
                 <div class="tile-body">
                     <div class="table-responsive">
-                            {% if perms.ventas.cliente_add %}
+                            {% if perms.ventas.add_facturaventa %}
                            
                                 <a class="btn btn-success p-2" href="{% url 'ventas:factura_add' %}"
                                            title="Editar">
@@ -116,6 +116,6 @@
     <script type="text/javascript" src="{% static "js/functions/functions.js" %}"></script>
     <script type="text/javascript" src="{% static "js/ventas/index.js" %}"></script>
     <script>
-        list_factura('/modulos/ventas/facturas/list/','/modulos/ventas/facturas/del/');
+        list_factura('/modulos/ventas/facturas/list/', '/modulos/ventas/facturas/edit/', '/modulos/ventas/facturas/del/', {{ perms.ventas.change_facturaventa | safe | lower}}, {{ perms.ventas.delete_facturaventa | safe | lower}});
     </script>
 {% endblock %}

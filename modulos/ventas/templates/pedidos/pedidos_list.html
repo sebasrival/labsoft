@@ -36,7 +36,7 @@
             <div class="tile">
                 <div class="tile-body">
                     <div class="table-responsive">
-                            {% if perms.ventas.cliente_add %}
+                            {% if perms.ventas.add_pedido %}
                            
                                 <a class="btn btn-success p-2" href="{% url 'ventas:pedido_add' %}"
                                            title="Editar">
@@ -115,6 +115,6 @@
     <script type="text/javascript" src="{% static "js/functions/functions.js" %}"></script>
     <script type="text/javascript" src="{% static "js/ventas/index.js" %}"></script>
     <script>
-        list_pedido('/modulos/ventas/pedidos/list/','/modulos/ventas/pedidos/del/');
+        list_pedido('/modulos/ventas/pedidos/list/', '/modulos/ventas/pedidos/edit/','/modulos/ventas/pedidos/del/', {{ perms.ventas.change_pedido | safe | lower}}, {{ perms.ventas.delete_pedido | safe | lower}});
     </script>
 {% endblock %}

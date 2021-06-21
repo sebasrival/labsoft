@@ -92,6 +92,6 @@
     <script type="text/javascript" src="{% static "js/functions/functions.js" %}"></script>
     <script type="text/javascript" src="{% static "js/ventas/index.js" %}"></script>
     <script>
-        list_cliente('/modulos/ventas/clientes/list/', '/modulos/ventas/clientes/edit/', '/modulos/ventas/clientes/del/');
+        list_cliente('/modulos/ventas/clientes/list/', '/modulos/ventas/clientes/edit/', '/modulos/ventas/clientes/del/',{{ perms.ventas.change_cliente | safe | lower}}, {{ perms.ventas.delete_cliente | safe | lower}} );
     </script>
 {% endblock %}
