@@ -36,7 +36,7 @@
             <div class="tile">
                 <div class="tile-body">
                     <div class="table-responsive">
-                            {% if perms.compras.add_stockmateriaprima %}
+                            {% if perms.compras.add_materiaprima %}
                                 <span>
                                 <button onclick="abrir_modal_stock('{% url 'compras:stock_add' %}')"
                                         class="btn btn-primary btn-sm">+ Agregar Stock</button>
@@ -81,6 +81,6 @@
     <script>
         //console.log({{ perms.compras.change_proveedor | safe | lower}});
         //console.log({{ perms.compras.delete_proveedor | safe | lower}});
-        list_stock('/modulos/compras/stock/materia/list/', '/modulos/compras/stock/materia/edit/', '/modulos/compras/stock/materia/del/', {{ perms.compras.change_stockmateriaprima | safe | lower}}, {{ perms.compras.delete_stockmateriaprima | safe | lower}});
+        list_stock('/modulos/compras/stock/materia/list/', '/modulos/compras/stock/materia/edit/', '/modulos/compras/stock/materia/del/', {{ perms.compras.change_materiaprima | safe | lower}}, {{ perms.compras.delete_materiaprima | safe | lower}});
     </script>
 {% endblock %}

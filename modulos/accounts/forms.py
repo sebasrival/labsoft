@@ -114,7 +114,7 @@ class UserFormChange(UserChangeForm):
             return user
 
 #seccion de código para listar permisos para agregar
-queryset = ["cliente","pedido","producto","facturaventa","facturacompra", "materiaprima", "factura", "proveedor", "pago", "group", "user", "stockmateriaprima"]
+queryset = ["cobro","cliente","pedido","producto","facturaventa","facturacompra", "materiaprima", "factura", "proveedor", "pago", "group", "user", "stockmateriaprima"]
 
 class GroupForm(ModelForm):
     def __init__(self, *args, **kwargs):

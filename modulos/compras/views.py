@@ -4,7 +4,7 @@ from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, TemplateView
@@ -190,10 +190,11 @@ class SearchMateriaPrima(TemplateView):
 
 
 # Factura
-class FacturaCompraCreateView(LoginRequiredMixin, CreateView):
+class FacturaCompraCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
     model = FacturaCompra
     form_class = FacturaCompraForm
     template_name = 'factura/factura_add.html'
+    permission_required = 'compras.add_facturacompra'
 
     # noinspection DuplicatedCode
     def post(self, request, *args, **kwargs):
@@ -279,9 +280,10 @@ class FacturaCompraCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class FacturaCompraListView(LoginRequiredMixin, ListView):
+class FacturaCompraListView(LoginRequiredMixin, PermissionMixin, ListView):
     model = FacturaCompra
     template_name = 'factura/factura_list.html'
+    permission_required = 'compras.view_facturacompra'
 
     def get_context_data(self, **kwargs):
         context = super(FacturaCompraListView, self).get_context_data(**kwargs)
@@ -313,10 +315,11 @@ class FacturaCompraListView(LoginRequiredMixin, ListView):
             return super().get(self, request, *args, **kwargs)
 
 
-class FacturaCompraUpdateView(LoginRequiredMixin, UpdateView):
+class FacturaCompraUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
     model = FacturaCompra
     form_class = FacturaCompraForm
     template_name = 'factura/factura_edit.html'
+    permission_required = 'compras.change_facturacompra'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -431,9 +434,10 @@ class FacturaCompraUpdateView(LoginRequiredMixin, UpdateView):
             raise(str(e))
 
 
-class FacturaCompraDeleteView(LoginRequiredMixin, DeleteView):
+class FacturaCompraDeleteView(LoginRequiredMixin, PermissionMixin, DeleteView):
     model = FacturaCompra
     success_url = reverse_lazy('compras:factura_list')
+    permission_required = 'compras.delete_facturacompra'
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -446,12 +450,12 @@ class FacturaCompraDeleteView(LoginRequiredMixin, DeleteView):
 
 
 # Vistas de Stock de Materia Prima
-class StockMateriaPrimaCreateView(LoginRequiredMixin, CreateView):
+class StockMateriaPrimaCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
     model = StockMateriaPrima
     form_class = MateriaPrimaForm
     template_name = 'stock/stock_materia_add.html'
     success_url = reverse_lazy('compras:stock_list')
-    # permission_required = 'compras.add_proveedor'
+    permission_required = 'compras.add_materiaprima'
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -488,10 +492,10 @@ class StockMateriaPrimaCreateView(LoginRequiredMixin, CreateView):
             return redirect('compras:stock_list')
 
 
-class StockMateriaPrimaListView(LoginRequiredMixin, ListView):
+class StockMateriaPrimaListView(LoginRequiredMixin, PermissionMixin, ListView):
     model = StockMateriaPrima
     template_name = 'stock/stock_materia_list.html'
-    # permission_required = 'compras.view_proveedor'
+    permission_required = 'compras.view_materiaprima'
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -519,12 +523,12 @@ class StockMateriaPrimaListView(LoginRequiredMixin, ListView):
             return render(request, self.template_name, context)
 
 
-class StockMateriaUpdateView(LoginRequiredMixin, UpdateView):
+class StockMateriaUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
     model = MateriaPrima
     form_class = MateriaPrimaForm
     template_name = 'stock/stock_materia_edit.html'
     # success_url = reverse_lazy('compras:proveedor_list')
-    # permission_required = 'compras.change_proveedor'
+    permission_required = 'compras.change_materiaprima'
     # url_redirect = reverse_lazy('index')
 
     def post(self, request, *args, **kwargs):
@@ -541,6 +545,7 @@ class StockMateriaUpdateView(LoginRequiredMixin, UpdateView):
                     materia = MateriaPrima.objects.get(codigo=codmateria)
                     stock = StockMateriaPrima.objects.get(materia=materia)
                     stock.cantidad = cantidad
+                    stock.save()
                     form.save()
                     data['message'] = f'¡{self.model.__name__} editado correctamente!'
                     data['error'] = '¡Sin errores!'
@@ -565,12 +570,13 @@ class StockMateriaUpdateView(LoginRequiredMixin, UpdateView):
             return redirect('compras:stock_list')
 
 
-class StockMateriaPrimaDeleteView(LoginRequiredMixin, DeleteView):
-    model = StockMateriaPrima
-    form_class = StockMateriaPrimaForm
+class StockMateriaPrimaDeleteView(LoginRequiredMixin, PermissionMixin, DeleteView):
+    model = MateriaPrima
+    form_class = MateriaPrimaForm
     success_url = reverse_lazy('compras:stock_list')
-    # permission_required = 'compras.delete_proveedor'
+    permission_required = 'compras.delete_materiaprima'
     url_redirect = reverse_lazy('index')
+
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -578,4 +584,3 @@ class StockMateriaPrimaDeleteView(LoginRequiredMixin, DeleteView):
         else:
             # redirectcciona si se hace una peticion que no sea ajax
             return redirect('compras:stock_list')
-

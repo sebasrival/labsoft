@@ -207,7 +207,7 @@ function delete_ajax_stock(url) {
         confirmButtonText: 'Sí, eliminar!'
     }).then((result) => {
         if (result.isConfirmed) {
-            let csrf = {}
+            let csrf = {};
             csrf['csrfmiddlewaretoken'] = $('input[name="csrfmiddlewaretoken"]').val();
             $.ajax({
                 url: url,
@@ -224,10 +224,10 @@ function delete_ajax_stock(url) {
                 error: function (error) {
                     console.log(error);
                 }
-            })
+            });
 
         }
-    })
+    });
 }
 
 

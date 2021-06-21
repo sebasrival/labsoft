@@ -96,7 +96,7 @@ class FacturaDet(models.Model):
 
 
 class StockMateriaPrima(models.Model):
-    materia = models.ForeignKey(MateriaPrima, on_delete=models.PROTECT)
+    materia = models.ForeignKey(MateriaPrima, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField(default=1)
 
     class Meta:
