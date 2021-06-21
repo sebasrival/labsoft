@@ -1,6 +1,7 @@
 from datetime import date
 
 from django.db import models
+from django.forms import model_to_dict
 
 # Create your models here.
 from django.utils import timezone
@@ -50,6 +51,15 @@ class MateriaPrima(models.Model):
     def __str__(self):
         return '%s - %s' % (self.codigo, self.nombre)
 
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['id']=self.id
+        item['codigo'] = self.codigo
+        item['nombre'] = self.nombre
+        item['descripcion'] = self.descripcion
+        item['inci'] = self.inci
+        item['unidad_medida'] = self.um
+        return item
     class Meta:
         verbose_name = 'Materia Prima'
         verbose_name_plural = 'Materias Primas'

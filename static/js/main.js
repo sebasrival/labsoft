@@ -64,6 +64,29 @@ function show_notify_success(message) {
     });
 }
 
+function show_notify_error(message) {
+    $.notify({
+        title: '',
+        message: message,
+        icon: 'fas fa-exclamation-circle'
+    }, {
+        type: "danger",
+        allow_dismiss: true,
+        newest_on_top: false,
+        showProgressbar: false,
+        timer: 1500,
+        delay: 500,
+        placement: {
+            from: "top",
+            align: "right"
+        },
+        animate: {
+            enter: 'animate__animated animate__fadeInDown',
+            exit: 'animate__animated animate__fadeOutUp'
+        },
+    });
+}
+
 function show_error_json(title, errors) {
 
     let html = "";

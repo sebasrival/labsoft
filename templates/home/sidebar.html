@@ -58,6 +58,16 @@
             <li><a class="treeview-item" href="{% url 'produccion:producto_list' %}">Stock de Productos</a></li>
         {% endif %}
         </ul>
+        <ul class="treeview-menu">
+            {% if perms.produccion.view_equipo or perms.produccion.add_quipo or perms.produccion.delete_equipo or perms.produccion.change_equipo%}
+            <li><a class="treeview-item" href="{% url 'produccion:equipo_list' %}">Equipos</a></li>
+        {% endif %}
+        </ul>
+        <ul class="treeview-menu">
+            {% if perms.produccion.view_equipo or perms.produccion.add_quipo or perms.produccion.delete_equipo or perms.produccion.change_equipo%}
+            <li><a class="treeview-item" href="{% url 'produccion:orden_list' %}">Ordenes de elaboracion</a></li>
+        {% endif %}
+        </ul>
     </li>
     {% endif %}
         {% if perms.accounts %}
