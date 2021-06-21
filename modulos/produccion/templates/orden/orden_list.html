@@ -36,7 +36,7 @@
             <div class="tile">
                 <div class="tile-body">
                     <div class="table-responsive">
-                            {% if perms.ventas.cliente_add %}
+                            {% if perms.produccion.add_ordenelaboracion %}
                            
                                 <a class="btn btn-success p-2" href="{% url 'produccion:orden_add' %}"
                                            title="Editar">
@@ -79,15 +79,12 @@
     </div>
 
 
-    </div>
-
-
 {% endblock %}
 
 {% block scripts %}
     <script type="text/javascript" src="{% static "js/functions/functions.js" %}"></script>
     <script type="text/javascript" src="{% static "js/produccion/index.js" %}"></script>
     <script>
-        list_orden('/modulos/produccion/orden/list/','/modulos/produccion/orden/del/');
+        list_orden('/modulos/produccion/orden/list/', '/modulos/produccion/orden/edit/', '/modulos/produccion/orden/del/', {{ perms.produccion.change_ordenelaboracion | safe | lower}}, {{ perms.produccion.delete_ordenelaboracion | safe | lower}});
     </script>
 {% endblock %}

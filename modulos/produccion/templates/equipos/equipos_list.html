@@ -36,7 +36,7 @@
             <div class="tile">
                 <div class="tile-body">
                     <div class="table-responsive">
-                            {% if perms.produccion.producto_add %}
+                            {% if perms.produccion.add_equipo %}
                                 <span>
                                 <button onclick="abrir_modal('{% url 'produccion:equipo_add' %}')"
                                         class="btn btn-primary btn-sm">+ Agregar Equipo</button>
@@ -81,6 +81,6 @@
     <script type="text/javascript" src="{% static "js/functions/functions.js" %}"></script>
     <script type="text/javascript" src="{% static "js/produccion/indexEquipos.js" %}"></script>
     <script>
-        list_equipo('/modulos/produccion/equipos/list/', '/modulos/produccion/equipos/edit/', '/modulos/produccion/equipos/del/');
+        list_equipo('/modulos/produccion/equipos/list/', '/modulos/produccion/equipos/edit/', '/modulos/produccion/equipos/del/', {{ perms.produccion.change_equipo | safe | lower}}, {{ perms.produccion.delete_equipo | safe | lower}});
     </script>
 {% endblock %}

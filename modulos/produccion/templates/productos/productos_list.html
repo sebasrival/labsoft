@@ -36,7 +36,7 @@
             <div class="tile">
                 <div class="tile-body">
                     <div class="table-responsive">
-                            {% if perms.produccion.producto_add %}
+                            {% if perms.produccion.add_producto %}
                                 <span>
                                 <button onclick="abrir_modal('{% url 'produccion:producto_add' %}')"
                                         class="btn btn-primary btn-sm">+ Agregar Producto</button>
@@ -91,6 +91,6 @@
     <script type="text/javascript" src="{% static "js/functions/functions.js" %}"></script>
     <script type="text/javascript" src="{% static "js/produccion/index.js" %}"></script>
     <script>
-        list_producto('/modulos/produccion/productos/list/', '/modulos/produccion/productos/edit/', '/modulos/produccion/productos/del/');
+        list_producto('/modulos/produccion/productos/list/', '/modulos/produccion/productos/edit/', '/modulos/produccion/productos/del/', {{ perms.produccion.change_producto | safe | lower}}, {{ perms.produccion.delete_producto | safe | lower}});
     </script>
 {% endblock %}

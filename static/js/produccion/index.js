@@ -1,5 +1,5 @@
 /* Seccion producto */
-function list_orden(url_list,url_del) {
+function list_orden(url_list, url_edit, url_del, perm_change, perm_delete) {
     $('#ordenTable').DataTable({
         responsive: true,
         pageLength: 6,
@@ -25,8 +25,15 @@ function list_orden(url_list,url_del) {
         targets: [-1],
         orderable: false,
         render: function (data, type, row) {
-            var buttons = '<a href="/modulos/produccion/orden/edit/' + row.id + '/" class="btn btn-warning btn-xs btn-sm"><i class="fas fa-edit"></i></a> ';
-            buttons += '<button onclick="delete_ajax_orden(\'' + url_del + row.id + '/\')" title="Borrar" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
+            let buttons = '';
+            if (perm_change){
+                buttons += '<a href="'+ url_edit + row.id + '/" class="btn btn-warning btn-xs btn-sm"><i class="fas fa-edit"></i></a> ';
+            }
+            if(perm_delete){
+                buttons += '<button onclick="delete_ajax_orden(\'' + url_del + row.id + '/\')" title="Borrar" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
+            }
+
+
 
            return buttons;
         }
@@ -67,7 +74,7 @@ function delete_ajax_orden(url) {
         }
     })
 }
-function list_producto(url_list, url_edit, url_del) {
+function list_producto(url_list, url_edit, url_del, perm_change, perm_delete) {
     $('#productoTable').DataTable({
         responsive: true,
         pageLength: 6,
@@ -92,8 +99,14 @@ function list_producto(url_list, url_edit, url_del) {
             targets: [-1],
             orderable: false,
             render: function (data, type, row) {
-                var buttons = '<button onclick="abrir_modal(\'' + url_edit + row.id + '/\')" class="btn btn-warning btn-sm" title="Editar"><i class="fas fa-edit"></i></button> ';
-                buttons += '<button onclick="delete_ajax_producto(\'' + url_del + row.id + '/\')" title="Borrar" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
+                let buttons = ''
+                console.log(perm_change)
+                if (perm_change){
+                    buttons += '<button onclick="abrir_modal(\'' + url_edit + row.id + '/\')" class="btn btn-warning btn-sm" title="Editar"><i class="fas fa-edit"></i></button> ';
+                }
+                if(perm_delete){
+                    buttons += '<button onclick="delete_ajax_producto(\'' + url_del + row.id + '/\')" title="Borrar" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
+                }
                 return buttons;
             }
         }]
