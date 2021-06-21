@@ -125,6 +125,7 @@ function cerrar_modal() {
 
 function create_ajax_producto() {
     $.ajax({
+        stock: $('#cantidadStock').val(),
         data: $('#productoForm').serializeArray(),
         url: $('#productoForm').attr('action'),
         type: $('#productoForm').attr('method'),

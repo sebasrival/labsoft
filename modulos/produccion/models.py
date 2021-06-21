@@ -24,6 +24,7 @@ class Producto(models.Model):
     cantidad_contenido = models.FloatField(blank=True)
     tipo = models.CharField(max_length=10, blank=True, default='')
     tasa_iva= models.IntegerField(default=0,choices=TIPO_IVA)
+    stock_inicial= models.IntegerField(default=0,blank=True)
 
     def __str__(self):
         return '%s %s' % (self.codigo_producto, self.nombre)

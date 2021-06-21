@@ -15,6 +15,8 @@ class ProductoForm(forms.ModelForm):
             'precio': forms.NumberInput(attrs={'class': 'form-control','min':1}),
             'cantidad_contenido': forms.NumberInput(attrs={'class': 'form-control','min':1}),
             'tasa_iva': forms.Select(attrs={'class': 'form-control'}),
+            'stock_inicial': forms.NumberInput(attrs={'class': 'form-control','min':1}),
+
         }
 
 

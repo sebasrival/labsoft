@@ -40,8 +40,10 @@ class ProductoCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                     response = JsonResponse(data, safe=False)
                     response.status_code = 201  # codigo de que esta bien
                     p = Producto.objects.get(codigo_producto=form['codigo_producto'].value())
-                    s = StockProductos(cantidad=0, producto_id=p.id)
+                    s = StockProductos(cantidad=form['stock_inicial'].value(), producto_id=p.id)
                     s.save()
+                    print(form)
+
 
                 else:
                     data['message'] = '¡Los datos ingresados no son validos!'
