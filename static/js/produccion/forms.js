@@ -245,9 +245,12 @@ $(function () {
             if (ui.item.materias!=undefined){
                 orden.items.materias=ui.item.materias;
             }
+            else{
+                orden.items.materias=[];
+            }
             orden.items.producto=ui.item.id;
-            console.log(ui.item.materias)
-            orden.list()
+            console.log(ui.item.materias);
+            orden.list();
             $(this).val(ui.item.nombre);
             
         }
