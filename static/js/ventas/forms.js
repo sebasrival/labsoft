@@ -264,11 +264,18 @@ $(function () {
         select: function (event, ui) {
             event.preventDefault();
             console.clear();
-            ui.item.cantidad = 1;
-            ui.item.subtotal = 0.00;
-            console.log(factura.items);
-            factura.add(ui.item);
-            $(this).val('');
+
+            console.log (ui.item.cantidad_stock);
+            if (ui.item.cantidad_stock ==0){
+                show_notify_error('El producto seleccionado no posee stock disponible. ');
+            }
+            else{
+                ui.item.cantidad = 1;
+                ui.item.subtotal = 0.00;
+                console.log(ui.item);
+                factura.add(ui.item);
+                $(this).val('');
+            }
         }
     });
     

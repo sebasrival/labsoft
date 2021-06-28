@@ -303,6 +303,10 @@ $(function () {
             show_notify_error('No puede cambiar el estado de '+orden.items.estado +' a '+estado_nuevo);
             return false;
         }
+        if (orden.items.estado=='PENDIENTE' && estado_nuevo=='FINALIZADA'){
+            show_notify_error('No puede cambiar el estado de '+orden.items.estado +' a '+estado_nuevo);
+            return false;
+        }
         orden.items.fecha_emision = $('input[name="fecha_emision"]').val();
         orden.items.fecha_vigencia = $('input[name="fecha_vigencia"]').val();
         orden.items.elaborado_por = $('input[name="elaborado_por"]').val();
