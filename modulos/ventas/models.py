@@ -100,6 +100,12 @@ class FacturaVenta(models.Model):
         item['cobro_id']=self.cobro.id
         return item
   
+    def obtener_total(self):
+        return int(self.total)
+    def obtener_montoiva1(self):
+        return round(self.monto_iva1)
+    def obtener_montoiva2(self):
+        return round(self.monto_iva2)
     class Meta:
         verbose_name = 'FacturaVenta'
         verbose_name_plural = 'Facturas'
@@ -114,6 +120,11 @@ class FacturaVentaDetalle(models.Model):
     def obtener_subtotal(self):
         return int(self.cantidad)*int(self.precio)
 
+    def obtener_total(self):
+        return int(self.cantidad)*int(self.precio)
+
+    def obtener_precio(self):
+        return round(self.precio)
     class Meta:
         ordering = ['id']
 

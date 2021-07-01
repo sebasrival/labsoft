@@ -1,3 +1,4 @@
+from django.forms.forms import Form
 from modulos.compras.models import StockMateriaPrima
 from django.db.models import Max
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -325,6 +326,23 @@ class OrdenCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                     item = i.toJSON()
                     item['value'] = i.nombre
                     data.append(item)
+            elif action == 'search_formula':
+                data =[]
+                materia = []
+                producto=Producto.objects.get(id=request.POST['term'])
+                item=producto.toJSON()
+                cantidad = FormulaProducto.objects.filter(producto_id=request.POST['term'],cantidad_teorica=request.POST['cantidad']).count()
+                if cantidad > 0:
+                    formula = FormulaProducto.objects.filter(producto_id=request.POST['term'],cantidad_teorica=request.POST['cantidad'])
+                    for f in formula:
+                        m = f.toJSON()
+                        materia.append(m)
+                    item['materias']=materia
+                    data.append(item)
+
+      
+                
+       
             elif action == 'add':
                 print('entro xd')
                 orden = json.loads(request.POST['orden'])
@@ -363,12 +381,7 @@ class OrdenCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                     det.cantidad = i['cantidad']
                     det.inci = i['inci']
                     det.unidad_medida = i['unidad_medida']
-                    print(det.orden_id)
-                    print(det.materia_id)
-                    print(det.cantidad)
-                    print(det.inci)
-                    print(det.unidad_medida)
-                    print('entro x2')
+      
 
                     det.save()
                     print('guardo en detalle')
@@ -562,6 +575,203 @@ class OrdenDeleteView(LoginRequiredMixin, PermissionMixin, DeleteView):
     model = OrdenElaboracion
     form_class = OrdenElaboracionForm
     success_url = reverse_lazy('produccion:orden_list')
+    permission_required = 'produccion.delete_ordenelaboracion'
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super().get(self, request, *args, **kwargs)
+        else:
+            # redirectcciona si se hace una peticion que no sea ajax
+            return redirect('produccion:orden_list')
+
+
+class FormulaCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
+    model = Formula
+    form_class = FormulaForm
+    template_name = 'formulas/formulas_add.html'
+    success_url = reverse_lazy('produccion:orden_list')
+    permission_required = 'produccion.add_ordenelaboracion'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'search_materias':
+                data = []
+                mats = MateriaPrima.objects.filter(nombre__icontains=request.POST['term'])
+                for i in mats:
+                    item = i.toJSON()
+                    item['value'] = i.nombre
+                    data.append(item)
+            elif action == 'search_products':
+                data = []
+                materia = []
+                prods = Producto.objects.filter(nombre__icontains=request.POST['term'])
+                for i in prods:
+                    item = i.toJSON()
+                    cantidad = FormulaProducto.objects.filter(producto_id=i.id).count()
+                    if cantidad > 0:
+                        formula = FormulaProducto.objects.filter(producto_id=i.id)
+                        for f in formula:
+                            m = f.toJSON()
+                            materia.append(m)
+
+                        item['materias'] = materia
+                    item['value'] = i.nombre
+                    data.append(item)
+   
+            elif action == 'add':
+                print('entro xd')
+                orden = json.loads(request.POST['orden'])
+                formula= Formula()
+                formula.producto_id=orden['producto']
+                formula.cantidad_teorica=orden['cantidad_teorica']
+                formula.save()
+                for i in orden['materias']:
+                    print('entro xs')
+                    formulav = FormulaProducto()
+                    formulav.formula_id=formula.id
+                    formulav.producto_id = orden['producto']
+                    formulav.cantidad_teorica = orden['cantidad_teorica']
+                    formulav.materia_id = i['id']
+                    formulav.cantidad = i['cantidad']
+                    formulav.save()
+                    print('guardo la formula')
+
+            else:
+                data['error'] = 'No ha ingresado a ninguna opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
+
+class FormulaUpdateView(LoginRequiredMixin, PermissionMixin, CreateView):
+    model = Formula
+    form_class = FormulaForm
+    template_name = 'formulas/formulas_edit.html'
+    success_url = reverse_lazy('produccion:orden_list')
+    permission_required = 'produccion.add_ordenelaboracion'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'search_materias':
+                data = []
+                mats = MateriaPrima.objects.filter(nombre__icontains=request.POST['term'])
+                for i in mats:
+                    item = i.toJSON()
+                    item['value'] = i.nombre
+                    data.append(item)
+            elif action == 'search_products':
+                data = []
+                materia = []
+                prods = Producto.objects.filter(nombre__icontains=request.POST['term'])
+                for i in prods:
+                    item = i.toJSON()
+                    cantidad = FormulaProducto.objects.filter(producto_id=i.id).count()
+                    if cantidad > 0:
+                        formula = FormulaProducto.objects.filter(producto_id=i.id)
+                        for f in formula:
+                            m = f.toJSON()
+                            materia.append(m)
+
+                        item['materias'] = materia
+                    item['value'] = i.nombre
+                    data.append(item)
+   
+            elif action == 'edit':
+                print('entro xd')
+                orden = json.loads(request.POST['orden'])
+                formula=self.get_object()
+                formula.producto_id=orden['producto']
+                formula.cantidad_teorica=orden['cantidad_teorica']
+                formula.save()
+                FormulaProducto.objects.filter(formula_id=formula.id).delete()
+                for i in orden['materias']:
+                    formulav = FormulaProducto()
+                    formulav.formula_id=formula.id
+                    formulav.producto_id = orden['producto']
+                    formulav.cantidad_teorica = orden['cantidad_teorica']
+                    formulav.materia_id = i['id']
+                    formulav.cantidad = i['cantidad']
+                    formulav.save()
+                    print('edito la formula la formula')
+
+            else:
+                data['error'] = 'No ha ingresado a ninguna opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
+
+    def get_details_materias(self):
+        data = []
+        try:
+            for i in FormulaProducto.objects.filter(formula_id=self.get_object().id):
+                item = i.materia.toJSON()
+                item['cantidad'] = i.cantidad
+                item['producto_id'] = self.get_object().producto.id
+                item['producto'] = self.get_object().producto.nombre
+                item['cantidad_teorica']=self.get_object().cantidad_teorica
+                data.append(item)
+        except:
+            pass
+        return data
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Editar Formula'
+        context['entity'] = 'Produccion'
+        context['list_url'] = self.success_url
+        context['action'] = 'edit'
+        context['det'] = json.dumps(self.get_details_materias())
+
+        return context
+
+class FormulaListView(LoginRequiredMixin, PermissionMixin, ListView):
+    model = Formula
+    template_name = 'formulas/formulas_list.html'
+    permission_required = 'produccion.view_ordenelaboracion'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'searchdata':
+                data = []
+                for i in Formula.objects.all():
+                    data.append(i.toJSON())
+                print (data)
+
+                response = JsonResponse(data, safe=False)
+                response.status_code = 201
+            else:
+                data['error'] = 'Ha ocurrido un error'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Listado de Formulas'
+        context['create_url'] = reverse_lazy('produccion:formula_add')
+        context['list_url'] = reverse_lazy('produccion:formula_list')
+        return context
+
+class FormulaDeleteView(LoginRequiredMixin, PermissionMixin, DeleteView):
+    model = Formula
+    form_class = FormulaForm
+    success_url = reverse_lazy('produccion:formula_list')
     permission_required = 'produccion.delete_ordenelaboracion'
 
     def get(self, request, *args, **kwargs):

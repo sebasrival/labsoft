@@ -1,5 +1,5 @@
 from django import forms
-from modulos.produccion.models import Equipo, OrdenElaboracion, Producto
+from modulos.produccion.models import Equipo, FormulaProducto, OrdenElaboracion, Producto
 from datetime import datetime
 
 class ProductoForm(forms.ModelForm):
@@ -73,3 +73,12 @@ class OrdenElaboracionForm(forms.ModelForm):
 
 
 
+class FormulaForm(forms.ModelForm):
+    class Meta:
+        model = FormulaProducto
+        fields = '__all__'
+        widgets = {
+            'producto': forms.TextInput(attrs={'class': 'form-control'}),
+            'cantidad_teorica': forms.TextInput(attrs={'class': 'form-control'}),
+  
+        }

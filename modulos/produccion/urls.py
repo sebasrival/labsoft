@@ -22,5 +22,9 @@ urlpatterns = [
     path('orden/edit/<int:pk>/', OrdenUpdateView.as_view(), name='orden_edit'),
     path('orden/del/<int:pk>/', OrdenDeleteView.as_view(), name='orden_del'),
 
+    path('formula/add/', FormulaCreateView.as_view(), name='formula_add'),
+    path('formula/edit/<int:pk>/', FormulaUpdateView.as_view(), name='formula_edit'),
+    path('formula/list/', FormulaListView.as_view(), name='formula_list'),
+    path('formula/del/<int:pk>/', FormulaDeleteView.as_view(), name='formula_del'),
 
 ]

@@ -35,12 +35,12 @@
             <div class="row">
                 <div class="col-lg-9" >
                     <div class="page-header">
-                        <h5 class="mb-3 line-head" id="typography">Generar orden de elaboracion</h5>
+                        <h5 class="mb-3 line-head" id="typography">Registrar Formula</h5>
                         <div class="row-lg-9">
                             
                             <div class="card" >
                                 
-                                <h6 class="card-header">Datos Orden</h6>
+                                <h6 class="card-header">Datos Formula</h6>
                                 <div class="card-body">
                                     <input type="hidden" name="action" value="add">
                                     <div class="form-row">
@@ -55,80 +55,21 @@
                                             {{ form.cantidad_teorica }}   
                                                                  
                                          </div>
-                                         
-                                       
-                                    </div>
-                                    <div class="col">
-                                        <label><strong></strong></label>
-
-                                    </div>
-                                    <button type="button" class="mb-2 py-0 btn btn-success btn-sm btnFormula"
-                                    style="height: 25px; align-content: center">
-                                    <label>Buscar formula</label>
-                                    </button>
-                                    <div class="form-group">
-                                       
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col" disabled="True">
-                                            <fieldset disabled>
-                                            <label><strong>Estado:</strong></label>
-                                            {{ form.estado }}
-                                        </fieldset>
-                                        </div>
-                                      
-                                     
-                                       
-                                    </div>
-                                    <div class="form-group">
-                                     
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col">
-                                            <label><strong>Fecha Emision:</strong></label>
-                                            {{ form.fecha_emision }}
-                                        </div>
-                                        <div class="col">
-                                            <label><strong>Fecha Vigencia:</strong></label>
-                                        {{ form.fecha_vigencia }}                     
-                                         </div>
-                                    </div>
-                                    <div class="form-group"> </div>
-                                    <div class="form-row">
-                                        <div class="col">
-                                            <label><strong>Descripcion modificacion :</strong></label>
-                                            {{ form.descripcion_modificacion }}
-                                        </div>
-                                        <div class="col">
-                                            <label><strong>Verificado por  :</strong></label>
-                                            {{ form.verificado_por }}                    
-                                        </div>
-                                
-                                    </div>
-                                    <div class="form-group"> </div>
-                                    <div class="form-row">
-                                        <div class="col">
-                                            <label><strong>Aprobado por  :</strong></label>
-                                            {{ form.aprobado_por }}
-                                        </div>
-                                        <div class="col">
-                                            <label><strong>Elaborado por  :</strong></label>
-                                            {{ form.elaborado_por }}                    
-                                        </div>
-                                
-                                    </div>    
+                                 
+                              
+      
                                 </div>
                             </div>
                         </div>  
                     </div>
                 </div>
-                
+                </div>
             </div>
             <div class="form-group"></div>
             <div class="row">
                 <div class="col-lg-9">
                     <div class="card">
-                        <h6 class="card-header">    Orden de elaboracion </h6>
+                        <h6 class="card-header"> Materias Primas </h6>
                         <div class="card-body">
                             <div class="form-group">
                                 <label> <strong> Buscar Materia Prima:</strong> </label>
@@ -161,36 +102,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label> <strong> Buscar Equipo:</strong> </label>
-                                <span class="input-group-append">
-                                    <input type="text" class="form-control" id="searchEquipo" placeholder="Ingrese una descripción de un equipo" autocomplete="off">
-                                    
-                                    <span class="input-group-append">
-                                        <button type="button" class="btn btn-danger btn-flat">
-                                            <i class="fas fa-times"></i></button>
-                                    </span>                          
-                                </span>
-                            </div>
-                            <div class="table-responsive">
-                                <button type="button" class="mb-2 py-0 btn btn-danger btn-sm btnRemoveAllEquipo"
-                                        style="height: 20px; align-content: center">
-                                    <label>Eliminar todo</label>
-                                </button>
-                                <table class="table table-bordered"
-                                       id="tblEquipo" style="width: 100%;">
-                                    <thead>
-                                    <tr>
-                                        <td>Cod</td>
-                                        <td>Descripción</td>
-                                        <td>Eliminar</td>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                        
+   
                     </div>
                     
 
@@ -201,11 +113,12 @@
  
             <div class="tile-footer">
                 <button type="submit" class="btn btn-primary" style="color: white"><i
-                        class="fa fa-fw fa-lg fa-check-circle"></i>Registrar Orden
+                        class="fa fa-fw fa-lg fa-check-circle"></i>Registrar Formula
                 </button>&nbsp;&nbsp;&nbsp;
                 <a class="btn btn-secondary" href="{% url 'index' %}">
                     <i class="fa fa-fw fa-lg fa-times-circle"></i>Cancelar</a>
             </div>
+        </div>
         </div>
     </form>
 {% endblock %}
@@ -223,7 +136,7 @@
     <!--Lenguage español-->
     <script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.es.js" %}"></script>
     <script type="text/javascript" src= {% static "js/functions/functions.js " %}></script>
-    <script type="text/javascript" src= {% static "js/produccion/forms.js" %}></script>
+    <script type="text/javascript" src= {% static "js/produccion/formsFormula.js" %}></script>
     <script>
  
         // Se removio el vents.list(); para calcular bien el iva en el editar. Revisar al final del archivo form.js se lo puso.

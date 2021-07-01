@@ -29,40 +29,9 @@ var orden = {
 
     setOrdenEdit: function () {
         this.items.producto=this.items.materias[0].producto_id;
-        $('input[name="producto"]').val(this.items.materias[0].producto)
-        this.items.estado=$('select[name="estado"]').val();
-        this.listEquipo();
-        if (this.items.estado=='EN PRODUCCION'){
-            $('input[name="fecha_emision"]').attr('disabled',true);
-            $('input[name="elaborado_por"]').attr('disabled',true);
-            $('input[name="producto"]').attr('disabled',true);
-            $('input[name="cantidad_teorica"]').attr('disabled',true);
-            $('input[name="cant"]').attr('disabled',true);
-            $( 'a[rel="remove"]').hide();
-            $('.btnRemoveAll').attr('disabled',true);
-            $('#search').attr('disabled',true);
-        }
-        if (this.items.estado=='FINALIZADA'){
-            $('input[name="fecha_emision"]').attr('disabled',true);
-            $('input[name="producto"]').attr('disabled',true);
-            $('input[name="cantidad_teorica"]').attr('disabled',true);
-            $('input[name="cant"]').attr('disabled',true);
-            $( 'a[rel="remove"]').hide();
-            $('.btnRemoveAll').attr('disabled',true);
-            $('#search').attr('disabled',true);
-            $('#searchEquipo').attr('disabled',true);
-            $('input[name="aprobado_por"]').attr('disabled',true);
-            $('select[name="estado"]').attr('disabled',true);
-            $('input[name="verificado_por"]').attr('disabled',true);
-            $('input[name="elaborado_por"]').attr('disabled',true);
-            $('input[name="fecha_vigencia"]').attr('disabled',true);
-            $( 'a[rel="removeEquipo"]').hide();
-            $('input[name="descripcion_modificacion"]').attr('disabled',true);
-            $('.btnRemoveAllEquipo').attr('disabled',true);
-            $('#btn').hide();
+        $('input[name="producto"]').val(this.items.materias[0].producto);
+        $('input[name="cantidad_teorica"]').val(this.items.materias[0].cantidad_teorica);
 
-
-        }
     },
     list: function () {
         tblOrden = $('#tblOrden').DataTable({
@@ -326,47 +295,21 @@ $(function () {
     });
     $('form').on('submit', function (e) {
         e.preventDefault();
-        estado_nuevo=$('select[name="estado"]').val();
-        console.log(estado_nuevo);
-        console.log(orden.items.estado);
-
-        if ((orden.items.estado=='EN PRODUCCION'|| orden.items.estado=='FINALIZADA') && estado_nuevo=='PENDIENTE'){
-            show_notify_error('No puede cambiar el estado de '+orden.items.estado +' a PENDIENTE.');
+        if ($('input[name="cantidad_teorica"]').val()==0 || $('input[name="producto"]').val()==''){
+            show_notify_error('Debe completar todos los datos. ');
             return false;
         }
-        if (orden.items.estado=='FINALIZADA' && (estado_nuevo=='PENDIENTE' || estado_nuevo=='EN PRODUCCION')){
-            show_notify_error('No puede cambiar el estado de '+orden.items.estado +' a '+estado_nuevo);
-            return false;
-        }
-        if (orden.items.estado=='PENDIENTE' && estado_nuevo=='FINALIZADA'){
-            show_notify_error('No puede cambiar el estado de '+orden.items.estado +' a '+estado_nuevo);
-            return false;
-        }
-        orden.items.fecha_emision = $('input[name="fecha_emision"]').val();
-        orden.items.fecha_vigencia = $('input[name="fecha_vigencia"]').val();
-        orden.items.elaborado_por = $('input[name="elaborado_por"]').val();
-        orden.items.aprobado_por = $('input[name="aprobado_por"]').val();
-        orden.items.verificado_por = $('input[name="verificado_por"]').val();
-        orden.items.estado = $('select[name="estado"]').val();
-        orden.items.descripcion_modificacion = $('input[name="descripcion_modificacion"]').val();
-        orden.items.cantidad_teorica = $('input[name="cantidad_teorica"]').val();
+        orden.items.cantidad_teorica=$('input[name="cantidad_teorica"]').val();
         if(orden.items.materias.length === 0){
-            mensaje_error('Debe al menos tener una materia prima en su orden.');
+            mensaje_error('Debe al menos tener una materia prima en su formula.');
             return false;
         }
-        if(orden.items.fecha_emision>orden.items.fecha_vigencia){
-            show_notify_error('La fecha de vigencia no puede ser menor a la fecha de emision.')
-            return false;
-        }
-        
-
-
 
         var parameters = new FormData();
         parameters.append('action', $('input[name="action"]').val());
         parameters.append('orden', JSON.stringify(orden.items));
         submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
-            location.href = '/modulos/produccion/orden/list/';
+            location.href = '/modulos/produccion/formula/list/';
         });
     });
 

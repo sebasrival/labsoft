@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+    {% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i> {{ title }}</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+{% block head %}
+    <style>
+        #Table td, th {
+            vertical-align: inherit;
+            padding: 0.4rem;
+        }
+    </style>
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{{ route }}">{{ title }}</a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div class="table-responsive">
+                            {% if perms.ventas.add_formula %}
+                           
+                                <a class="btn btn-success p-2" href="{% url 'produccion:formula_add' %}"
+                                           title="Agregar Formula">
+                                            <i class="fas fa-plus"></i>
+                                        </a>
+                                {% csrf_token %}
+                            {% endif %}
+                        <div style="text-align: center;">
+                            <h4 style="font-size: large; margin-bottom: 0" class="tile-title">{{ subtitle }}</h4>
+                        </div>
+                        <table class="table table-hover table-bordered" id="formTable" style="max-width: 100%; width: 100%">
+                            <thead>
+                            <tr style="font-size: 0.7rem">
+                                <th>Producto</th>
+                                <th>Cantidad Teorica</th>
+                               
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="font-size: 0.75rem;">
+                                    <td></td>
+                                    <td></td>
+                            
+                                    <td style="text-align: center;">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{% static "js/functions/functions.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/produccion/index.js" %}"></script>
+    <script>
+        list_formula('/modulos/produccion/formula/list/', '/modulos/produccion/formula/edit/','/modulos/produccion/formula/del/', {{ perms.ventas.change_pedido | safe | lower}}, {{ perms.ventas.delete_pedido | safe | lower}});
+    </script>
+{% endblock %}

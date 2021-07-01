@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block navbar %}
+    {% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+{% block head %}
+
+    
+    <link type="text/css" href="{% static "lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.css" %}"
+          rel="stylesheet"/>
+    <link href="{% static "lib/jquery-ui-1.12.1/jquery-ui.min.css" %}" rel="stylesheet"/>
+ 
+    
+
+
+{% endblock %}
+
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i> Produccion</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block content %}
+<form method="post">
+            {% csrf_token %}
+        <div class="tile mb-4">
+            <div class="row">
+                <div class="col-lg-9" >
+                    <div class="page-header">
+                        <h5 class="mb-3 line-head" id="typography">Editar Formula</h5>
+                        <div class="row-lg-9">
+                            
+                            <div class="card" >
+                                
+                                <h6 class="card-header">Datos Formula</h6>
+                                <div class="card-body">
+                                    <input type="hidden" name="action" value="edit">
+                                    <div class="form-row">
+                                   
+                                        <div class="col">
+                                            <label><strong>Producto:</strong></label>
+                                            {{ form.producto }}                           
+                                         </div>
+                                           
+                                        <div class="col">
+                                            <label><strong>Cantidad Teorica: (en litros)</strong></label>
+                                            {{ form.cantidad_teorica }}   
+                                                                 
+                                         </div>
+                                 
+                              
+      
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="form-group"></div>
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="card">
+                        <h6 class="card-header"> Materias Primas </h6>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label> <strong> Buscar Materia Prima:</strong> </label>
+                                <span class="input-group-append">
+                                    <input type="text" class="form-control" id="search"
+                                    placeholder="Ingrese una descripción de producto" autocomplete="off">
+                                    <span class="input-group-append">
+                                        <button type="button" class="btn btn-danger btn-flat">
+                                            <i class="fas fa-times"></i></button>
+                                    </span>                          
+                                </span>
+                            </div>
+                            <div class="table-responsive">
+                                <button type="button" class="mb-2 py-0 btn btn-danger btn-sm btnRemoveAll"
+                                        style="height: 20px; align-content: center">
+                                    <label>Eliminar todo</label>
+                                </button>
+                                <table class="table table-bordered"
+                                       id="tblOrden" style="width: 100%;">
+                                    <thead>
+                                    <tr>
+                                        <td>Cod</td>
+                                        <td>Descripción</td>
+                                        <td>INCI</td>
+                                        <td>Cantidad</td>
+                                        <td>Unidad de Medida</td>
+                                        <td>Eliminar</td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+   
+                    </div>
+                    
+
+                </div>
+             
+         
+            </div>
+ 
+            <div class="tile-footer">
+                <button type="submit" class="btn btn-primary" style="color: white"><i
+                        class="fa fa-fw fa-lg fa-check-circle"></i>Editar Formula
+                </button>&nbsp;&nbsp;&nbsp;
+                <a class="btn btn-secondary" href="{% url 'index' %}">
+                    <i class="fa fa-fw fa-lg fa-times-circle"></i>Cancelar</a>
+            </div>
+        </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static "lib/jquery-ui-1.12.1/jquery-ui.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/select2.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/jquery.dataTables.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/dataTables.bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugins/datatable-es/dataTable-es.js" %} "></script>
+    <script type="text/javascript" src="{% static "js/plugins/sweetalert.min.js" %}"></script>
+    <script type="text/javascript"
+            src="{% static "lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js" %} "></script>
+    <!--Lenguage español-->
+    <script type="text/javascript" src="{% static "js/plugins/bootstrap-datepicker.es.js" %}"></script>
+    <script type="text/javascript" src= {% static "js/functions/functions.js " %}></script>
+    <script type="text/javascript" src= {% static "js/produccion/formsFormula.js" %}></script>
+    <script>
+         orden.items.materias = {{ det|safe }};
+         orden.list();
+         orden.setOrdenEdit();
+
+        // Se removio el vents.list(); para calcular bien el iva en el editar. Revisar al final del archivo form.js se lo puso.
+    </script>
+{% endblock %}

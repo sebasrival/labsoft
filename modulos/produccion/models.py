@@ -147,12 +147,31 @@ class EquipoOrdenElaboracion(models.Model):
     def __str__(self):
         return self.orden
 
+class Formula(models.Model):
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad_teorica=models.FloatField(default=0)
+    class Meta:
+        verbose_name = 'Formula'
+        verbose_name_plural = 'Formulas'
 
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['id'] = self.id
+        item['producto'] = self.producto.nombre
+        item['cantidad_teorica']=self.cantidad_teorica
+        return item
+
+
+
+    def __str__(self):
+        return self.producto
 
 class FormulaProducto(models.Model):
+    formula=models.ForeignKey(Formula, on_delete=models.CASCADE,default=0)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     materia= models.ForeignKey(MateriaPrima, on_delete=models.CASCADE)
     cantidad= models.FloatField()
+    cantidad_teorica=models.FloatField(default=0)
     
     class Meta:
         verbose_name = 'Formula'
@@ -167,7 +186,11 @@ class FormulaProducto(models.Model):
         item['unidad_medida']=self.materia.um
         item['cantidad'] = self.cantidad
         item['descripcion'] = self.materia.descripcion
+        item['cantidad_teorica']=self.cantidad_teorica
 
         return item
     def __str__(self):
         return self.orden
+
+
+
