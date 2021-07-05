@@ -70,7 +70,7 @@ class Cobro(models.Model):
         return item
     class Meta:
         verbose_name = "Cobro"
-        verbose_name_plural = "Plural"
+        verbose_name_plural = "Cobros"
 
         
 class FacturaVenta(models.Model):
@@ -151,7 +151,7 @@ class Cuota(models.Model):
         return item
     class Meta:
         verbose_name = "Cuota"
-        verbose_name_plural = "Plural"
+        verbose_name_plural = "Cuotas"
 
 
 # Create your models here.

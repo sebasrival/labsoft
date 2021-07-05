@@ -174,8 +174,8 @@ class FormulaProducto(models.Model):
     cantidad_teorica=models.FloatField(default=0)
     
     class Meta:
-        verbose_name = 'Formula'
-        verbose_name_plural = 'Formulas'
+        verbose_name = 'Formula Producto'
+        verbose_name_plural = 'Formula de  Productos'
 
     def toJSON(self):
         item = model_to_dict(self)
