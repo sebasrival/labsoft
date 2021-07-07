@@ -102,16 +102,29 @@
                         <h6 class="card-header">Datos Factura</h6>
                         <div class="card-body">
                             <div class="form-group">
+                                <label><strong>Timbrado:</strong></label>
+                                {{ form.timbrado }}
+                            </div>
+                        <div class="form-group">
+                                <label><strong>Fecha Vencimiento Timbrado:</strong></label>
+                                {{ form.fecha_vencimiento_timbrado }}
+                            </div>
+                            <div class="form-group">
                                 <label><strong>Número Factura:</strong></label>
                                 {{ form.nro_factura }}
                             </div>
                             <div class="form-group">
-                                <label><strong>Tipo de compra:</strong></label>
+                                <label><strong>Tipo de factura:</strong></label>
+                            <br>
                                 <div style="display: inline-block">
                                     {% for radio in form.tipo_factura %}
                                         <b>{{ radio }}&nbsp;&nbsp;</b>
                                     {% endfor %}
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Fecha Plazo o Vencimiento:</strong></label>
+                                {{ form.fecha_vencimiento_credito }}
                             </div>
                             <div class="form-group">
                                 <label><strong>Proveedor:</strong></label>
@@ -226,7 +239,7 @@
     <script type="text/javascript" src="{% static "js/compras/index.js" %}"></script>
     <script type="text/javascript">
         //inicializacion de la fecha
-        $('#date_compra').datepicker({
+        $('.date_compra').datepicker({
             format: "dd/mm/yyyy",
             autoclose: true,
             todayHighlight: true,

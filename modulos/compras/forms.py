@@ -58,13 +58,23 @@ class FacturaCompraForm(forms.ModelForm):
         exclude = ['estado', 'pago']
         widgets = {
             'nro_factura' : forms.TextInput(attrs={'class': 'form-control', 'autocomplete':'off'}),
+            'timbrado': forms.TextInput(attrs={'class' : 'form-control'}),
             'proveedor': forms.Select(attrs={'class': 'form-control',
                                                 'id': 'proveedor_select',
                                                 'style': 'width: 100%; ',
                                                 }),
             'fecha_factura': forms.DateInput(attrs={
-                'class': 'form-control',
-                'id':'date_compra',
+                'class': 'form-control date_compra',
+                'style': 'font-weight: bold;',
+                'autocomplete': 'off',
+            }),
+            'fecha_vencimiento_credito': forms.DateInput(attrs={
+                'class': 'form-control date_compra',
+                'style': 'font-weight: bold;',
+                'autocomplete': 'off',
+            }),
+            'fecha_vencimiento_timbrado': forms.DateInput(attrs={
+                'class': 'form-control date_compra',
                 'style': 'font-weight: bold;',
                 'autocomplete': 'off',
             }),
