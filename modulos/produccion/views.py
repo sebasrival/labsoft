@@ -387,7 +387,12 @@ class OrdenCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                     print('guardo en detalle')
 
                 for i in orden['equipos']:
+                    print(int(i['horas_trabajo']))
                     edet = EquipoOrdenElaboracion()
+                    edet.horas_trabajo=int(i['horas_trabajo'])
+                    equipo=Equipo.objects.get(id=i['id'])
+                    equipo.horas_utilizadas=equipo.horas_utilizadas+ int(i['horas_trabajo'])
+                    equipo.save()
                     edet.orden_id = ordenv.id
                     edet.equipo_id = i['id']
                     edet.save()
@@ -492,6 +497,8 @@ class OrdenUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
                 EquipoOrdenElaboracion.objects.filter(orden_id=ordenv.id).delete()
                 for i in orden['equipos']:
                     edet = EquipoOrdenElaboracion()
+                    print(i['horas_utiles'])
+                    edet.horas_trabajo=int(i['horas_trabajo'])
                     edet.orden_id = ordenv.id
                     edet.equipo_id = i['id']
                     edet.save()
@@ -520,6 +527,7 @@ class OrdenUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
         try:
             for i in EquipoOrdenElaboracion.objects.filter(orden_id=self.get_object().id):
                 item = i.equipo.toJSON()
+                item['horas_trabajo']=i.horas_trabajo
                 data.append(item)
         except:
             pass

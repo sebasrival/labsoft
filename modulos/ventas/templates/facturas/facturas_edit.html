@@ -78,21 +78,21 @@
                         </div>
                         
                             <div class="card">
-                                <h6 class="card-header">Forma de cobro</h6>
+                                <h6 class="card-header">Datos de la Factura</h6>
                                 <div class="card-body">
                                 <div class="row">
                                     <div class="form-group col">
-                                        <label><strong>Tipo de cobro : </strong></label>
+                                        <label><strong>Tipo de Factura : </strong></label>
                                         <select class="form-control" id="tipoCobro">
                                             <option>Contado</option>
-                                            <option>Financiado</option>
+                                            <option>Credito</option>
                                             
                                         </select>
                                   
                                        
                                     </div>
                                     <div class="form-group col">
-                                        <label><strong>Cantidad de cuotas : </strong></label>
+                                        <label><strong>Plazo (en meses) : </strong></label>
                                         
                                                 <input type="number" class="form-control" id="cuotas"
                                                 min=1 max=2 value=0
@@ -111,7 +111,7 @@
                                 </div>
                                     <span>
                                     <href id="botonCobro"
-                                            class="btn btn-primary btn-sm">+ Registrar cobro</href>
+                                            class="btn btn-primary btn-sm">+ Registrar</href>
                                     </span>
                                     <div class="table-responsive">
                                         <button type="button" class="mb-2 py-0 btn btn-danger btn-sm btnRemoveAllCobro"
@@ -123,11 +123,11 @@
                                             <thead>
                                             <tr>
                     
-                                                <td>Tipo de cobro</td>
+                                                <td>Tipo de Factura</td>
                                                 <td>Monto </td>
                                                 <td>Medio de cobro</td>
                                                 <td>Estado</td>
-                                                <td>Cantidad de cuotas</td>
+                                                <td>Plazo</td>
                                                 <td>Fecha de registro</td>
                                             </tr>
                                             </thead>
@@ -146,10 +146,13 @@
                         <h6 class="card-header">Datos Factura</h6>
                         <div class="card-body">
                             <input type="hidden" name="action" value="edit">
+                            <fieldset disabled>
+
                             <div class="form-group">
                                 <label><strong>Número Factura:</strong></label>
                                 {{ form.nro_factura }}
                             </div>
+                           </fieldset>
                             <div class="form-group">
                                 <label><strong>Ruc del cliente:</strong></label>
                                 {{ form.cliente}}
