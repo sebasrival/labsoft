@@ -92,7 +92,7 @@ var factura = {
         var vencimiento=new Date();
      
         var i;
-        if (factura.items.tipo_cobro=='Financiado'){
+        if (factura.items.tipo_cobro=='Credito'){
                 var datosCobro ={
                     cantidad_cuotas: 0,
                     estado:'',
@@ -326,6 +326,63 @@ $(function () {
 
         }
         console.log(tipocobro)
+    });
+    $('#puntoVenta').on('change', function (e) {
+        var punto=$('#puntoVenta').val();
+        if (punto!='') {
+        console.log(punto);
+        $.ajax({
+            url: window.location.pathname,
+            type: 'POST',
+            data: {
+                'action': 'set_punto_venta',
+                'term': punto,
+            },
+            dataType: 'json',
+        }).done(function (data) {
+            var numero=data[0].numeracion_actual;
+            var string=numero.toString();
+            var nro;
+            console.log(data[0].numeracion_actual.length);
+            if (string.length==1){
+                nro='000000' +data[0].numeracion_actual;
+            }
+            if (string.length==2){
+                nro='00000' +data[0].numeracion_actual;
+            }
+            if (string.length==3){
+                nro='0000' +data[0].numeracion_actual;
+            }
+            if (string.length==4){
+                nro='000' +data[0].numeracion_actual;
+            }
+            if (string.length==5){
+                nro='00' +data[0].numeracion_actual;
+            }
+            if (string.length==6){
+                nro='0' +data[0].numeracion_actual;
+            }
+            if (string.length==7){
+                nro=data[0].numeracion_actual;
+            }
+            $('input[name="nro_factura"]').val(''+data[0].sucursal+'-'+data[0].punto_venta+'-'+nro);
+            factura.items.numeracion_actual = data[0].numeracion_actual;
+            factura.items.punto_venta = data[0].punto_venta;
+            factura.items.sucursal=data[0].sucursal;
+
+            console.log(data[0].numeracion_actual);  
+
+            
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            //alert(textStatus + ': ' + errorThrown);
+        }).always(function (data) {
+
+        });
+    }
+    else{
+        $('input[name="nro_factura"]').val('');
+    }
+       
     });
     $('#botonCobro').on('click', function (e) {
         var estado= $('#botonCobro').disabled;

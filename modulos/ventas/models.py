@@ -72,6 +72,56 @@ class Cobro(models.Model):
         verbose_name = "Cobro"
         verbose_name_plural = "Plural"
 
+
+class DatosFacturacion(models.Model):
+    punto_venta= models.TextField()
+    sucursal=models.TextField()
+    timbrado_actual = models.TextField()
+    inicio_timbrado=models.DateField()
+    vencimiento_timbrado=models.DateField()
+    numeracion_actual=models.IntegerField()
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['id']=self.id
+        item['punto_venta'] = self.punto_venta
+        item['numeracion_actual'] = self.numeracion_actual
+        item['sucursal'] = self.sucursal
+   
+        return item
+
+    class Meta:
+        verbose_name = "Datos Facturacion"
+        verbose_name_plural = "Plural"
+
+
+class Timbrado(models.Model):
+    timbrado_actual = models.TextField()
+    inicio_timbrado=models.DateField()
+    vencimiento_timbrado=models.DateField()
+
+
+    class Meta:
+        verbose_name = "Timbrado Facturacion"
+        verbose_name_plural = "Plural"
+
+
+class PuntoVenta (models.Model):
+    codigo = models.CharField(max_length=15, unique=True)
+    numero=  models.IntegerField(blank=False)
+
+
+    def __str__(self):
+        return '%s %s' % (self.codigo, self.numero)
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['numero'] = self.numero
+        return item
+
+    class Meta():
+        verbose_name = "Punto Venta"
+        verbose_name_plural = "Puntos Ventas"
         
 class FacturaVenta(models.Model):
     nro_factura = models.CharField(max_length=20, blank=False)
@@ -84,6 +134,7 @@ class FacturaVenta(models.Model):
     exenta = models.DecimalField( default=0.00, decimal_places=2, max_digits=9)
     fecha_emision = models.DateField()
     cobro = models.ForeignKey(Cobro, on_delete=models.PROTECT)
+    punto_venta=models.ForeignKey(PuntoVenta, on_delete=models.PROTECT,default=1)
 
     def __str__(self):
         return 'Nro Factura: %s - Cliente: %s' % (self.nro_factura, self.cliente)
@@ -191,3 +242,5 @@ class PedidoDetalle(models.Model):
         return item
     class Meta:
         ordering = ['id']
+
+

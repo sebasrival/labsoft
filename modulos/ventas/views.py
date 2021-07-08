@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView,View
-from .models import Cliente,FacturaVenta,FacturaVentaDetalle,Cobro,Cuota, Pedido,PedidoDetalle
+from .models import Cliente, DatosFacturacion,FacturaVenta,FacturaVentaDetalle,Cobro,Cuota, Pedido,PedidoDetalle,PuntoVenta
 from modulos.produccion.models import Producto, StockProductos
 from .forms import ClienteForm,FacturaVentaForm,PedidoForm
 from django.utils.decorators import method_decorator
@@ -177,7 +177,13 @@ class FacturaVentaCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                     item['value'] = i.nombre
                     item['cantidad_stock']=stock.cantidad
                     data.append(item)
-    
+            elif action == 'set_punto_venta':
+                data = []
+              
+                punto = PuntoVenta.objects.get(numero=int(request.POST['term']))
+                numero=DatosFacturacion.objects.get(punto_venta=punto.codigo)
+                item=numero.toJSON()
+                data.append(item)
             elif action == 'search_clientes':
                 data = []
                 clients = Cliente.objects.filter(ruc__icontains=request.POST['term'])
@@ -190,7 +196,11 @@ class FacturaVentaCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                 facturav = FacturaVenta()
                 facturav.nro_factura=factura['nro_factura']
                 facturav.fecha_emision = factura['fecha_emision']
-
+                datos=DatosFacturacion.objects.get(sucursal=factura['sucursal'],punto_venta=factura['punto_venta'])
+                datos.numeracion_actual=int(factura['numeracion_actual'])+1
+                datos.save()
+                punto_venta=PuntoVenta.objects.get(codigo=factura['punto_venta'])
+                facturav.punto_venta_id=punto_venta.id
                 print (factura['cliente_ruc'])
                 if (factura['cliente_ruc']==''):
                     facturav.cliente_id = factura['cliente']
@@ -276,11 +286,23 @@ class FacturaVentaCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
         except:
             pass
         return data
-    
+    def get_punto_venta(self):
+        data = []
+        try:
+            punto=PuntoVenta.objects.all()
+            for i in punto:
+                item = i.toJSON()
+                print(item['numero'])
+                data.append(item)
+        except:
+            pass
+        return data
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         id_pedido= self.kwargs.get('pedidoid')
+        context['puntos'] = self.get_punto_venta()
+
         if (id_pedido!=''):
             context['det'] = json.dumps(self.get_details_product(id_pedido))
             context['pedidodet'] = json.dumps(self.get_details_pedido(id_pedido))
@@ -312,6 +334,11 @@ class FacturaVentaListView(LoginRequiredMixin, PermissionMixin, ListView):
                 print(cobro)
                 for i in Cuota.objects.filter(cobro_id=cobro):
                     data.append(i.toJSON())
+            elif action == 'anular_factura':
+                data = []
+                fv=FacturaVenta.objects.get(id=request.POST['id'])
+                fv.estado='ANULADA'
+                fv.save()
             elif action=='edit_cuota':
                 cuota=Cuota.objects.get(id=request.POST['cuota_id'])
                 cuota.estado=request.POST['estado']
@@ -545,8 +572,12 @@ class FacturaPdfView(View):
     def get(self, request, *args, **kwargs):
         try:
             template = get_template('facturas/factura_invoice.html')
+            factura= FacturaVenta.objects.get(pk=self.kwargs['pk'])
+            punto_venta=PuntoVenta.objects.get(id=factura.punto_venta_id)
+
             context = {
                 'factura': FacturaVenta.objects.get(pk=self.kwargs['pk']),
+                'datos_facturacion': DatosFacturacion.objects.get(punto_venta=punto_venta.codigo),
                 'comp': {'name': 'LABORATORIO OCAMPOS SRL', 'ruc': '9999999999999', 'address': 'San Lorenzo, Paraguay'},
                 'icon': '{}{}'.format(settings.MEDIA_URL, 'logo.png')
             }

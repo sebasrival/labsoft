@@ -12,6 +12,10 @@ TIPO_ORDEN = [
     ('FINALIZADA','FINALIZADA')
 ]
 
+UNIDAD_MEDIDA = [
+    ( 'LITROS','Litros'),
+    ( 'KILOGRAMOS','Kilogramos'),
+]
 # Create your models here.
 
 
@@ -25,6 +29,7 @@ class Producto(models.Model):
     tipo = models.CharField(max_length=10, blank=True, default='')
     tasa_iva= models.IntegerField(default=0,choices=TIPO_IVA)
     stock_inicial= models.IntegerField(default=0,blank=True)
+    unidad_medida=models.CharField(max_length=100,default='Litros',choices=UNIDAD_MEDIDA)
 
     def __str__(self):
         return '%s %s' % (self.codigo_producto, self.nombre)
@@ -68,8 +73,11 @@ class StockProductos(models.Model):
 class Equipo(models.Model):
     codigo= models.CharField(max_length=30, null=False,unique=True)
     nombre= models.CharField(max_length=150, blank=True)
-
-
+    horas_utiles=models.IntegerField(default=100)
+    horas_utilizadas=models.IntegerField(default=0)
+    ultimo_mantenimiento=models.DateField(blank=True,null=True)
+    proximo_mantenimiento=models.DateField(blank=True,null=True)
+    fecha_ingreso=models.DateField(blank=True,null=True)
     def __str__(self):
         return '%s %s' % (self.codigo, self.nombre)
 
@@ -78,6 +86,8 @@ class Equipo(models.Model):
         item['id']=self.id
         item['codigo'] = self.codigo
         item['descripcion'] = self.nombre
+        item['horas_utiles'] = self.nombre
+        item['horas_utilizadas'] = self.nombre
 
         return item
 
@@ -139,7 +149,7 @@ class DetalleOrdenElaboracion(models.Model):
 class EquipoOrdenElaboracion(models.Model):
     orden = models.ForeignKey(OrdenElaboracion, on_delete=models.CASCADE)
     equipo = models.ForeignKey(Equipo, on_delete=models.CASCADE)
-
+    horas_trabajo=models.IntegerField(default=0)
     class Meta:
         verbose_name = 'Equipo en Orden de Elaboración'
         verbose_name_plural = 'Equipos de orden de elaboracion'

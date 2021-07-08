@@ -117,6 +117,7 @@ var orden = {
         });
     },
     listEquipo: function () {
+        console.log(this.items.equipos);
         tblEquipo = $('#tblEquipo').DataTable({
             responsive: true,
             destroy: true,
@@ -125,6 +126,7 @@ var orden = {
             columns: [
                 {"data": "codigo"},
                 {"data": "descripcion"},
+                {"data": "horas_trabajo"},
                 {"data": "id"},
             ],
             columnDefs: [
@@ -135,16 +137,16 @@ var orden = {
                     orderable: false,
                 },
                 {
-                    targets: [1],
+                    targets: [2],
                     class: "",
                     width: "30%",
                     orderable: false,
                     render: function (data, type, row) {
-                        return '<input type="" name="descripcion" class="form-control form-control-sm input-sm" autocomplete="off" value="' + row.descripcion + '">';
+                        return '<input type="" name="horas_trabajo" class="form-control form-control-sm input-sm"  autocomplete="off" value="' + row.horas_trabajo + '">';
                     }
                 },
                 {
-                    targets: [2],
+                    targets: [3],
                     class: "text-center",
                     width: "5%",
                     orderable: false,
@@ -215,6 +217,8 @@ $(function () {
         select: function (event, ui) {
             event.preventDefault();
             console.clear();
+            ui.item.horas_trabajo = 1;
+            console.log(ui.item);
             orden.addEquipo(ui.item);
             $(this).val('');
         }
@@ -244,7 +248,7 @@ $(function () {
             event.preventDefault();
             console.clear();
             console.log(ui.item.materias);
-         
+            orden.items.objecto_producto=ui.item;
             orden.items.producto=ui.item.id;
             //console.log(ui.item.materias);
            /* orden.list();*/
@@ -262,6 +266,15 @@ $(function () {
     });
 
     $('.btnFormula').on('click', function (request, response) {
+        var unidad=$('#unidad_medida').val();
+        console.log(unidad);
+        
+        if (orden.items.objecto_producto.unidad_medida != unidad){
+            show_notify_error('La unidad de medida de la  cantidad teorica no coincide con la del producto. Verificar. ');
+            orden.items.materias=[];
+            orden.list();
+            return false;
+        }
         if ( $('input[name="producto"]').val()==''|| $('input[name="cantidad_teorica"]').val()==''){
             show_notify_error('Debe especificar el producto y la cantidad teorica. ')
             return false;
@@ -323,8 +336,15 @@ $(function () {
         var tr = tblEquipo.cell($(this).closest('td, li')).index();
         orden.items.equipos.splice(tr.row, 1);
         orden.listEquipo();
+    }).on('change', 'input[name="horas_trabajo"]', function () {
+        console.clear();
+        var horas_trabajo = $(this).val();
+        var tr = tblEquipo.cell($(this).closest('td, li')).index();
+        orden.items.equipos[tr.row].horas_trabajo = horas_trabajo;
     });
+
     $('form').on('submit', function (e) {
+        console.log(orden.items.equipos)
         e.preventDefault();
         estado_nuevo=$('select[name="estado"]').val();
         console.log(estado_nuevo);

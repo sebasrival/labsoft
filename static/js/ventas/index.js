@@ -151,13 +151,14 @@ function list_factura(url_list, url_edit, url_del, perm_change, perm_delete) {
                     buttons += '<a href="' + url_edit + row.id + '/" class="btn btn-warning btn-xs btn-sm"><i class="fas fa-edit"></i></a> ';
                     buttons += '<button onclick="abrir_modal_cobro(\'' + row.id + '\')" title="Cuotas" class="btn btn-success btn-sm"><i class="fas fa-search"></i></button>';
                 }
-                buttons += '<a href="/modulos/ventas/facturas/invoice/pdf/' + row.id + '/" class="btn btn-primary btn-xs btn-sm"><i class="fas fa-print"></i></a> ';
-                if (perm_delete) {
-                    buttons += '<button onclick="delete_ajax_factura(\'' + url_del + row.id + '/\')" title="Borrar" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
+                if (perm_delete && row.estado!='ANULADA') {
+                    buttons += '<a href="/modulos/ventas/facturas/invoice/pdf/' + row.id + '/" class="btn btn-primary btn-xs btn-sm"><i class="fas fa-print"></i></a> ';
+                    buttons += '<button onclick="anular_factura(\'' + row.id + '\')" title="Anular" class="btn btn-danger btn-sm"><i class="far fa-window-close"></i></button>';
                 }
                 return buttons;
             }
-        }]
+        },
+    ]
     });
 }
 
@@ -245,6 +246,27 @@ function actualizar_cuota(id) {
 
 }
 
+function anular_factura(id) {
+    $.ajax({
+        url: window.location.pathname,
+        type: 'POST',
+        data: {
+            'action': 'anular_factura',
+            'id': id,
+        },
+        dataType: 'json',
+    }).done(function (data) {
+        $('#modalCobro').modal('hide');
+        show_notify_success('La factura ha sido anulada!');
+        $('#facturaTable').DataTable().ajax.reload();
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        //alert(textStatus + ': ' + errorThrown);
+    }).always(function (data) {
+
+    });
+
+}
+
 
 function delete_ajax_factura(url) {
     Swal.fire({
@@ -279,7 +301,70 @@ function delete_ajax_factura(url) {
         }
     })
 }
+function anular_ajax_factura(url) {
+    Swal.fire({
+        title: '¿Estás se seguro de querer anular ésta factura?',
+        text: "Este cambio no puede ser revertido",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, anular!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let csrf = {}
+            csrf['csrfmiddlewaretoken'] = $('input[name="csrfmiddlewaretoken"]').val();
+            $.ajax({
+                url: window.location.pathname,
+                type: 'POST',
+                data: {
+                    'action': 'anular',
+                    'term': punto,
+                },
+                dataType: 'json',
+            }).done(function (data) {
+                var numero=data[0].numeracion_actual;
+                var string=numero.toString();
+                var nro;
+                console.log(data[0].numeracion_actual.length);
+                if (string.length==1){
+                    nro='000000' +data[0].numeracion_actual;
+                }
+                if (string.length==2){
+                    nro='00000' +data[0].numeracion_actual;
+                }
+                if (string.length==3){
+                    nro='0000' +data[0].numeracion_actual;
+                }
+                if (string.length==4){
+                    nro='000' +data[0].numeracion_actual;
+                }
+                if (string.length==5){
+                    nro='00' +data[0].numeracion_actual;
+                }
+                if (string.length==6){
+                    nro='0' +data[0].numeracion_actual;
+                }
+                if (string.length==7){
+                    nro=data[0].numeracion_actual;
+                }
+                $('input[name="nro_factura"]').val(''+data[0].sucursal+'-'+data[0].punto_venta+'-'+nro);
+                factura.items.numeracion_actual = data[0].numeracion_actual;
+                factura.items.punto_venta = data[0].punto_venta;
+                factura.items.sucursal=data[0].sucursal;
+    
+                console.log(data[0].numeracion_actual);  
+    
+                
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                //alert(textStatus + ': ' + errorThrown);
+            }).always(function (data) {
+    
+            });
 
+        }
+    })
+}
 
 function list_pedido(url_list, url_edit, url_del, perm_change, perm_delete) {
     $('#pedidoTable').DataTable({
