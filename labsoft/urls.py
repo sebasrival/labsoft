@@ -40,6 +40,8 @@ urlpatterns = [
     path('modulos/ventas/', include('modulos.ventas.urls')),
     #módulo produccion
     path('modulos/produccion/', include('modulos.produccion.urls')),
+    #módulo reportes
+    path('modulos/reportes/', include('modulos.reportes.urls')),
     # #usuarios
     path('user/list/', lista_usuarios, name='list_user'),
     path('user/add/', agregar_usuario, name='add_user'),

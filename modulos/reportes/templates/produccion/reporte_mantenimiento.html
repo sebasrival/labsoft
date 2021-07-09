@@ -1,0 +1,192 @@
+<html>
+    <header> 
+        <meta charset="utf-8">
+        <!-- Custom CSS -->
+
+
+        <style>
+            @page {
+                size: a4 portrait;
+                @frame image_frame {           /* Static Frame - Donde se pone la imagen */
+                    -pdf-frame-content: image_content;
+                    left: 50pt; width: 50pt; top: 10pt; height: 50pt;
+                    text-align: center;
+                    border: 0pt solid white;
+                }
+                @frame header_frame {           /* Static Frame - Para el encabezado*/
+                    -pdf-frame-content: header_content;
+                    left: 50pt; width: 500pt; top: 20pt; 
+
+                }
+                @frame header_frame {           /* Static Frame <!-- Título del informe -->*/
+                    -pdf-frame-content: header_title;
+                    left: 90pt; width: 412pt; top: 50pt; height: 0pt;
+                    text-align: center;
+                    border: 0pt solid white;
+                }
+                @frame header_frame {           /* Static Frame: Header fijo de la tabla */
+                    -pdf-frame-content: header_div;
+                    left: 50pt; width: 512pt; top: 170pt; height: 5pt;
+                    text-align: center;
+                    border: 0pt solid white;
+                }
+                @frame header_frame {           /* Static Frame: Header fijo de la tabla */
+                    -pdf-frame-content: datos_reporte;
+                    left: 70pt; width: 512pt; top: 125pt;
+                    text-align: right;
+                }
+
+                @frame header_table {           /* Static Frame: lugar donde ponemos la tabla */
+                    -pdf-frame-content: header_table;
+                    left: 50pt; width: 512pt; top: 100pt; height: 15pt;
+                    text-align: center;
+                    border: 0pt solid white;
+                }
+                @frame footer_frame {           /* Static Frame: lugar donde ponemos el footer (en mi caso paginador)  */
+                    -pdf-frame-content: footer_content;
+                    left: 50pt; width: 512pt; top: 800pt; height: 40pt;
+                    border: 0pt solid white;
+                    
+                }
+                /* ESTE FRAME NO SE REPITE EN CADA PAGINA, EL RESTO SI */
+                @frame content_frame {          /* Content Frame: Todo lo que no esté en un div de los otros frames.  */
+                    left: 50pt; width: 512pt; top: 200pt; height: 720pt;
+                    border: 0pt solid white;
+                }
+                
+            }
+
+            .table th {         
+                vertical-align:middle; 
+                text-align:center;
+                border: 1pt solid black;
+                height: 60pt;
+                padding-top: 2px;
+            }
+            .table td {         
+                vertical-align:middle; 
+                text-align:left;
+                border: 1pt solid #CCCCCC;
+                padding-top: 2px;
+                padding-left: 3px;
+            }
+            .td_left {                         
+                text-align:left;                
+            }
+            .td_center {         
+                text-align:center;                
+            }
+
+            .bg-grey{
+                background:#EEEFFF;
+            }
+
+            .td_10 {    
+                width:10%;                                 
+                vertical-align:middle; 
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/   
+            }
+            .td_20 {    
+                width:20%;                                 
+                vertical-align:middle; 
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/   
+            }
+            .td_30 {    
+                width:30%;                                 
+                vertical-align:middle; 
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/   
+            }
+            .td_40 {    
+                width:40%;                                 
+                vertical-align:middle; 
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/   
+            }
+            .td_50 {    
+                width:50%;                                 
+                vertical-align:middle; 
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/   
+            }
+
+        </style>
+    </header>
+
+    <body>
+        <!-- Content for Static Frame 'header_frame' -->
+        <div id="image_content">
+        <!-- Content con la imagen -->
+        </div>
+
+        <div id="header_content"> 
+        <p></p>    
+        </div>
+        <div id="header_title">   
+            <h1 style="text-align: center;"><strong>LABORATORIOS OCAMPOS SA.</strong></h1>
+            <h1 style="text-align: center;"><strong>HISTORIAL DE MANTENIMIENTO DE EQUIPOS</strong></h1>                     
+        </div>
+        <div id="datos_reporte">  
+            <b>FECHA DE IMPRESION:  </b>{{fecha}} <br>
+        <b>USUARIO:</b>  {{usuario}}<br>
+        <b>HORA:</b>  {{hora}}:{{minutos}}:{{segundos}}<br>
+
+                   
+        </div>
+        <div id="header_div"><hr></div>
+        <div id= "header_table">        
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <th class ="td_10 td_center" >Orden</th>
+                        <th class ="td_40">Codigo</th>                                               
+                        <th class ="td_40">Nombre</th>                                               
+
+                    </tr>
+                </thead>
+            </table>
+            <hr>
+        </div>
+
+        <!-- Content for Static Frame 'footer_frame' -->
+        <div id="footer_content">           
+            <hr/>
+            <!-- PAGINADOR EN EL FOOTER -->
+            Página <pdf:pagenumber> de <pdf:pagecount>
+        </div>
+
+
+
+            <table class="table">
+
+              <tbody>   
+                    <tr>
+                        <td class ="td_40"><b>N°</b></td>
+                        <td class ="td_40"><b>Codigo</b></td>                                               
+                        <td class ="td_40"><b>Nombre</b></td>      
+                        <td class ="td_40"><b>Horas utilizadas </b> </td>  
+                        <td class ="td_40"><b>Horas utiles </b> </td>  
+                        <td class ="td_40"><b>Porcentaje de utilizacion</b> </td>  
+                        <td class ="td_40"><b>Ultimo Mantenimiento</b> </td>  
+                                     
+                                         
+
+                    </tr>
+    
+                    {% for equipo in equipos %}
+                    <tr>
+                        <td class ="td_10 td_center">{{forloop.counter}}</td>
+                        <td class ="td_40">{{equipo.codigo}}</td>
+                        <td class ="td_40">{{equipo.nombre}}</td>    
+                        <td class ="td_40">{{equipo.horas_utilizadas}}</td>         
+                        <td class ="td_40">{{equipo.horas_utiles}}</td>                        
+                        
+                        <td class ="td_40">{{equipo.obtener_porcentaje}} %</td>                        
+                        <td class ="td_40">{{equipo.ultimo_mantenimiento}}</td>                        
+
+
+                    </tr>
+                    {% endfor %}                    
+                    
+                </tbody>
+            </table>
+            </body>
+            </html>

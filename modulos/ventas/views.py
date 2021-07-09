@@ -221,7 +221,7 @@ class FacturaVentaCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                 else:
                     facturav.estado='PENDIENTE'
 
-                facturav.exenta=0
+                facturav.exenta=float(factura['total_exenta'])
                 cobro=Cobro()
                 cobro.cantidad_cuotas=factura['cant_cuotas']
                 cobro.metodo_cobro=factura['tipo_cobro']

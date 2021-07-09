@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.aggregates import Sum
 from modulos.produccion.models import Producto
 from django.forms import model_to_dict
 
@@ -135,6 +136,7 @@ class FacturaVenta(models.Model):
     fecha_emision = models.DateField()
     cobro = models.ForeignKey(Cobro, on_delete=models.PROTECT)
     punto_venta=models.ForeignKey(PuntoVenta, on_delete=models.PROTECT,default=1)
+ 
 
     def __str__(self):
         return 'Nro Factura: %s - Cliente: %s' % (self.nro_factura, self.cliente)
@@ -150,13 +152,36 @@ class FacturaVenta(models.Model):
         item['tipo_venta'] = self.tipo_venta
         item['cobro_id']=self.cobro.id
         return item
-  
+    def obtener_fecha(self):
+        print 
+        return (self.fecha_emision.strftime("%d/%m/%Y"))
+        
     def obtener_total(self):
         return int(self.total)
     def obtener_montoiva1(self):
         return round(self.monto_iva1)
     def obtener_montoiva2(self):
         return round(self.monto_iva2)
+    def obtener_gravada_5(self):
+        if self.monto_iva2==0:
+            return 0
+        else:
+            return round(int(self.monto_iva2)*21)
+    def obtener_gravada_10(self):
+        if self.monto_iva1==0:
+            return 0
+        else:
+            return round(int(self.monto_iva1)*11)
+    def obtener_sin_iva(self):
+            return int(self.total)-int(self.monto_iva1) -int(self.monto_iva2)-int(self.exenta)
+    def obtener_exenta(self):
+            return round(self.exenta)
+    def obtener_timbrado(self):
+        punto_venta=PuntoVenta.objects.get(id=self.punto_venta_id)
+        datos=DatosFacturacion.objects.get(punto_venta=punto_venta.codigo)
+        return (datos.timbrado_actual)
+
+
     class Meta:
         verbose_name = 'FacturaVenta'
         verbose_name_plural = 'Facturas'

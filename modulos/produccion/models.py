@@ -85,11 +85,14 @@ class Equipo(models.Model):
         item = model_to_dict(self)
         item['id']=self.id
         item['codigo'] = self.codigo
-        item['descripcion'] = self.nombre
-        item['horas_utiles'] = self.nombre
-        item['horas_utilizadas'] = self.nombre
-
+        item['nombre'] = self.nombre
+        item['horas_utiles'] = self.horas_utiles
+        item['horas_utilizadas'] = self.horas_utilizadas
+        
         return item
+
+    def obtener_porcentaje(self):
+        return (self.horas_utilizadas * 100)/self.horas_utiles
 
     class Meta:
         verbose_name = 'Equipo'
