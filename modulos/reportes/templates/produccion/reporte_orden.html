@@ -10,7 +10,7 @@
         <style>
  
             @page {
-                size: a4 landscape;
+                size: a4 portrait;
 
                 
                 @frame image_frame {           /* Static Frame - Donde se pone la imagen */
@@ -27,24 +27,29 @@
                 
                 @frame header_frame {           /* Static Frame <!-- Título del informe -->*/
                     -pdf-frame-content: header_title;
-                    left: 200pt; width: 412pt; top: 50pt; height: 0pt;
+                    left: 100pt; width: 412pt; top: 50pt; height: 0pt;
                     text-align: center;
                     border: 0pt solid white;
                 }
                 @frame header_frame {           /* Static Frame: Header fijo de la tabla */
                     -pdf-frame-content: header_div;
-                    left: 50pt; width: 600pt; top: 170pt; height: 5pt;
+                    left: 50pt; width: 512pt; top: 190pt; height: 5pt;
                     text-align: center;
                     border: 0pt solid white;
                 }
                 @frame header_frame {           /* Static Frame: Header fijo de la tabla */
                     -pdf-frame-content: datos_reporte;
-                    left: 70pt; width: 512pt; top: 125pt;
+                    left: 50pt; width: 512pt; top: 125pt;
+                    text-align: right;
+                }
+                @frame header_frame {           /* Static Frame: Header fijo de la tabla */
+                    -pdf-frame-content: datos_finales;
+                    left: 50pt; width: 512pt; top: 500pt;
                     text-align: right;
                 }
                 @frame header_frame {           /* Static Frame: Header fijo de la tabla */
                     -pdf-frame-content: encabezado;
-                    left: 50pt; width: 750pt; top: 200pt;
+                    left: 50pt; width: 500pt; top: 200pt;
                     text-align: right;
                 }
                 @frame imagen {           /* Static Frame: Header fijo de la tabla */
@@ -61,13 +66,13 @@
                 }
                 @frame footer_frame {           /* Static Frame: lugar donde ponemos el footer (en mi caso paginador)  */
                     -pdf-frame-content: footer_content;
-                    left: 50pt; width: 512pt; top: 560pt; height: 40pt;
+                    left: 50pt; width: 512pt; top: 800pt; height: 40pt;
                     border: 0pt solid white;
                     
                 }
                 /* ESTE FRAME NO SE REPITE EN CADA PAGINA, EL RESTO SI */
                 @frame content_frame {          /* Content Frame: Todo lo que no esté en un div de los otros frames.  */
-                    left: 50pt; width: 750pt; top: 261pt; height: 250pt;
+                    left: 50pt; width: 500pt; top: 240pt; height: 450pt;
                     border: 0pt solid white;
                 }
           
@@ -83,13 +88,13 @@
                 vertical-align:middle; 
                 text-align:center;
                 border: 1pt solid #CCCCCC;
-                height: 60pt;
+                height: 40pt;
                 padding-top: 1px;
 
             }
             .table td {         
                 vertical-align:middle; 
-                text-align:left;
+                text-align:center;
                 border: 1pt solid #CCCCCC;
                 padding-top: 2px;
                 padding-left: 3px;
@@ -136,6 +141,16 @@
                 vertical-align:middle; 
                /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/   
             }
+            .td_80 {    
+                width:80%;                                 
+                vertical-align:middle; 
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/   
+            }
+            .th_80 {    
+                width:80%;                                 
+                vertical-align:middle; 
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/   
+            }
             .th_40 {    
                 width:40%;                                 
                 vertical-align:middle; 
@@ -165,14 +180,15 @@
             </div>  
         <div id="header_title"> 
        
-            <h1 style="text-align: center;"><strong>LABORATORIOS OCAMPOS SRL</strong></h1>
-            <h1 style="text-align: center;"><strong>REPORTES DE VENTAS ANUAL</strong></h1>     
-            <h1 style="text-align: center;"><strong> AÑO {{anho}}</strong></h1>                     
+            <h1 style="text-align: center;"><strong>LABORATORIOS OCAMPOS SRL </strong></h1>
+            <h1 style="text-align: center;"><strong>REPORTES DE ORDENES DE ELABORACION</strong></h1>     
                 
         </div>
         <div id="datos_reporte">  
             <b>FECHA DE IMPRESION:  </b>{{fecha}}. <br>
         <b>USUARIO:</b>  {{usuario}}. <br>
+        <b>DESDE EL :</b>  {{start}} <br>
+        <b>HASTA EL :</b>  {{end}}. <br>
         <b>HORA:</b>  {{hora}}:{{minutos}}:{{segundos}}<br>
 
                    
@@ -184,22 +200,13 @@
         <tbody>   
             <thead>
             <tr>
-             <th class ="th_40"><b>1- Tipo Identificación</b></th>
-             <th class ="th_40"><b>2-RUC/ Identificación</b></th>                                               
-             <th class ="th_60"><b>3-Nombre</b></th>      
-             <th class ="th_40"><b>4-Tipo Comprobante</b> </th>  
-             <th class ="th_40"><b>5-Timbrado </b> </th>  
-             <th class ="th_40"><b>6-Tipo  </b> </th>  
+             <th class ="th_40"><b>Numero </b></th>
+             <th class ="th_60"><b>Estado</b></th>                                               
+             <th class ="th_80"><b>Producto</b></th>      
+             <th class ="th_60"><b>Fecha emision</b> </th>  
+             <th class ="th_60"><b>Fecha vigencia</b> </th>  
+             <th class ="th_60"><b>Cantidad Teorica</b> </th>  
 
-             <th class ="th_60"><b>7-Número de Comprobante</b> </th>  
-            <th class ="th_40"><b>8-Fecha de Emisión</b> </th>  
-             <th class ="th_40"><b>9-Importe Total del comprobante</b> </th>  
-             <th class ="th_40"><b>10-Importe Exenta</b> </th>  
-            <th class ="th_40"><b>11-Total gravadas 5% </b> </th>  
-             <th class ="th_40"><b>12-IVA 5%</b> </th>  
-             <th class ="th_40"><b>13-Total gravadas 10%</b> </th>  
-             <th class ="th_40"><b>14-IVA 10%</b> </th>  
-             <th class ="th_40"><b>15-Total Importe sin IVA</b> </th>  
             </tr>
             </thead>                   
       
@@ -212,48 +219,27 @@
             <table class="table">
 
         <tbody>   
-        {% for factura in facturas %}
+        {% for orden in ordenes %}
         <tr>
-            <td class ="td_40">RUC</td>
-          <td class ="td_40">{{factura.cliente.ruc}}</td>    
-          <td class ="td_60">{{factura.cliente.razon_social}}</td>         
-          <td class ="td_40">FACTURA</td>                        
-          <td class ="td_40">{{factura.obtener_timbrado}}</td>    
-          <td class ="td_40">{{factura.tipo_venta}}</td>                            
-          <td class ="td_60">{{factura.nro_factura}}</td>                        
-          <td class ="td_40">{{factura.obtener_fecha}}</td>                        
-          <td class ="td_40">{{factura.obtener_total}}</td>                        
-          <td class ="td_40">{{factura.obtener_exenta}}</td>           
-          <td class ="td_40">{{factura.obtener_gravada_5}}</td>                        
-          <td class ="td_40">{{factura.obtener_montoiva2}}</td>                        
-          <td class ="td_40">{{factura.obtener_gravada_10}}</td>                        
-          <td class ="td_40">{{factura.obtener_montoiva1}}</td>                        
-          <td class ="td_40">{{factura.obtener_sin_iva}}</td>                               
+          <td class ="td_40 td_center">     {{orden.numero}}</td>  
+          <td class ="td_60 td_center">{{orden.estado}}</td>         
+          <td class ="td_80">{{orden.producto.nombre}}</td>         
+          <td class ="td_60">{{orden.fecha_emision}}</td>         
+          <td class ="td_60">{{orden.fecha_vigencia}}</td>         
+          <td class ="td_60">{{orden.cantidad_teorica}} {{orden.producto.unidad_medida}}</td>         
+
          </tr>
         {% endfor %}  
-        <td class ="td_40"></td>
-          <td class ="td_40"></td>    
-          <td class ="td_60"></td>         
-          <td class ="td_40"></td>                        
-          <td class ="td_40"></td>         
-          <td class ="td_40"></td>                        
-               
-          <td class ="td_60"></td>
-        <td class ="td_40"><b>TOTALES</b></td>  
-        <td class ="td_40">{{total_ventas}}</td>                                    
-          <td class ="td_40">{{total_exentas}}</td>           
-          <td class ="td_40">{{total_gravadas5}}</td>                        
-          <td class ="td_40">{{total_montoiva2}}</td>                        
-          <td class ="td_40">{{total_gravadas10}}</td>                        
-          <td class ="td_40">{{total_montoiva1}}</td>                        
-          <td class ="td_40">{{total_sin_iva}}</td>                       
-        </tbody>
+     
+
    
  
                           
                     
      
 </table>
+     
+
         </div>
   
         <div id="footer_content">           

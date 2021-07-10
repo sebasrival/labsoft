@@ -1,3 +1,6 @@
+{% load l10n %}
+
+
 <html>
     <header> 
         <meta charset="utf-8">
@@ -5,11 +8,14 @@
 
 
         <style>
+ 
             @page {
                 size: a4 portrait;
+
+                
                 @frame image_frame {           /* Static Frame - Donde se pone la imagen */
                     -pdf-frame-content: image_content;
-                    left: 50pt; width: 50pt; top: 10pt; height: 50pt;
+                    left: 100pt; width: 50pt; top: 50pt; height: 50pt;
                     text-align: center;
                     border: 0pt solid white;
                 }
@@ -18,9 +24,10 @@
                     left: 50pt; width: 500pt; top: 20pt; 
 
                 }
+                
                 @frame header_frame {           /* Static Frame <!-- Título del informe -->*/
                     -pdf-frame-content: header_title;
-                    left: 90pt; width: 412pt; top: 50pt; height: 0pt;
+                    left: 100pt; width: 412pt; top: 50pt; height: 0pt;
                     text-align: center;
                     border: 0pt solid white;
                 }
@@ -32,8 +39,23 @@
                 }
                 @frame header_frame {           /* Static Frame: Header fijo de la tabla */
                     -pdf-frame-content: datos_reporte;
-                    left: 70pt; width: 512pt; top: 125pt;
+                    left: 50pt; width: 512pt; top: 125pt;
                     text-align: right;
+                }
+                @frame header_frame {           /* Static Frame: Header fijo de la tabla */
+                    -pdf-frame-content: datos_finales;
+                    left: 50pt; width: 512pt; top: 500pt;
+                    text-align: right;
+                }
+                @frame header_frame {           /* Static Frame: Header fijo de la tabla */
+                    -pdf-frame-content: encabezado;
+                    left: 50pt; width: 500pt; top: 200pt;
+                    text-align: right;
+                }
+                @frame imagen {           /* Static Frame: Header fijo de la tabla */
+                    -pdf-frame-content: imagen;
+                    left: 100pt; width: 50pt; top: 50pt; height: 0pt;
+           
                 }
 
                 @frame header_table {           /* Static Frame: lugar donde ponemos la tabla */
@@ -50,18 +72,25 @@
                 }
                 /* ESTE FRAME NO SE REPITE EN CADA PAGINA, EL RESTO SI */
                 @frame content_frame {          /* Content Frame: Todo lo que no esté en un div de los otros frames.  */
-                    left: 50pt; width: 512pt; top: 200pt; height: 720pt;
+                    left: 50pt; width: 500pt; top: 261pt; height: 250pt;
                     border: 0pt solid white;
                 }
-                
+          
             }
-
+         
+           .table{
+            page-break-inside:auto;
+           }
+           .table tr{
+            page-break-inside:avoid; page-break-after:auto;
+           }
             .table th {         
                 vertical-align:middle; 
                 text-align:center;
-                border: 1pt solid black;
+                border: 1pt solid #CCCCCC;
                 height: 60pt;
-                padding-top: 2px;
+                padding-top: 1px;
+
             }
             .table td {         
                 vertical-align:middle; 
@@ -69,6 +98,7 @@
                 border: 1pt solid #CCCCCC;
                 padding-top: 2px;
                 padding-left: 3px;
+                
             }
             .td_left {                         
                 text-align:left;                
@@ -101,6 +131,21 @@
                 vertical-align:middle; 
                /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/   
             }
+            .td_60 {    
+                width:60%;                                 
+                vertical-align:middle; 
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/   
+            }
+            .th_60 {    
+                width:60%;                                 
+                vertical-align:middle; 
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/   
+            }
+            .th_40 {    
+                width:40%;                                 
+                vertical-align:middle; 
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/   
+            }
             .td_50 {    
                 width:50%;                                 
                 vertical-align:middle; 
@@ -111,80 +156,92 @@
     </header>
 
     <body>
+        <!-- Content for Static Frame 'footer_frame' -->
+
+  
         <!-- Content for Static Frame 'header_frame' -->
-        <div id="image_content">
-        <!-- Content con la imagen -->
-        </div>
+       
 
         <div id="header_content"> 
         <p></p>    
         </div>
-        <div id="header_title">   
-            <h1 style="text-align: center;"><strong>LABORATORIOS OCAMPOS SA.</strong></h1>
-            <h1 style="text-align: center;"><strong>REPORTE DE UTILIZACION DE EQUIPOS</strong></h1>                     
+        <div id="imagen"  >
+                <img src="https://ss3.4sqi.net/img/categories_v2/education/lab_88.png" alt="My image">
+            </div>  
+        <div id="header_title"> 
+       
+            <h1 style="text-align: center;"><strong>LABORATORIOS OCAMPOS SRL </strong></h1>
+            <h1 style="text-align: center;"><strong>REPORTES DE PRODUCTOS MENSUAL</strong></h1>     
+            <h1 style="text-align: center;"><strong> {{mes}} {{anho}}</strong></h1>                     
+                
         </div>
         <div id="datos_reporte">  
-            <b>FECHA DE IMPRESION:  </b>{{fecha}} <br>
-        <b>USUARIO:</b>  {{usuario}}<br>
+            <b>FECHA DE IMPRESION:  </b>{{fecha}}. <br>
+        <b>USUARIO:</b>  {{usuario}}. <br>
         <b>HORA:</b>  {{hora}}:{{minutos}}:{{segundos}}<br>
 
                    
         </div>
         <div id="header_div"><hr></div>
-        <div id= "header_table">        
-            <table class="table">
+        <div id= "encabezado">        
+        <table class="table">
 
-                <thead>
-                    <tr>
-                        <th class ="td_10 td_center" >Orden</th>
-                        <th class ="td_40">Codigo</th>                                               
-                        <th class ="td_40">Nombre</th>                                               
+        <tbody>   
+            <thead>
+            <tr>
+             <th class ="th_40"><b>Codigo del producto</b></th>
+             <th class ="th_60"><b>Descripcion</b></th>                                               
+             <th class ="th_60"><b>Cantidad Producida</b></th>      
+             <th class ="th_60"><b>Cantidad vendida</b> </th>  
 
-                    </tr>
-                </thead>
-            </table>
-            <hr>
+            </tr>
+            </thead>                   
+      
+         </tbody>
+        </table>
+      
         </div>
 
-        <!-- Content for Static Frame 'footer_frame' -->
+        <div id="content_frame">           
+            <table class="table">
+
+        <tbody>   
+        {% for producto in lista_producto %}
+        <tr>
+          <td class ="td_40">{{producto.codigo}}</td>    
+          <td class ="td_60">{{producto.nombre}}</td>         
+          <td class ="td_60">{{producto.cantidad_producida}}</td>         
+          <td class ="td_60">{{producto.cantidad_vendida}}</td>         
+           
+         </tr>
+        {% endfor %}  
+        <td class ="td_40"><b></b></td>                         
+
+        <td class ="td_60"><b>TOTALES</b></td>                         
+          <td class ="td_60">{{producida_total}}</td>                        
+          <td class ="td_60">{{vendida_total}}</td>                        
+        </tbody>
+
+   
+ 
+                          
+                    
+     
+</table>
+        <div id="datos_finales">  
+            <b>PRODUCTO MAS VENDIDO:  </b>{{mas_vendida}} <br>
+            <b>PRODUCTO MAS PRODUCIDO:</b>  {{mas_producida}} <br>
+
+                   
+        </div>
+
+        </div>
+  
         <div id="footer_content">           
             <hr/>
             <!-- PAGINADOR EN EL FOOTER -->
             Página <pdf:pagenumber> de <pdf:pagecount>
         </div>
 
-
-
-            <table class="table">
-
-              <tbody>   
-                    <tr>
-                        <td class ="td_40"><b>N°</b></td>
-                        <td class ="td_40"><b>Codigo</b></td>                                               
-                        <td class ="td_40"><b>Nombre</b></td>      
-                        <td class ="td_40"><b>Horas utilizadas </b> </td>  
-                        <td class ="td_40"><b>Porcentaje de utilizacion</b> </td>  
-                        <td class ="td_40"><b>Ultimo Mantenimiento</b> </td>  
-                                     
-                                         
-
-                    </tr>
-    
-                    {% for equipo in equipos %}
-                    <tr>
-                        <td class ="td_10 td_center">{{forloop.counter}}</td>
-                        <td class ="td_40">{{equipo.codigo}}</td>
-                        <td class ="td_40">{{equipo.nombre}}</td>    
-                        <td class ="td_40">{{equipo.horas_utilizadas}}</td>         
-                        
-                        <td class ="td_40">{{equipo.obtener_porcentaje}} %</td>                        
-                        <td class ="td_40">{{equipo.ultimo_mantenimiento}}</td>                        
-
-
-                    </tr>
-                    {% endfor %}                    
-                    
-                </tbody>
-            </table>
             </body>
             </html>

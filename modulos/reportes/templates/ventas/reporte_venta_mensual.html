@@ -33,7 +33,7 @@
                 }
                 @frame header_frame {           /* Static Frame: Header fijo de la tabla */
                     -pdf-frame-content: header_div;
-                    left: 50pt; width: 600pt; top: 170pt; height: 5pt;
+                    left: 50pt; width: 730pt; top: 170pt; height: 5pt;
                     text-align: center;
                     border: 0pt solid white;
                 }
@@ -61,7 +61,7 @@
                 }
                 @frame footer_frame {           /* Static Frame: lugar donde ponemos el footer (en mi caso paginador)  */
                     -pdf-frame-content: footer_content;
-                    left: 50pt; width: 512pt; top: 560pt; height: 40pt;
+                    left: 50pt; width: 730pt; top: 560pt; height: 40pt;
                     border: 0pt solid white;
                     
                 }
@@ -165,9 +165,9 @@
             </div>  
         <div id="header_title"> 
        
-            <h1 style="text-align: center;"><strong>LABORATORIOS OCAMPOS SRL</strong></h1>
-            <h1 style="text-align: center;"><strong>REPORTES DE VENTAS ANUAL</strong></h1>     
-            <h1 style="text-align: center;"><strong> AÑO {{anho}}</strong></h1>                     
+            <h1 style="text-align: center;"><strong>LABORATORIOS OCAMPOS SRL.</strong></h1>
+            <h1 style="text-align: center;"><strong>REPORTES DE VENTAS MENSUAL.</strong></h1>     
+            <h1 style="text-align: center;"><strong> {{mes}} {{anho}}</strong></h1>                     
                 
         </div>
         <div id="datos_reporte">  
@@ -189,8 +189,7 @@
              <th class ="th_60"><b>3-Nombre</b></th>      
              <th class ="th_40"><b>4-Tipo Comprobante</b> </th>  
              <th class ="th_40"><b>5-Timbrado </b> </th>  
-             <th class ="th_40"><b>6-Tipo  </b> </th>  
-
+             <th class ="th_40"><b>6-Tipo </b> </th>  
              <th class ="th_60"><b>7-Número de Comprobante</b> </th>  
             <th class ="th_40"><b>8-Fecha de Emisión</b> </th>  
              <th class ="th_40"><b>9-Importe Total del comprobante</b> </th>  
@@ -214,12 +213,13 @@
         <tbody>   
         {% for factura in facturas %}
         <tr>
-            <td class ="td_40">RUC</td>
+          <td class ="td_40">RUC</td>
           <td class ="td_40">{{factura.cliente.ruc}}</td>    
           <td class ="td_60">{{factura.cliente.razon_social}}</td>         
           <td class ="td_40">FACTURA</td>                        
           <td class ="td_40">{{factura.obtener_timbrado}}</td>    
-          <td class ="td_40">{{factura.tipo_venta}}</td>                            
+          <td class ="td_40">{{factura.tipo_venta}}</td>                        
+                    
           <td class ="td_60">{{factura.nro_factura}}</td>                        
           <td class ="td_40">{{factura.obtener_fecha}}</td>                        
           <td class ="td_40">{{factura.obtener_total}}</td>                        
@@ -228,7 +228,7 @@
           <td class ="td_40">{{factura.obtener_montoiva2}}</td>                        
           <td class ="td_40">{{factura.obtener_gravada_10}}</td>                        
           <td class ="td_40">{{factura.obtener_montoiva1}}</td>                        
-          <td class ="td_40">{{factura.obtener_sin_iva}}</td>                               
+          <td class ="td_40">{{factura.obtener_sin_iva}}</td>                        
          </tr>
         {% endfor %}  
         <td class ="td_40"></td>
@@ -246,7 +246,7 @@
           <td class ="td_40">{{total_montoiva2}}</td>                        
           <td class ="td_40">{{total_gravadas10}}</td>                        
           <td class ="td_40">{{total_montoiva1}}</td>                        
-          <td class ="td_40">{{total_sin_iva}}</td>                       
+          <td class ="td_40">{{total_sin_iva}}</td>                        
         </tbody>
    
  

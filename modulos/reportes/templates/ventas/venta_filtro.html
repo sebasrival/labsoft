@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head-app %}
+    <div>
+        <h1><i class="fas fa-atom"> </i>{{ title }}</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+
+
+{% block navbar %}
+    {% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+
+{% block sidebar %}
+    {% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="tile">
+                    <h3 class="tile-title">Reporte de Ventas Anual</h3>
+                    <div class="tile-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="control-label">Seleccione el año</label>
+                                <select class="form-control" id="anho">
+                                    <option>2021</option>
+                                    <option>2020</option>
+
+                                </select>    
+                            </div>
+               
+                            <div class="tile-footer">
+                                <button type="button" class=" btn btn-primary btn-sm btnReporteVenta"
+                                style="height: 30px; align-content: center">
+                                <label><i
+                                    class="fa fa-fw fa-lg fa-check-circle"></i>Generar Reporte</label>
+                                </button>
+                             
+                                             </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+
+    </script>
+        <script type="text/javascript" src= {% static "js/reportes/reportes.js" %}></script>
+
+{% endblock %}
