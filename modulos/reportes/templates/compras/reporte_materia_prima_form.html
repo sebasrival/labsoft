@@ -26,36 +26,29 @@
 {% endblock sidebar %}
 
 {% block content %}
-
     <div class="col-lg-3">
         <form method="post">
             {% csrf_token %}
-
             <div class="form-group">
-                <label>Fecha Inicial:</label>
-                {{ form.start_date }}
+                <label>Seleccione un mes:</label>
+                {{ form.mes}}
             </div>
-
-            <div class="form-group">
-                <label>Fecha Final:</label>
-                {{ form.end_date }}
-            </div>
-
             <br>
             <button type="submit" class="btn btn-success">Generar Reporte (PDF)</button>
         </form>
     </div>
-
 {% endblock %}
 
 {% block scripts %}
     <script type="text/javascript">
-        $('.datepicker').datepicker({
-                format: "dd/mm/yyyy",
-                autoclose: true,
-                todayHighlight: true,
-                language: 'es',
-            });
+        $('.datepicker').datepicker( {
+            format: "mm-yyyy",
+            startView: "months",
+            minViewMode: "months",
+            language: 'es',
+            autoclose: true,
+            todayHighlight: true,
+        });
     </script>
 {% endblock %}
 

@@ -69,7 +69,7 @@ let factura_compra = {
                     width: "20%",
                     orderable: false,
                     render: function (data, type, row) {
-                        return '<input name="ipPrecio" type="number" min="0" step="1000" class="form-control form-control-sm"' +
+                        return '<input name="ipPrecio" type="number" min="0" class="form-control form-control-sm"' +
                             ' value="' + data + '">';
                     }
                 },
@@ -230,13 +230,13 @@ $(function () {
         let tr = tblCompra.cell($(this).closest('td, li')).index();
         factura_compra.itemsFactura.materias[tr.row].cantidad = cant;
         factura_compra.calc_invoice();
-        $('td:eq(5)', tblCompra.row(tr.row).node()).html('$' + factura_compra.itemsFactura.materias[tr.row].subtotal);
+        $('td:eq(5)', tblCompra.row(tr.row).node()).html(factura_compra.itemsFactura.materias[tr.row].subtotal.toFixed(2));
     }).on('change keyup paste', 'input[name="ipPrecio"]', function () {
         let precio = parseFloat($(this).val());
         let tr = tblCompra.cell($(this).closest('td, li')).index();
         factura_compra.itemsFactura.materias[tr.row].precio = precio.toFixed(2);
         factura_compra.calc_invoice();
-        $('td:eq(5)', tblCompra.row(tr.row).node()).html('$' + factura_compra.itemsFactura.materias[tr.row].subtotal);
+        $('td:eq(5)', tblCompra.row(tr.row).node()).html(factura_compra.itemsFactura.materias[tr.row].subtotal.toFixed(2));
     }).on('change', 'input[name="ipIva"]', function () {
         let iva = parseInt($(this).val());
         let tr = tblCompra.cell($(this).closest('td, li')).index();

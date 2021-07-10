@@ -1,7 +1,7 @@
 from django.db.models import Q
 
-from modulos.compras.models import FacturaCompra, FacturaDet
-from modulos.reportes.forms import ReporteFiltro
+from modulos.compras.models import FacturaCompra, FacturaDet, StockMateriaPrima, MateriaPrima
+from modulos.reportes.forms import ReporteFiltro, MesForm
 import os
 from django.conf import settings
 from django.shortcuts import render
@@ -251,3 +251,89 @@ class ReporteCompraPdfView(View):
             dict['total_grabada10'] += f.get_grabada10()
             dict['total_iva10'] += f.monto_iva2
         return dict
+
+
+class ReporteMateriaPrima(View):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            mes = datetime.strptime(request.POST['mes'], "%m-%Y")
+            facturas = FacturaCompra.objects.filter(Q(estado='recibido') and Q(fecha_factura__year=mes.year, fecha_factura__month=mes.month))
+            materias = self.reporte_materia_utilizado(facturas)
+            user = User.objects.get(id=request.user.id)
+            usuario = "%s %s" % (user.first_name, user.last_name)
+            now = datetime.now()
+            template = get_template('compras/reporte_materia_prima.html')
+            context = {
+                'materias': materias,
+                'usuario': usuario,
+                'fecha': date.today().strftime("%d/%m/%Y"),
+                'año': now.year,
+                'hora': now.hour,
+                'minutos': now.minute,
+                'segundos': now.second,
+                'fecha_reporte': mes,
+                'comp': {'name': 'LABORATORIO OCAMPOS SRL', 'ruc': '9999999999999', 'address': 'San Lorenzo, Paraguay'},
+                'icon': '{}{}'.format(settings.STATIC_URL, 'img/logo.png')
+            }
+            html = template.render(context)
+            response = HttpResponse(content_type='application/pdf')
+            # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+            pisaStatus = pisa.CreatePDF(
+                html, dest=response,
+                link_callback=self.link_callback
+            )
+            return response
+        except Exception as e:
+            print(e)
+        return HttpResponseRedirect(reverse_lazy('index'))
+
+    def get(self, request, *args, **kwargs):
+        form = MesForm
+        context = {'form': form,
+                    'title': 'Reporte de Materias Primas'}
+        return render(request, 'compras/reporte_materia_prima_form.html', context)
+
+    def reporte_materia_utilizado(self, facturas):
+        materias = []
+        mts = MateriaPrima.objects.all()
+        for m in mts:
+            item = {}
+            item['materia'] = m.nombre
+            item['um'] = m.um
+            item['cantidadCont'] = m.cantidadCont
+            item['comprado_mes'] = 0
+            for f in facturas:
+                try:
+                    det = FacturaDet.objects.get(factura=f, materia=m)
+                    item['comprado_mes'] += det.cantidad
+                    materias.append(item)
+                except Exception as e:
+                    pass
+        return materias
+
+    def link_callback(self, uri, rel):
+        """
+        Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+        resources
+        """
+        # use short variable names
+        sUrl = settings.STATIC_URL  # Typically /static/
+        sRoot = settings.STATIC_ROOT  # Typically /home/userX/project_static/
+        mUrl = settings.MEDIA_URL  # Typically /static/media/
+        mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
+
+        # convert URIs to absolute system paths
+        if uri.startswith(mUrl):
+            path = os.path.join(mRoot, uri.replace(mUrl, ""))
+        elif uri.startswith(sUrl):
+            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        else:
+            return uri  # handle absolute uri (ie: http://some.tld/foo.png)
+
+        # make sure that file exists
+        if not os.path.isfile(path):
+            raise Exception(
+                'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+        return path

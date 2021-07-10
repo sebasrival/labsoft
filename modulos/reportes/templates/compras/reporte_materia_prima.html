@@ -170,15 +170,14 @@
 
 <div id="header_title">
     <h1 style="text-align: center;"><strong>LABORATORIOS OCAMPOS S.R.L.</strong></h1>
-    <h1 style="text-align: center;"><strong>REPORTES DE COMPRAS</strong></h1>
-    <h1 style="text-align: center;"><strong> AÑO {{ año }}</strong></h1>
+    <h1 style="text-align: center;"><strong>REPORTES DE MATERIAS PRIMAS</strong></h1>
+    <h1 style="text-align: center;"><strong> {{ fecha_reporte | date:'m/Y' }}</strong></h1>
 </div>
 
 <div id="datos_reporte">
     <b>FECHA DE IMPRESO: </b>{{ fecha }}. <br>
     <b>USUARIO:</b> {{ usuario }}. <br>
     <b>HORA:</b> {{ hora }}:{{ minutos }}:{{ segundos }}<br>
-    <span><b>FILTRO DESDE:</b> {{ start_date }} <b>HASTA:</b> {{ end_date }}</span>
 </div>
 
 <div id="header_div">
@@ -189,20 +188,10 @@
     <table class="table">
         <thead>
         <tr>
-            <th class="th_40"><b>1- Tipo Identificación</b></th>
-            <th class="th_40"><b>2-RUC/ Identificación</b></th>
-            <th class="th_60"><b>3-Nombre</b></th>
-            <th class="th_40"><b>4-Tipo Comprobante</b></th>
-            <th class="th_40"><b>5-Timbrado </b></th>
-            <th class="th_60"><b>6-Número de Comprobante</b></th>
-             <th class="th_40"><b>7-Condición</b></th>
-            <th class="th_40"><b>8-Fecha de Emisión</b></th>
-            <th class="th_40"><b>9-Importe Total del comprobante</b></th>
-            <th class="th_40"><b>10-Importe Exenta</b></th>
-            <th class="th_40"><b>11-Total gravadas 5% </b></th>
-            <th class="th_40"><b>12-IVA 5%</b></th>
-            <th class="th_40"><b>13-Total gravadas 10%</b></th>
-            <th class="th_40"><b>14-IVA 10%</b></th>
+            <th class="th_60"><b>Materias Prima</b></th>
+            <th class="th_40"><b>Cantidad Contenido</b></th>
+            <th class="th_40"><b>Unidad de Medida</b></th>
+            <th class="th_40"><b>Cantidad de unidades en el mes {{ fecha_reporte | date:'F' }} </b></th>
         </tr>
         </thead>
     </table>
@@ -211,43 +200,14 @@
 <div id="content_frame">
     <table class="table">
         <tbody>
-        {% for factura in facturas %}
+        {% for m in materias %}
             <tr>
-                <td class="td_40">RUC</td>
-                <td class="td_40">{{ factura.proveedor.ruc}}</td>
-                <td class="td_60">{{ factura.proveedor.razon_social }}</td>
-                <td class="td_40">FACTURA</td>
-                <td class="td_40">{{ factura.timbrado }}</td>
-                <td class="td_60">{{ factura.nro_factura }}</td>
-                {% if factura.tipo_factura == True %}
-                    <td class="td_40">Contado</td>
-                {% else %}
-                    <td class="td_40">Credito</td>
-                {% endif %}
-                <td class="td_40">{{ factura.fecha_factura }}</td>
-                <td class="td_40">{{ factura.total }}</td>
-                <td class="td_40">{{ factura.get_exenta }}</td>
-                <td class="td_40">{{ factura.get_grabada5 }}</td>
-                <td class="td_40">{{ factura.monto_iva1}}</td>
-                <td class="td_40">{{ factura.get_grabada10 }}</td>
-                <td class="td_40">{{ factura.monto_iva2 }}</td>
+                <td class="td_60">{{ m.materia }}</td>
+                <td class="td_40">{{ m.cantidadCont }}</td>
+                <td class="td_40">{{ m.um }}</td>
+                <td class="td_40">{{ m.comprado_mes }}</td>
             </tr>
         {% endfor %}
-        <td class ="td_40" style="border: 0px"></td>
-        <td class ="td_40" style="border: 0px"></td>
-        <td class ="td_60" style="border: 0px"></td>
-        <td class ="td_40" style="border: 0px"></td>
-        <td class ="td_40" style="border: 0px"></td>
-        <td class ="td_60" style="border: 0px"></td>
-        <td class ="td_40" style="border: 0px"></td>
-        <td class ="td_40" style="border: black 1px solid;"><b>TOTALES</b></td>
-        <td class ="td_40" style="border: black 1px solid;">{{ total }}</td>
-        <td class ="td_40" style="border: black 1px solid;">{{ total_exenta }}</td>
-        <td class ="td_40" style="border: black 1px solid;">{{ total_grabada5 }}</td>
-        <td class ="td_40" style="border: black 1px solid;">{{ total_iva5 }}</td>
-        <td class ="td_40" style="border: black 1px solid;">{{ total_grabada10 }}</td>
-        <td class ="td_40" style="border: black 1px solid;">{{  total_iva10 }}</td>
-
         </tbody>
     </table>
 </div>
