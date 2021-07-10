@@ -269,7 +269,6 @@ class FacturaCompraCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                 data['error'] = str(e)
                 response = JsonResponse(data, safe=False)
                 response.status_code = 400
-                raise (e)
             return response
         else:
             return redirect('index')
