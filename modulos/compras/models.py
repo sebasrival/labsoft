@@ -84,6 +84,30 @@ class FacturaCompra(models.Model):
     def __str__(self):
         return 'Factura Compra: %s - Proveedor: %s' % (self.nro_factura, self.proveedor.razon_social)
 
+    def get_exenta(self):
+        exenta = 0
+        det = FacturaDet.objects.filter(factura=self)
+        for d in det:
+            if d.tipo_iva == 0:
+                exenta += d.cantidad * d.precio
+        return exenta
+
+    def get_grabada5(self):
+        grabada5 = 0
+        det = FacturaDet.objects.filter(factura=self)
+        for d in det:
+            if d.tipo_iva == 5:
+                grabada5 += d.cantidad * d.precio
+        return grabada5
+
+    def get_grabada10(self):
+        grabada10 = 0
+        det = FacturaDet.objects.filter(factura=self)
+        for d in det:
+            if d.tipo_iva == 10:
+                grabada10 += d.cantidad * d.precio
+        return grabada10
+
     class Meta:
         verbose_name = 'Factura Compra'
         verbose_name_plural = 'Facturas Compras'

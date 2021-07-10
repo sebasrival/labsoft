@@ -1,6 +1,6 @@
 from django.db.models import Q
 
-from modulos.compras.models import FacturaCompra
+from modulos.compras.models import FacturaCompra, FacturaDet
 from modulos.reportes.forms import ReporteFiltro
 import os
 from django.conf import settings
@@ -160,6 +160,7 @@ class ReporteVentaPdfView(View):
 
 
 class ReporteCompraPdfView(View):
+
     def link_callback(self, uri, rel):
         """
         Convert HTML URIs to absolute system paths so xhtml2pdf can access those
@@ -195,8 +196,15 @@ class ReporteCompraPdfView(View):
             user = User.objects.get(id=request.user.id)
             usuario = "%s %s" % (user.first_name, user.last_name)
             now = datetime.now()
+            t = self.get_totales(facturas)
             context = {
                 'facturas': facturas,
+                'total': t['total_comprobante'],
+                'total_exenta': t['total_exenta'],
+                'total_grabada5': t['total_grabada5'],
+                'total_iva5': t['total_iva5'],
+                'total_grabada10': t['total_grabada10'],
+                'total_iva10': t['total_iva10'],
                 'usuario': usuario,
                 'fecha': date.today().strftime("%d/%m/%Y"),
                 'año': now.year,
@@ -225,3 +233,21 @@ class ReporteCompraPdfView(View):
         context = {'form': form,
                     'title': 'Reporte de Compras'}
         return render(request, 'compras/reporte_compras.html', context)
+
+    def get_totales(self, facturas):
+        dict = {
+            'total_comprobante' : 0,
+            'total_exenta' : 0,
+            'total_grabada5' : 0,
+            'total_iva5' : 0,
+            'total_grabada10' : 0,
+            'total_iva10': 0
+        }
+        for f in facturas:
+            dict['total_comprobante'] += f.total
+            dict['total_exenta'] += f.get_exenta()
+            dict['total_grabada5'] += f.get_grabada5()
+            dict['total_iva5'] += f.monto_iva1
+            dict['total_grabada10'] += f.get_grabada10()
+            dict['total_iva10'] += f.monto_iva2
+        return dict
