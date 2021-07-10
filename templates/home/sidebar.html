@@ -93,6 +93,11 @@
                     <li><a class="treeview-item" href="{% url 'reportes:ventas_pdf' %}">Reporte de Ventas</a></li>
                 {% endif %}
             </ul>
+            <ul class="treeview-menu">
+                {% if perms.compras %}
+                    <li><a class="treeview-item" href="{% url 'reportes:reporte_compras' %}">Reporte de Compras</a></li>
+                {% endif %}
+            </ul>
         </li>
         {% if perms.accounts %}
             <li class="treeview">
