@@ -188,37 +188,21 @@ class ReporteCompraPdfView(View):
 
     def post(self, request, *args, **kwargs):
         try:
-            start_date = request.POST['start_date']
-            end_date = request.POST['end_date']
+            start_date = datetime.strptime(request.POST['start_date'], '%d/%m/%Y')
+            end_date = datetime.strptime(request.POST['end_date'], '%d/%m/%Y')
             template = get_template('compras/reporte_compra_pdf.html')
             facturas = FacturaCompra.objects.filter(Q(estado='RECIBIDO') | Q(fecha_factura__range=[start_date, end_date]))
             user = User.objects.get(id=request.user.id)
             usuario = "%s %s" % (user.first_name, user.last_name)
             now = datetime.now()
-            total_facturas = round(FacturaVenta.objects.aggregate(Sum('total')).get('total__sum'))
-            total_exentas = round(FacturaVenta.objects.aggregate(Sum('exenta')).get('exenta__sum'))
-            total_montoiva1 = round(FacturaVenta.objects.aggregate(Sum('monto_iva1')).get('monto_iva1__sum'))
-            total_montoiva2 = round(FacturaVenta.objects.aggregate(Sum('monto_iva2')).get('monto_iva2__sum'))
-            total_gravadas10 = round(
-                float(FacturaVenta.objects.aggregate(Sum('monto_iva1')).get('monto_iva1__sum')) * 11)
-            total_gravadas5 = round(FacturaVenta.objects.aggregate(Sum('monto_iva2')).get('monto_iva2__sum') * 21)
-            total_sin_iva = (total_gravadas10 - total_montoiva1) + (total_gravadas5 - total_montoiva2)
             context = {
-                'facturas': FacturaVenta.objects.all(),
-                'usuario': usuario.username,
-                'total_ventas': f'{total_facturas:,.0f}',
-                'total_exentas': f'{total_exentas:,.0f}',
-                'total_montoiva1': f'{total_montoiva1:,.0f}',
-                'total_montoiva2': f'{total_montoiva2:,.0f}',
-                'total_gravadas10': f'{total_gravadas10:,.0f}',
-                'total_gravadas5': f'{total_gravadas5:,.0f}',
-                'total_sin_iva': f'{total_sin_iva:,.0f}',
-
+                'facturas': facturas,
+                'usuario': usuario,
                 'fecha': date.today().strftime("%d/%m/%Y"),
+                'año': now.year,
                 'hora': now.hour,
                 'minutos': now.minute,
                 'segundos': now.second,
-
                 'comp': {'name': 'LABORATORIO OCAMPOS SRL', 'ruc': '9999999999999', 'address': 'San Lorenzo, Paraguay'},
                 'icon': '{}{}'.format(settings.STATIC_URL, 'img/logo.png')
             }
