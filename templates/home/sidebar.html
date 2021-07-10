@@ -111,10 +111,25 @@
             </ul>
             <ul class="treeview-menu">
                 {% if perms.ventas %}
-                <li><a class="treeview-item" href="{% url 'reportes:ventas_pdf' %}">Reporte de Ventas</a></li>
+                <li><a class="treeview-item" href="{% url 'reportes:pantalla_reporte_ventas' %}">Reporte de Ventas Anual</a></li>
             {% endif %}
             </ul>
-          
+            <ul class="treeview-menu">
+                {% if perms.ventas %}
+                <li><a class="treeview-item" href="{% url 'reportes:mes_reporte_ventas' %}">Reporte de Ventas Mensual</a></li>
+            {% endif %}
+            </ul>
+            <ul class="treeview-menu">
+                {% if perms.ventas %}
+                <li><a class="treeview-item" href="{% url 'reportes:mes_reporte_productos' %}">Reporte de Productos Mensual</a></li>
+            {% endif %}
+            </ul>
+            <ul class="treeview-menu">
+                {% if perms.ventas %}
+                <li><a class="treeview-item" href="{% url 'reportes:pantalla_reporte_ordenes' %}">Reporte de Ordenes de Elaboracion</a></li>
+            {% endif %}
+            </ul>
+            
           
         </li>
     </ul>

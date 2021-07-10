@@ -1,6 +1,8 @@
 from django.db import models
 from django.forms import model_to_dict
+
 from modulos.compras.models import MateriaPrima
+
 TIPO_IVA = [
     ( 5,'IVA5',),
     ( 10,'IVA10'),
@@ -41,6 +43,22 @@ class Producto(models.Model):
         item['tipo'] = self.tipo
         item['tasa_iva'] = self.tasa_iva
         return item
+
+    def obtener_cantidad_producida(self,mes,anho):
+        cantidad_producida = 0 
+        ordenes=OrdenElaboracion.objects.filter(producto_id=self.id,fecha_emision__year=anho,fecha_emision__month=mes)
+        for orden in ordenes:
+             cantidad_producida =cantidad_producida + float(orden.cantidad_teorica) / ((orden.producto.cantidad_contenido) / float(1000))
+        return int(cantidad_producida)
+
+    def obtener_cantidad_vendida(self,mes,anho):
+        from modulos.ventas.models import FacturaVenta, FacturaVentaDetalle
+        cantidad_vendida = 0 
+        facturas=FacturaVenta.objects.filter(fecha_emision__year=anho,fecha_emision__month=mes)
+        for factura in facturas:
+            for facturadetalle in FacturaVentaDetalle.objects.filter(factura_id=factura.id,producto_id=self.id):
+                cantidad_vendida=cantidad_vendida+ facturadetalle.cantidad
+        return cantidad_vendida
 
     class Meta:
         verbose_name = 'Producto'
@@ -86,13 +104,18 @@ class Equipo(models.Model):
         item['id']=self.id
         item['codigo'] = self.codigo
         item['nombre'] = self.nombre
+        item['descripcion'] = self.nombre
+
         item['horas_utiles'] = self.horas_utiles
         item['horas_utilizadas'] = self.horas_utilizadas
-        
+        item['ultimo_mantenimiento']=''
+        item['proximo_mantenimiento']=''
+        item['fecha_ingreso']=''
+
         return item
 
     def obtener_porcentaje(self):
-        return (self.horas_utilizadas * 100)/self.horas_utiles
+        return round((self.horas_utilizadas * 100)/self.horas_utiles)
 
     class Meta:
         verbose_name = 'Equipo'

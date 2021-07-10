@@ -1,3 +1,5 @@
+from modulos.ventas.models import FacturaVenta, FacturaVentaDetalle
+from modulos.produccion.models import OrdenElaboracion
 from django.db import models
 
 
@@ -25,7 +27,21 @@ class Producto(models.Model):
         dict['precio'] = self.precio
         dict['cantidad_contenido'] = self.cantidad_contenido
         return dict
+    
+    def obtener_cantidad_producida(self,mes,anho):
+        cantidad_producida = 0 
+        ordenes=OrdenElaboracion.objects.filter(producto_id=self.id,fecha_emision__year=anho,fecha_emision__month=mes)
+        for orden in ordenes:
+             cantidad_producida =cantidad_producida + float(orden.cantidad_teorica) / ((orden.producto.cantidad_contenido) / float(1000))
+        return cantidad_producida
 
+    def obtener_cantidad_vendida(self,mes,anho):
+        cantidad_vendida = 0 
+        facturas=FacturaVenta.objects.filter(fecha_emision__year=anho,fecha_emision__month=mes)
+        for factura in facturas:
+            for facturadetalle in FacturaVentaDetalle.objects.filter(factura_id=factura.id,producto_id=self.id):
+                cantidad_vendida=cantidad_vendida+ facturadetalle.cantidad
+        return cantidad_vendida
     class Meta:
         verbose_name = 'Producto'
         verbose_name_plural = 'Productos'
