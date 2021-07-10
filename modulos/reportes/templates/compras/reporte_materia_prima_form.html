@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block navbar %}
+    {% include 'home/navbar.html' %}
+{% endblock navbar %}
+
+{% block head-app %}
+    <!--suppress ALL -->
+    <div>
+        <h1><i class="fas fa-atom"> </i> {{ title }}</h1>
+        <p>Sistema de Gestion - Labsoft</p>
+    </div>
+{% endblock %}
+
+{% block head %}
+    <style>
+        th, td {
+            font-size: x-small;
+        }
+    </style>
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'home/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block content %}
+    <div class="col-lg-3">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Seleccione un mes:</label>
+                {{ form.mes}}
+            </div>
+            <br>
+            <button type="submit" class="btn btn-success">Generar Reporte (PDF)</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $('.datepicker').datepicker( {
+            format: "mm-yyyy",
+            startView: "months",
+            minViewMode: "months",
+            language: 'es',
+            autoclose: true,
+            todayHighlight: true,
+        });
+    </script>
+{% endblock %}
+

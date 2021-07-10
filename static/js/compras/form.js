@@ -7,6 +7,9 @@ let factura_compra = {
     itemsFactura: {
         proveedor: '',
         nro_factura: '',
+        timbrado: '',
+        fecha_vencimiento_timbrado: '',
+        fecha_vencimiento_credito: '',
         fecha_factura: '',
         tipo_compra: '',
         descuento: 0,
@@ -66,7 +69,7 @@ let factura_compra = {
                     width: "20%",
                     orderable: false,
                     render: function (data, type, row) {
-                        return '<input name="ipPrecio" type="number" min="0" step="1000" class="form-control form-control-sm"' +
+                        return '<input name="ipPrecio" type="number" min="0" class="form-control form-control-sm"' +
                             ' value="' + data + '">';
                     }
                 },
@@ -227,13 +230,13 @@ $(function () {
         let tr = tblCompra.cell($(this).closest('td, li')).index();
         factura_compra.itemsFactura.materias[tr.row].cantidad = cant;
         factura_compra.calc_invoice();
-        $('td:eq(5)', tblCompra.row(tr.row).node()).html('$' + factura_compra.itemsFactura.materias[tr.row].subtotal);
+        $('td:eq(5)', tblCompra.row(tr.row).node()).html(factura_compra.itemsFactura.materias[tr.row].subtotal.toFixed(2));
     }).on('change keyup paste', 'input[name="ipPrecio"]', function () {
         let precio = parseFloat($(this).val());
         let tr = tblCompra.cell($(this).closest('td, li')).index();
         factura_compra.itemsFactura.materias[tr.row].precio = precio.toFixed(2);
         factura_compra.calc_invoice();
-        $('td:eq(5)', tblCompra.row(tr.row).node()).html('$' + factura_compra.itemsFactura.materias[tr.row].subtotal);
+        $('td:eq(5)', tblCompra.row(tr.row).node()).html(factura_compra.itemsFactura.materias[tr.row].subtotal.toFixed(2));
     }).on('change', 'input[name="ipIva"]', function () {
         let iva = parseInt($(this).val());
         let tr = tblCompra.cell($(this).closest('td, li')).index();
@@ -252,7 +255,10 @@ $(function () {
         factura_compra.itemsFactura.proveedor = $('#proveedor_select').val();
         factura_compra.itemsFactura.nro_factura = $('#id_nro_factura').val();
         factura_compra.itemsFactura.tipo_compra = $('input:radio[name="tipo_factura"]:checked').val();
-        factura_compra.itemsFactura.fecha_factura = $('#date_compra').val();
+        factura_compra.itemsFactura.fecha_factura = $('#id_fecha_factura').val();
+        factura_compra.itemsFactura.timbrado = $('#id_timbrado').val();
+        factura_compra.itemsFactura.fecha_vencimiento_credito = $('#id_fecha_vencimiento_credito').val();
+        factura_compra.itemsFactura.fecha_vencimiento_timbrado = $('#id_fecha_vencimiento_timbrado').val();
         factura_compra.itemsFactura.metodo_pago = $('#id_metodo_pago').val();
         factura_compra.itemsFactura.descripcion_pago = $('#descripcion_pago').val();
         console.log(factura_compra.itemsFactura.fecha_factura);

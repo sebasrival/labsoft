@@ -14,18 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from modulos.accounts.views import lista_usuarios, agregar_usuario, editar_usuario, delete_user, agregar_rol,\
+from modulos.accounts.views import lista_usuarios, agregar_usuario, editar_usuario, delete_user, agregar_rol, \
     editar_rol, delete_rol
 
 from django.conf import settings
 from .views import home, logoutUser
 from django.contrib.auth import views as auth_views
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,15 +31,18 @@ urlpatterns = [
     path('logout/', logoutUser, name="logout"),
     path('', home, name="index"),
 
-    #módulo compras
+    # módulo compras
     path('modulos/compras/', include('modulos.compras.urls')),
 
-    #módulo ventas
+    # módulo ventas
     path('modulos/ventas/', include('modulos.ventas.urls')),
-    #módulo produccion
+
+    # módulo produccion
     path('modulos/produccion/', include('modulos.produccion.urls')),
-    #módulo reportes
+
+    # módulo reportes
     path('modulos/reportes/', include('modulos.reportes.urls')),
+
     # #usuarios
     path('user/list/', lista_usuarios, name='list_user'),
     path('user/add/', agregar_usuario, name='add_user'),
@@ -51,6 +52,6 @@ urlpatterns = [
     path('rol/add/', agregar_rol, name='add_rol'),
     path('rol/edit/<id>/', editar_rol, name='editar_rol'),
     path('rol/delete/<id>/', delete_rol, name='delete_rol')
-   ]
+]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

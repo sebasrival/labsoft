@@ -209,6 +209,9 @@ class FacturaCompraCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                     factura.proveedor = Proveedor.objects.get(id=fc['proveedor'])
                     factura.nro_factura = fc['nro_factura']
                     factura.fecha_factura = datetime.strptime(fc['fecha_factura'], '%d/%m/%Y')
+                    factura.timbrado = fc['timbrado']
+                    factura.fecha_vencimiento_timbrado = datetime.strptime(fc['fecha_vencimiento_timbrado'], '%d/%m/%Y')
+                    factura.fecha_vencimiento_credito = datetime.strptime(fc['fecha_vencimiento_credito'], '%d/%m/%Y')
                     factura.tipo_factura = fc['tipo_compra']
                     factura.descuento = fc['descuento']
                     factura.monto_iva1 = fc['totalIva5']
@@ -266,6 +269,7 @@ class FacturaCompraCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                 data['error'] = str(e)
                 response = JsonResponse(data, safe=False)
                 response.status_code = 400
+                raise (e)
             return response
         else:
             return redirect('index')
@@ -344,6 +348,9 @@ class FacturaCompraUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
                     factura.proveedor = Proveedor.objects.get(id=fc['proveedor'])
                     factura.nro_factura = fc['nro_factura']
                     factura.fecha_factura = datetime.strptime(fc['fecha_factura'], '%d/%m/%Y')
+                    factura.timbrado = fc['timbrado']
+                    factura.fecha_vencimiento_timbrado = datetime.strptime(fc['fecha_vencimiento_timbrado'], '%d/%m/%Y')
+                    factura.fecha_vencimiento_credito = datetime.strptime(fc['fecha_vencimiento_credito'], '%d/%m/%Y')
                     factura.tipo_factura = fc['tipo_compra']
                     factura.descuento = fc['descuento']
                     factura.monto_iva1 = fc['totalIva5']

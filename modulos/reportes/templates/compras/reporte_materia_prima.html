@@ -1,0 +1,221 @@
+{% load l10n %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <!-- Custom CSS -->
+    <style>
+         @page {
+                size: a4 landscape;
+
+
+                @frame image_frame {           /* Static Frame - Donde se pone la imagen */
+                    -pdf-frame-content: image_content;
+                    left: 100pt; width: 50pt; top: 50pt; height: 50pt;
+                    text-align: center;
+                    border: 0pt solid white;
+                }
+                @frame header_frame {           /* Static Frame - Para el encabezado*/
+                    -pdf-frame-content: header_content;
+                    left: 50pt; width: 500pt; top: 20pt;
+
+                }
+
+                @frame header_frame {           /* Static Frame <!-- Título del informe -->*/
+                    -pdf-frame-content: header_title;
+                    left: 200pt; width: 412pt; top: 50pt; height: 0pt;
+                    text-align: center;
+                    border: 0pt solid white;
+                }
+                @frame header_frame {           /* Static Frame: Header fijo de la tabla */
+                    -pdf-frame-content: header_div;
+                    left: 50pt; width: 750pt; top: 170pt; height: 5pt;
+                    text-align: center;
+                    border: 0pt solid white;
+                }
+                @frame header_frame {           /* Static Frame: Header fijo de la tabla */
+                    -pdf-frame-content: datos_reporte;
+                    left: 70pt; width: 512pt; top: 125pt;
+                    text-align: right;
+                }
+                @frame header_frame {           /* Static Frame: Header fijo de la tabla */
+                    -pdf-frame-content: encabezado;
+                    left: 50pt; width: 750pt; top: 200pt;
+                    text-align: right;
+                }
+                @frame imagen {           /* Static Frame: Header fijo de la tabla */
+                    -pdf-frame-content: imagen;
+                    left: 100pt; width: 50pt; top: 50pt; height: 0pt;
+
+                }
+
+                @frame header_table {           /* Static Frame: lugar donde ponemos la tabla */
+                    -pdf-frame-content: header_table;
+                    left: 50pt; width: 512pt; top: 100pt; height: 15pt;
+                    text-align: center;
+                    border: 0pt solid white;
+                }
+                @frame footer_frame {           /* Static Frame: lugar donde ponemos el footer (en mi caso paginador)  */
+                    -pdf-frame-content: footer_content;
+                    left: 50pt; width: 750pt; top: 560pt; height: 40pt;
+                    border: 0pt solid white;
+
+                }
+                /* ESTE FRAME NO SE REPITE EN CADA PAGINA, EL RESTO SI */
+                @frame content_frame {          /* Content Frame: Todo lo que no esté en un div de los otros frames.  */
+                    left: 50pt; width: 750pt; top: 261pt; height: 250pt;
+                    border: 0pt solid white;
+                }
+
+            }
+
+           .table{
+                page-break-inside:auto;
+               border-collapse: collapse;
+           }
+
+           .table tr{
+            page-break-inside:avoid; page-break-after:auto;
+               border-collapse: collapse;
+           }
+            .table th {
+                vertical-align:middle;
+                text-align:center;
+                border: 1pt solid #CCCCCC;
+                height: 60pt;
+                padding-top: 1px;
+                border-collapse: collapse;
+
+            }
+            .table td {
+                vertical-align:middle;
+                text-align:left;
+                border: 1pt solid #CCCCCC;
+                padding-top: 2px;
+                padding-left: 3px;
+                border-collapse: collapse;
+
+            }
+            .td_left {
+                text-align:left;
+            }
+            .td_center {
+                text-align:center;
+            }
+
+            .bg-grey{
+                background:#EEEFFF;
+            }
+
+            .td_10 {
+                width:10%;
+                vertical-align:middle;
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/
+            }
+            .td_20 {
+                width:20%;
+                vertical-align:middle;
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/
+            }
+            .td_30 {
+                width:30%;
+                vertical-align:middle;
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/
+            }
+            .td_40 {
+                width:40%;
+                vertical-align:middle;
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/
+            }
+            .td_60 {
+                width:60%;
+                vertical-align:middle;
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/
+            }
+            .th_60 {
+                width:60%;
+                vertical-align:middle;
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/
+            }
+            .th_40 {
+                width:40%;
+                vertical-align:middle;
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/
+            }
+            .td_50 {
+                width:50%;
+                vertical-align:middle;
+               /* **overflow:hidden;** (Optional)This might be useful for some overflow contents*/
+            }
+    </style>
+    <title>Reportes de Compras</title>
+</head>
+
+<body>
+<!-- Content for Static Frame 'footer_frame' -->
+
+
+<!-- Content for Static Frame 'header_frame' -->
+
+
+<div id="header_content">
+    <p></p>
+</div>
+
+<div id="imagen">
+    <img src="{{ icon }}" alt="logo">
+</div>
+
+<div id="header_title">
+    <h1 style="text-align: center;"><strong>LABORATORIOS OCAMPOS S.R.L.</strong></h1>
+    <h1 style="text-align: center;"><strong>REPORTES DE MATERIAS PRIMAS</strong></h1>
+    <h1 style="text-align: center;"><strong> {{ fecha_reporte | date:'m/Y' }}</strong></h1>
+</div>
+
+<div id="datos_reporte">
+    <b>FECHA DE IMPRESO: </b>{{ fecha }}. <br>
+    <b>USUARIO:</b> {{ usuario }}. <br>
+    <b>HORA:</b> {{ hora }}:{{ minutos }}:{{ segundos }}<br>
+</div>
+
+<div id="header_div">
+    <hr>
+</div>
+
+<div id="encabezado">
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="th_60"><b>Materias Prima</b></th>
+            <th class="th_40"><b>Cantidad Contenido</b></th>
+            <th class="th_40"><b>Unidad de Medida</b></th>
+            <th class="th_40"><b>Cantidad de unidades en el mes {{ fecha_reporte | date:'F' }} </b></th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<div id="content_frame">
+    <table class="table">
+        <tbody>
+        {% for m in materias %}
+            <tr>
+                <td class="td_60">{{ m.materia }}</td>
+                <td class="td_40">{{ m.cantidadCont }}</td>
+                <td class="td_40">{{ m.um }}</td>
+                <td class="td_40">{{ m.comprado_mes }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div id="footer_content">
+    <hr>
+    <!-- PAGINADOR EN EL FOOTER -->
+    Página <pdf:pagenumber> de <pdf:pagecount>
+</div>
+</body>
+</html>

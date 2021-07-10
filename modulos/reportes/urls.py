@@ -17,6 +17,7 @@ urlpatterns = [
     path('produccion/reporteproductos/pdf/<int:year>/<int:mes>/', ReporteProductosMensualPdfView.as_view(), name='productos_mes_pdf'),
     path('produccion/reporteorden/pdf/<start>/<end>/<estado>/', ReporteOrdenPdfView.as_view(), name='reporte_orden_pdf'),
 
-
+    path('reporte/compras/', ReporteCompraPdfView.as_view(), name='reporte_compras'),
+    path('reporte/compras/materiasprimas/', ReporteMateriaPrima.as_view(), name="reporte_materias_primas")
 
 ]

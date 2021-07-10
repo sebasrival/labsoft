@@ -68,8 +68,8 @@ class MateriaPrima(models.Model):
 class FacturaCompra(models.Model):
     nro_factura = models.CharField(max_length=200, unique=True)
     timbrado = models.CharField(max_length=200)
-    fecha_vencimiento_timbrado = models.DateField(blank=True)
-    fecha_vencimiento_credito = models.DateField(blank=True)
+    fecha_vencimiento_timbrado = models.DateField(blank=True, null=True)
+    fecha_vencimiento_credito = models.DateField(blank=True, null=True)
     tipo_factura = models.BooleanField(default=True)  # true: contado false: credito
     proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT)
     estado = models.CharField(max_length=12, choices=ESTADOS_FACTURA, default=ESTADOS_FACTURA[0][0])
@@ -83,6 +83,30 @@ class FacturaCompra(models.Model):
 
     def __str__(self):
         return 'Factura Compra: %s - Proveedor: %s' % (self.nro_factura, self.proveedor.razon_social)
+
+    def get_exenta(self):
+        exenta = 0
+        det = FacturaDet.objects.filter(factura=self)
+        for d in det:
+            if d.tipo_iva == 0:
+                exenta += d.cantidad * d.precio
+        return exenta
+
+    def get_grabada5(self):
+        grabada5 = 0
+        det = FacturaDet.objects.filter(factura=self)
+        for d in det:
+            if d.tipo_iva == 5:
+                grabada5 += d.cantidad * d.precio
+        return grabada5
+
+    def get_grabada10(self):
+        grabada10 = 0
+        det = FacturaDet.objects.filter(factura=self)
+        for d in det:
+            if d.tipo_iva == 10:
+                grabada10 += d.cantidad * d.precio
+        return grabada10
 
     class Meta:
         verbose_name = 'Factura Compra'
