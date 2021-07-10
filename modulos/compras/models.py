@@ -68,8 +68,8 @@ class MateriaPrima(models.Model):
 class FacturaCompra(models.Model):
     nro_factura = models.CharField(max_length=200, unique=True)
     timbrado = models.CharField(max_length=200)
-    fecha_vencimiento_timbrado = models.DateField(blank=True)
-    fecha_vencimiento_credito = models.DateField(blank=True)
+    fecha_vencimiento_timbrado = models.DateField(blank=True, null=True)
+    fecha_vencimiento_credito = models.DateField(blank=True, null=True)
     tipo_factura = models.BooleanField(default=True)  # true: contado false: credito
     proveedor = models.ForeignKey(Proveedor, on_delete=models.PROTECT)
     estado = models.CharField(max_length=12, choices=ESTADOS_FACTURA, default=ESTADOS_FACTURA[0][0])

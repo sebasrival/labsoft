@@ -7,6 +7,9 @@ let factura_compra = {
     itemsFactura: {
         proveedor: '',
         nro_factura: '',
+        timbrado: '',
+        fecha_vencimiento_timbrado: '',
+        fecha_vencimiento_credito: '',
         fecha_factura: '',
         tipo_compra: '',
         descuento: 0,
@@ -252,7 +255,10 @@ $(function () {
         factura_compra.itemsFactura.proveedor = $('#proveedor_select').val();
         factura_compra.itemsFactura.nro_factura = $('#id_nro_factura').val();
         factura_compra.itemsFactura.tipo_compra = $('input:radio[name="tipo_factura"]:checked').val();
-        factura_compra.itemsFactura.fecha_factura = $('#date_compra').val();
+        factura_compra.itemsFactura.fecha_factura = $('#id_fecha_factura').val();
+        factura_compra.itemsFactura.timbrado = $('#id_timbrado').val();
+        factura_compra.itemsFactura.fecha_vencimiento_credito = $('#id_fecha_vencimiento_credito').val();
+        factura_compra.itemsFactura.fecha_vencimiento_timbrado = $('#id_fecha_vencimiento_timbrado').val();
         factura_compra.itemsFactura.metodo_pago = $('#id_metodo_pago').val();
         factura_compra.itemsFactura.descripcion_pago = $('#descripcion_pago').val();
         console.log(factura_compra.itemsFactura.fecha_factura);
