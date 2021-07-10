@@ -191,7 +191,7 @@ class ReporteCompraPdfView(View):
             start_date = datetime.strptime(request.POST['start_date'], '%d/%m/%Y')
             end_date = datetime.strptime(request.POST['end_date'], '%d/%m/%Y')
             template = get_template('compras/reporte_compra_pdf.html')
-            facturas = FacturaCompra.objects.filter(Q(estado='RECIBIDO') | Q(fecha_factura__range=[start_date, end_date]))
+            facturas = FacturaCompra.objects.filter(Q(estado='RECIBIDO') and Q(fecha_factura__range=[start_date, end_date]))
             user = User.objects.get(id=request.user.id)
             usuario = "%s %s" % (user.first_name, user.last_name)
             now = datetime.now()
@@ -203,6 +203,8 @@ class ReporteCompraPdfView(View):
                 'hora': now.hour,
                 'minutos': now.minute,
                 'segundos': now.second,
+                'start_date': datetime.strftime(start_date, "%d/%m/%Y"),
+                'end_date': datetime.strftime(end_date, "%d/%m/%Y"),
                 'comp': {'name': 'LABORATORIO OCAMPOS SRL', 'ruc': '9999999999999', 'address': 'San Lorenzo, Paraguay'},
                 'icon': '{}{}'.format(settings.STATIC_URL, 'img/logo.png')
             }
