@@ -105,9 +105,11 @@ var factura = {
                 datosCobro.estado='PENDIENTE';
                 datosCobro.monto=  $('#total').val();
                 datosCobro.fecha=vencimiento.toISOString().split('T')[0];
+                vencimiento.setDate(vencimiento.getDate() + (30 * factura.items.cant_cuotas ));
+                datosCobro.fecha_vencimiento=vencimiento.toISOString().split('T')[0];
                 datosCobro.medio_cobro='N/A';
                 datosCobro.tipo_cobro=factura.items.tipo_cobro;
-                factura.items.metodo_cobro="N/A";
+                factura.items.metodo_cobro='N/A';
                 factura.items.cuotas.push(datosCobro);
                 this.listCobro();
         }
@@ -126,6 +128,8 @@ var factura = {
             datosCobro.monto=  $('#total').val();
             datosCobro.fecha=today.toISOString().split('T')[0];
             datosCobro.medio_cobro=$('#medioCobro').val();
+            datosCobro.fecha_vencimiento='N/A';
+
             factura.items.metodo_cobro=$('#medioCobro').val();
             datosCobro.tipo_cobro=factura.items.tipo_cobro;
             factura.items.cuotas.push(datosCobro);
@@ -229,6 +233,8 @@ var factura = {
                 {"data": "estado"},
                 {"data": "cantidad_cuotas"},
                 {"data": "fecha"},
+                {"data": "fecha_vencimiento"},
+
             ],
  
         });

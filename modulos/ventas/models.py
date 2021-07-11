@@ -68,6 +68,7 @@ class Cobro(models.Model):
         item['tipo_cobro'] = self.metodo_cobro
         item['medio_cobro']=self.medio_cobro
         item['cantidad_cuotas'] = self.cantidad_cuotas
+        item['fecha']=self.get_object().fecha_emision.strftime('%m/%d/%Y')
         return item
     class Meta:
         verbose_name = "Cobro"
