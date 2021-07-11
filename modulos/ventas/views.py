@@ -504,8 +504,16 @@ class FacturaVentaUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
             cobro=self.get_object().cobro
             cliente=self.get_object().cliente
             item=cobro.toJSON()
+            count= Cuota.objects.filter(cobro_id=cobro.id).count()
+            if count ==0:
+                item['fecha_vencimiento']= 'N/A'
+            else:
+                for cuota in Cuota.objects.filter(cobro_id=cobro.id):
+                    vencimiento=cuota.fecha_vencimiento
+                item['fecha_vencimiento']= vencimiento.strftime('%d/%m/%Y')
+                item['medio_cobro']= 'N/A'
             item['monto']=self.get_object().total
-            item['fecha']=self.get_object().fecha_emision.strftime('%m/%d/%Y')
+            item['fecha']=self.get_object().fecha_emision.strftime('%d/%m/%Y')
             item['estado']=self.get_object().estado
             item['razon_social']=cliente.razon_social
             item['cliente_id']=cliente.id
