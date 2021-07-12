@@ -36,7 +36,7 @@
             <div class="tile">
                 <div class="tile-body">
                     <div class="table-responsive">
-                            {% if perms.ventas.cliente_add %}
+                            {% if perms.ventas.add_cliente %}
                                 <span>
                                 <button onclick="abrir_modal('{% url 'ventas:cliente_add' %}')"
                                         class="btn btn-primary btn-sm">+ Agregar Cliente</button>

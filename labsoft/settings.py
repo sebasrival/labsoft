@@ -85,9 +85,9 @@ AUTH_USER_MODEL = 'accounts.User'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'labsoft_marten3',
+        'NAME': 'lb-final',
         'USER': 'postgres',
-        'PASSWORD': '123456',
+        'PASSWORD': '12345',
         'HOST': 'localhost',
         'PORT': '5432',
     }
