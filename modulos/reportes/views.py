@@ -26,7 +26,21 @@ from django.template.loader import get_template
 # Create your views here.
 
 def PantallaReporteVenta(request):
-    return render(request, "ventas/venta_filtro.html")
+    ANHIOS = [ ('2018', 2018),
+        ('2019', 2019),
+        ('2020', 2020),
+        ('2021', 2021),
+        ('2022', 2022),
+        ('2023', 2023),
+
+        ]
+    
+    
+    context = {
+        'anhos' : ANHIOS,
+
+    }
+    return render(request, "ventas/venta_filtro.html",context)
 
 
 def PantallaReporteOrden(request):
@@ -48,8 +62,19 @@ def PantallaReporteVentaMensual(request):
         ('Noviembre', 11),
         ('Diciembre', 12)
     ]
+    ANHIOS = [ ('2018', 2018),
+        ('2019', 2019),
+        ('2020', 2020),
+        ('2021', 2021),
+        ('2022', 2022),
+        ('2023', 2023),
+
+        ]
+    
+    
     context = {
         'meses': MESES,
+        'anhos' : ANHIOS,
 
     }
     return render(request, "ventas/generar_reporte_mensual.html", context)
@@ -70,8 +95,18 @@ def PantallaReporteProductoMensual(request):
         ('Noviembre', 11),
         ('Diciembre', 12)
     ]
+    ANHIOS = [ ('2018', 2018),
+        ('2019', 2019),
+        ('2020', 2020),
+        ('2021', 2021),
+        ('2022', 2022),
+        ('2023', 2023),
+
+        ]
+    
     context = {
         'meses': MESES,
+        'anhos': ANHIOS
 
     }
     return render(request, "produccion/generar_productos_mensual.html", context)

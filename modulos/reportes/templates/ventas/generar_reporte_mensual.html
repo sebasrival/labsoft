@@ -32,8 +32,9 @@
                             <div class="form-group">
                                 <label class="control-label">Seleccione el año</label>
                                 <select class="form-control" id="anho">
-                                    <option>2021</option>
-                                    <option>2020</option>
+                                    {% for key, value in anhos %} 
+                                    <option value= {{value}}>{{key}}</option>
+                                    {% endfor %}
 
                                 </select>    
                                 <label class="control-label">Seleccione el mes</label>
