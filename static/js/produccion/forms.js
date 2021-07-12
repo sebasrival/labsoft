@@ -29,6 +29,15 @@ var orden = {
 
     setOrdenEdit: function () {
         this.items.producto=this.items.materias[0].producto_id;
+        var unidad_medida=this.items.materias[0].unidad_medida_producto;
+        console.log(this.items.materias[0]);
+        if (unidad_medida =='GRAMOS'){
+            $('#unidad_medida').val('Kilogramos');
+        }
+        else{
+            $('#unidad_medida').val('Litros');
+        }
+      
         $('input[name="producto"]').val(this.items.materias[0].producto)
         this.items.estado=$('select[name="estado"]').val();
         this.listEquipo();

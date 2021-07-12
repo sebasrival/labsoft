@@ -524,6 +524,7 @@ class OrdenUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
                 item['cantidad'] = i.cantidad
                 item['producto_id'] = self.get_object().producto.id
                 item['producto'] = self.get_object().producto.nombre
+                item['unidad_medida_producto']=self.get_object().producto.unidad_medida
                 data.append(item)
         except:
             pass
