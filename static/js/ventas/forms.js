@@ -121,6 +121,7 @@ var factura = {
                 fecha: '',
                 tipo_cobro:'',
                 medio_cobro:'',
+                fecha_vencimiento: 'N/A'
                 
             };
             datosCobro.cantidad_cuotas=0;
