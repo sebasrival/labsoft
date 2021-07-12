@@ -605,7 +605,7 @@ class FormulaCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
     form_class = FormulaForm
     template_name = 'formulas/formulas_add.html'
     success_url = reverse_lazy('produccion:orden_list')
-    permission_required = 'produccion.add_ordenelaboracion'
+    permission_required = 'produccion.add_formula'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -683,7 +683,7 @@ class FormulaUpdateView(LoginRequiredMixin, PermissionMixin, CreateView):
     form_class = FormulaForm
     template_name = 'formulas/formulas_edit.html'
     success_url = reverse_lazy('produccion:orden_list')
-    permission_required = 'produccion.add_ordenelaboracion'
+    permission_required = 'produccion.change_formula'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -768,7 +768,7 @@ class FormulaUpdateView(LoginRequiredMixin, PermissionMixin, CreateView):
 class FormulaListView(LoginRequiredMixin, PermissionMixin, ListView):
     model = Formula
     template_name = 'formulas/formulas_list.html'
-    permission_required = 'produccion.view_ordenelaboracion'
+    permission_required = 'produccion.view_formula'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -803,7 +803,7 @@ class FormulaDeleteView(LoginRequiredMixin, PermissionMixin, DeleteView):
     model = Formula
     form_class = FormulaForm
     success_url = reverse_lazy('produccion:formula_list')
-    permission_required = 'produccion.delete_ordenelaboracion'
+    permission_required = 'produccion.delete_formula'
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
