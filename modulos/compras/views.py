@@ -236,10 +236,15 @@ class FacturaCompraCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                         if MateriaPrima.objects.filter(codigo=f['codigo']).exists():
                             materia = MateriaPrima.objects.get(codigo=f['codigo'])
                             det.materia = materia
+                            if (det.materia.nombre != f['nombre']):
+                                raise Exception("Este codigo: " + f['codigo'] +" de materia prima ya existe. " )
+                            
                             #  traemos el stock para actualizar
                             if StockMateriaPrima.objects.filter(materia=materia).exists():
                                 stock = StockMateriaPrima.objects.get(materia=materia)
                                 stock.cantidad += f['cantidad']
+                                stock.cantidad_stock += f['cantidad'] * materia.cantidadCont
+
                             else:
                                 stock = StockMateriaPrima(materia=det.materia, cantidad=f['cantidad'])
                             stock.save()
@@ -253,7 +258,7 @@ class FacturaCompraCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                                                cantidadCont=f['cantidadCont'])
                             mat.save()
                             # se crea la materia prima antes y luego se guarda en stock
-                            stock = StockMateriaPrima(materia=mat, cantidad=f['cantidad'])
+                            stock = StockMateriaPrima(materia=mat, cantidad=f['cantidad'],cantidad_stock = f['cantidad'] * mat.cantidadCont)
                             stock.save()
                             det.materia = mat
                         det.cantidad = f['cantidad']
@@ -367,6 +372,8 @@ class FacturaCompraUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
                             materia = MateriaPrima.objects.get(id=f.materia.id)
                             stock = StockMateriaPrima.objects.get(materia=materia)
                             stock.cantidad = stock.cantidad - f.cantidad
+                            stock.cantidad_stock += stock.cantidad * materia.cantidadCont
+
                             stock.save()
                             print("stock", stock.cantidad)
 
@@ -380,13 +387,15 @@ class FacturaCompraUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
                         if MateriaPrima.objects.filter(codigo=f['codigo']).exists() == True:
                             materia = MateriaPrima.objects.get(codigo=f['codigo'])
                             det.materia = materia
+                            if (det.materia.nombre != f['nombre']):
+                                raise Exception("Este codigo: " + f['codigo'] +" de materia prima ya existe. " )
                             #  traemos el stock para actualizar
                             if StockMateriaPrima.objects.filter(materia__codigo=f['codigo']).exists() == True:
                                 stock = StockMateriaPrima.objects.get(materia=materia)
                                 stock.cantidad += f['cantidad']
                                 stock.save()
                             else:
-                                stock = StockMateriaPrima(materia=det.materia, cantidad=f['cantidad'])
+                                stock = StockMateriaPrima(materia=det.materia, cantidad=f['cantidad'],cantidad_stock= f['cantidad'] * det.materia.cantidadCont)
                                 stock.save()
                             det.materia = materia
                         else:
@@ -471,10 +480,13 @@ class StockMateriaPrimaCreateView(LoginRequiredMixin, PermissionMixin, CreateVie
                 form = self.get_form()
                 # noinspection DuplicatedCode
                 if form.is_valid():
-                    form.save()
-                    materia = form.cleaned_data['codigo']
+                    materia = form.save()
                     cantidad = form.cleaned_data['cantidad']
-                    stock = StockMateriaPrima(materia=MateriaPrima.objects.get(codigo=materia), cantidad=cantidad)
+                    print('Materia',materia.id)
+                    print('MateriaObjecto',materia.cantidadCont)
+                    print('Cantidad',cantidad)
+                    print('Cantidad',cantidad * materia.cantidadCont)
+                    stock = StockMateriaPrima(materia=materia,cantidad=cantidad,cantidad_stock=cantidad * materia.cantidadCont)
                     stock.save()
                     data['message'] = f'¡{self.model.__name__} registrado correctamente!'
                     data['error'] = '¡Sin errores!'
@@ -512,6 +524,8 @@ class StockMateriaPrimaListView(LoginRequiredMixin, PermissionMixin, ListView):
                     stock_materia = {
                         'materia': st.materia.nombre,
                         'cantidad': st.cantidad,
+                        'cantidad_stock' : st.cantidad_stock,
+                        'unidad_medida' : st.materia.um,
                         'id': st.materia.id
                     }
                     data.append(stock_materia)
@@ -546,12 +560,6 @@ class StockMateriaUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
                 form = self.form_class(request.POST, instance=self.get_object())
                 # noinspection DuplicatedCode
                 if form.is_valid():
-                    codmateria = form.cleaned_data['codigo']
-                    cantidad = form.cleaned_data['cantidad']
-                    materia = MateriaPrima.objects.get(codigo=codmateria)
-                    stock = StockMateriaPrima.objects.get(materia=materia)
-                    stock.cantidad = cantidad
-                    stock.save()
                     form.save()
                     data['message'] = f'¡{self.model.__name__} editado correctamente!'
                     data['error'] = '¡Sin errores!'

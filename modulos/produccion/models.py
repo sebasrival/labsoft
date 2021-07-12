@@ -15,6 +15,8 @@ TIPO_ORDEN = [
 ]
 
 UNIDAD_MEDIDA = [
+    ( 'MILILITROS','Mililitros'),
+    ( 'GRAMOS','Gramos'),
     ( 'LITROS','Litros'),
     ( 'KILOGRAMOS','Kilogramos'),
 ]
@@ -46,7 +48,7 @@ class Producto(models.Model):
 
     def obtener_cantidad_producida(self,mes,anho):
         cantidad_producida = 0 
-        ordenes=OrdenElaboracion.objects.filter(producto_id=self.id,fecha_emision__year=anho,fecha_emision__month=mes)
+        ordenes=OrdenElaboracion.objects.filter(estado='FINALIZADA',producto_id=self.id,fecha_emision__year=anho,fecha_emision__month=mes)
         for orden in ordenes:
              cantidad_producida =cantidad_producida + float(orden.cantidad_teorica) / ((orden.producto.cantidad_contenido) / float(1000))
         return int(cantidad_producida)
@@ -59,6 +61,12 @@ class Producto(models.Model):
             for facturadetalle in FacturaVentaDetalle.objects.filter(factura_id=factura.id,producto_id=self.id):
                 cantidad_vendida=cantidad_vendida+ facturadetalle.cantidad
         return cantidad_vendida
+    def obtener_unidad_orden(self):
+        if self.unidad_medida == 'MILILITROS':
+            return 'LITROS'
+        else:
+            return 'KILOGRAMOS'
+        
 
     class Meta:
         verbose_name = 'Producto'
@@ -92,7 +100,7 @@ class Equipo(models.Model):
     codigo= models.CharField(max_length=30, null=False,unique=True)
     nombre= models.CharField(max_length=150, blank=True)
     horas_utiles=models.IntegerField(default=100)
-    horas_utilizadas=models.IntegerField(default=0)
+    horas_utilizadas=models.IntegerField(default=0,null=True,blank=True)
     ultimo_mantenimiento=models.DateField(blank=True,null=True)
     proximo_mantenimiento=models.DateField(blank=True,null=True)
     fecha_ingreso=models.DateField(blank=True,null=True)
@@ -116,7 +124,14 @@ class Equipo(models.Model):
 
     def obtener_porcentaje(self):
         return round((self.horas_utilizadas * 100)/self.horas_utiles)
-
+    def obtener_estado(self):
+        porcentaje= round((self.horas_utilizadas * 100)/self.horas_utiles)
+        if (porcentaje<90):
+            estado= 'Utilizable.'
+        else:
+            estado='Necesita mantenimiento.'
+        
+        return estado
     class Meta:
         verbose_name = 'Equipo'
         verbose_name_plural = 'Equipos'
@@ -211,7 +226,7 @@ class FormulaProducto(models.Model):
     
     class Meta:
         verbose_name = 'Formula'
-        verbose_name_plural = 'Formulas'
+        verbose_name_plural = 'Formula Productos'
 
     def toJSON(self):
         item = model_to_dict(self)

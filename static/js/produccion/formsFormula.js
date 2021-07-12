@@ -15,7 +15,8 @@ var orden = {
         descripcion_modificacion:'',
         estado: '',
         numero:'',
-        cantidad_teorica: 0
+        cantidad_teorica: 0,
+        check: 0
 
     },
     add: function (item) {
@@ -28,7 +29,18 @@ var orden = {
     },
 
     setOrdenEdit: function () {
+        this.items.check=1;
+
         this.items.producto=this.items.materias[0].producto_id;
+        var unidad_medida=this.items.materias[0].unidad_medida_producto;
+        console.log(this.items.materias[0].unidad_medida_producto);
+        if (unidad_medida =='GRAMOS'){
+            $('#unidad_medida').val('Kilogramos');
+        }
+        else{
+            $('#unidad_medida').val('Litros');
+        }
+      
         $('input[name="producto"]').val(this.items.materias[0].producto);
         $('input[name="cantidad_teorica"]').val(this.items.materias[0].cantidad_teorica);
 
@@ -213,7 +225,14 @@ $(function () {
             event.preventDefault();
             console.clear();
             console.log(ui.item.materias);
-         
+            orden.items.objecto_producto=ui.item;
+            if (orden.items.objecto_producto.unidad_medida== 'MILILITROS'){
+                $('#unidad_medida').val('Litros');
+            }
+            else{
+                $('#unidad_medida').val('Kilogramos');
+
+            }
             orden.items.producto=ui.item.id;
             //console.log(ui.item.materias);
            /* orden.list();*/
@@ -247,15 +266,12 @@ $(function () {
         }).done(function (data) {
             console.log(data);
             if (data.length==0){
-              orden.items.materias=[];
-              orden.list();
-              show_notify_error('No existe formula para este producto.');
-              return false;
+              show_notify_success('No existe formula para este producto. Puede agregarlo.!');
+              orden.items.check=1;
             }
-            else if (data[0].materias!=undefined){
-               orden.items.materias=data[0].materias;
-               orden.list();
-               show_notify_success('Se añadio la formula correctamente.');
+            else {
+               orden.items.check=-1;
+               show_notify_error('Ya se añadio la formula para este producto.');
                
             }
           
@@ -295,6 +311,14 @@ $(function () {
     });
     $('form').on('submit', function (e) {
         e.preventDefault();
+        if(orden.items.check==0){
+            show_notify_error('Debe verificar la existencia de la formula para poder agregarla. ');
+            return false;
+        }
+        if(orden.items.check==-1){
+            show_notify_error('La formula para este producto y cantidad teorica ya existe.');
+            return false;
+        }
         if ($('input[name="cantidad_teorica"]').val()==0 || $('input[name="producto"]').val()==''){
             show_notify_error('Debe completar todos los datos. ');
             return false;
@@ -304,7 +328,6 @@ $(function () {
             mensaje_error('Debe al menos tener una materia prima en su formula.');
             return false;
         }
-
         var parameters = new FormData();
         parameters.append('action', $('input[name="action"]').val());
         parameters.append('orden', JSON.stringify(orden.items));

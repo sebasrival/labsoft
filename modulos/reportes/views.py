@@ -178,6 +178,7 @@ class ReporteVentaPdfView(View):
             now = datetime.now()
             factura = FacturaVenta.objects.filter(estado='PAGADA', fecha_emision__year=self.kwargs.get('year')).count()
             print(factura)
+            facturas=FacturaVenta.objects.filter(estado='PAGADA', fecha_emision__year=self.kwargs.get('year'))
             if factura == 0:
 
                 total_facturas = 0
@@ -200,13 +201,15 @@ class ReporteVentaPdfView(View):
                 total_montoiva2 = round(
                     FacturaVenta.objects.filter(estado='PAGADA', fecha_emision__year=self.kwargs.get('year')).aggregate(
                         Sum('monto_iva2')).get('monto_iva2__sum'))
-                total_gravadas10 = round(float(
-                    FacturaVenta.objects.filter(estado='PAGADA', fecha_emision__year=self.kwargs.get('year')).aggregate(
-                        Sum('monto_iva1')).get('monto_iva1__sum')) * 11)
-                total_gravadas5 = round(
-                    FacturaVenta.objects.filter(estado='PAGADA', fecha_emision__year=self.kwargs.get('year')).aggregate(
-                        Sum('monto_iva2')).get('monto_iva2__sum') * 21)
-                total_sin_iva = (total_gravadas10 - total_montoiva1) + (total_gravadas5 - total_montoiva2)
+
+            total_gravadas5=0
+            total_gravadas10=0
+            total_sin_iva=0
+            print(facturas)
+            for f in facturas:
+                total_gravadas10 += f.obtener_gravada_10()
+                total_gravadas5 +=f.obtener_gravada_5()
+            total_sin_iva= (total_gravadas10 - total_montoiva1) + (total_gravadas5 - total_montoiva2)
             context = {
                 'facturas': FacturaVenta.objects.filter(estado='PAGADA', fecha_emision__year=self.kwargs.get('year')),
                 'usuario': usuario.username,
@@ -287,6 +290,8 @@ class ReporteVentaMensualPdfView(View):
             factura = FacturaVenta.objects.filter(estado='PAGADA', fecha_emision__year=self.kwargs.get('year'),
                                                   fecha_emision__month=self.kwargs.get('mes')).count()
             print(factura)
+            facturas=FacturaVenta.objects.filter(estado='PAGADA', fecha_emision__year=self.kwargs.get('year'),
+                                                        fecha_emision__month=self.kwargs.get('mes'))
             if factura == 0:
 
                 total_facturas = 0
@@ -321,7 +326,15 @@ class ReporteVentaMensualPdfView(View):
                                                                     fecha_emision__month=self.kwargs.get('mes'),
                                                                     estado='PAGADA').aggregate(Sum('monto_iva2')).get(
                     'monto_iva2__sum') * 21)
-                total_sin_iva = (total_gravadas10 - total_montoiva1) + (total_gravadas5 - total_montoiva2)
+            total_gravadas5=0
+            total_gravadas10=0
+            total_sin_iva=0
+            print(facturas)
+            for f in facturas:
+                total_gravadas10 += f.obtener_gravada_10()
+                total_gravadas5 +=f.obtener_gravada_5()
+            total_sin_iva= (total_gravadas10 - total_montoiva1) + (total_gravadas5 - total_montoiva2)
+
             context = {
                 'facturas': FacturaVenta.objects.filter(estado='PAGADA', fecha_emision__year=self.kwargs.get('year'),
                                                         fecha_emision__month=self.kwargs.get('mes')),
@@ -700,9 +713,10 @@ class ReporteMateriaPrima(View):
                 try:
                     det = FacturaDet.objects.get(factura=f, materia=m)
                     item['comprado_mes'] += det.cantidad
-                    materias.append(item)
                 except Exception as e:
                     pass
+            materias.append(item)
+
         return materias
 
     def link_callback(self, uri, rel):

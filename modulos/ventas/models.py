@@ -71,7 +71,7 @@ class Cobro(models.Model):
         return item
     class Meta:
         verbose_name = "Cobro"
-        verbose_name_plural = "Plural"
+        verbose_name_plural = "Cobros"
 
 
 class DatosFacturacion(models.Model):
@@ -93,7 +93,7 @@ class DatosFacturacion(models.Model):
 
     class Meta:
         verbose_name = "Datos Facturacion"
-        verbose_name_plural = "Plural"
+        verbose_name_plural = "Datos facturaciones"
 
 
 class Timbrado(models.Model):
@@ -104,7 +104,7 @@ class Timbrado(models.Model):
 
     class Meta:
         verbose_name = "Timbrado Facturacion"
-        verbose_name_plural = "Plural"
+        verbose_name_plural = "Timbrados"
 
 
 class PuntoVenta (models.Model):
@@ -163,15 +163,20 @@ class FacturaVenta(models.Model):
     def obtener_montoiva2(self):
         return round(self.monto_iva2)
     def obtener_gravada_5(self):
-        if self.monto_iva2==0:
-            return 0
-        else:
-            return round(int(self.monto_iva2)*21)
+        grabada5 = 0
+        det = FacturaVentaDetalle.objects.filter(factura_id=self.id)
+        for d in det:
+            if d.producto.tasa_iva == 5:
+                grabada5 += d.cantidad * d.precio
+        return round(grabada5)
     def obtener_gravada_10(self):
-        if self.monto_iva1==0:
-            return 0
-        else:
-            return round(int(self.monto_iva1)*11)
+        grabada10 = 0
+        det = FacturaVentaDetalle.objects.filter(factura_id=self.id)
+        for d in det:
+
+            if d.producto.tasa_iva == 10:
+                grabada10 += d.cantidad * d.precio
+        return round(grabada10)
     def obtener_sin_iva(self):
             return int(self.total)-int(self.monto_iva1) -int(self.monto_iva2)-int(self.exenta)
     def obtener_exenta(self):
@@ -227,7 +232,7 @@ class Cuota(models.Model):
         return item
     class Meta:
         verbose_name = "Cuota"
-        verbose_name_plural = "Plural"
+        verbose_name_plural = "Cuotas"
 
 
 # Create your models here.

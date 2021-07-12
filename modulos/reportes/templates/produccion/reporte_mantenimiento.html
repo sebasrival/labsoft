@@ -42,6 +42,11 @@
                     text-align: center;
                     border: 0pt solid white;
                 }
+                @frame imagen {           /* Static Frame: Header fijo de la tabla */
+                    -pdf-frame-content: imagen;
+                    left: 100pt; width: 50pt; top: 50pt; height: 0pt;
+           
+                }
                 @frame footer_frame {           /* Static Frame: lugar donde ponemos el footer (en mi caso paginador)  */
                     -pdf-frame-content: footer_content;
                     left: 50pt; width: 512pt; top: 800pt; height: 40pt;
@@ -115,9 +120,15 @@
         <div id="image_content">
         <!-- Content con la imagen -->
         </div>
+        <div id="imagen">
+        <img src="{{ icon }}" alt="logo">
+        </div>
 
         <div id="header_content"> 
         <p></p>    
+        <div id="imagen"  >
+                <img src="https://ss3.4sqi.net/img/categories_v2/education/lab_88.png" alt="My image">
+            </div> 
         </div>
         <div id="header_title">   
             <h1 style="text-align: center;"><strong>LABORATORIOS OCAMPOS SA.</strong></h1>
@@ -163,8 +174,11 @@
                         <td class ="td_40"><b>Codigo</b></td>                                               
                         <td class ="td_40"><b>Nombre</b></td>      
                         <td class ="td_40"><b>Horas utilizadas </b> </td>  
-                        <td class ="td_40"><b>Porcentaje de utilizacion</b> </td>  
+                        <td class ="td_40"><b>Horas de trabajo recomendadas </b> </td>  
+
+                        <td class ="td_40"><b>Porcentaje de utilizacion sobre horas recomendadas</b> </td>  
                         <td class ="td_40"><b>Ultimo Mantenimiento</b> </td>  
+                        <td class ="td_40"><b>Estado</b> </td>  
                                      
                                          
 
@@ -176,9 +190,11 @@
                         <td class ="td_40">{{equipo.codigo}}</td>
                         <td class ="td_40">{{equipo.nombre}}</td>    
                         <td class ="td_40">{{equipo.horas_utilizadas}}</td>         
-                        
+                        <td class ="td_40">{{equipo.horas_utiles}}</td>         
+
                         <td class ="td_40">{{equipo.obtener_porcentaje}} %</td>                        
                         <td class ="td_40">{{equipo.ultimo_mantenimiento}}</td>                        
+                        <td class ="td_40">{{equipo.obtener_estado}}</td>                        
 
 
                     </tr>

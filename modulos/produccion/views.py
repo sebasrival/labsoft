@@ -240,9 +240,14 @@ class EquipoUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
             response = ''
             try:
                 form = self.form_class(request.POST, instance=self.get_object())
+                equipo_old=self.get_object()
+
                 # noinspection DuplicatedCode
                 if form.is_valid():
-                    form.save()
+                    equipo_edit= form.save(commit=False)
+                    if equipo_edit.ultimo_mantenimiento != equipo_old.ultimo_mantenimiento:
+                        equipo_edit.horas_utilizadas= 0
+                    equipo_edit.save()
                     data['message'] = f'¡{self.model.__name__} editado correctamente!'
                     data['error'] = '¡Sin errores!'
                     response = JsonResponse(data, safe=False)
@@ -318,6 +323,8 @@ class OrdenCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                 for i in mats:
                     item = i.toJSON()
                     item['value'] = i.nombre
+                    stock=StockMateriaPrima.objects.get(materia_id=i.id)
+                    item['cantidad_stock']=stock.cantidad_stock
                     data.append(item)
             elif action == 'search_equipos':
                 data = []
@@ -490,7 +497,7 @@ class OrdenUpdateView(LoginRequiredMixin, PermissionMixin, UpdateView):
                     print('se guardo el detalle')
                     if ordenv.estado == 'EN PRODUCCION' and estado_anterior != 'EN PRODUCCION':
                         stock = StockMateriaPrima.objects.get(materia_id=det.materia_id)
-                        stock.cantidad = stock.cantidad - det.cantidad
+                        stock.cantidad_stock = stock.cantidad_stock - det.cantidad
                         stock.save()
 
                     print('edito en detalle')
@@ -631,7 +638,22 @@ class FormulaCreateView(LoginRequiredMixin, PermissionMixin, CreateView):
                         item['materias'] = materia
                     item['value'] = i.nombre
                     data.append(item)
-   
+            elif action == 'search_formula':
+                data =[]
+                materia = []
+                producto=Producto.objects.get(id=request.POST['term'])
+                item=producto.toJSON()
+                cantidad = FormulaProducto.objects.filter(producto_id=request.POST['term'],cantidad_teorica=request.POST['cantidad']).count()
+                if cantidad > 0:
+                    formula = FormulaProducto.objects.filter(producto_id=request.POST['term'],cantidad_teorica=request.POST['cantidad'])
+                    for f in formula:
+                        m = f.toJSON()
+                        materia.append(m)
+                    item['materias']=materia
+                    data.append(item)
+
+      
+                
             elif action == 'add':
                 print('entro xd')
                 orden = json.loads(request.POST['orden'])
@@ -726,6 +748,7 @@ class FormulaUpdateView(LoginRequiredMixin, PermissionMixin, CreateView):
                 item = i.materia.toJSON()
                 item['cantidad'] = i.cantidad
                 item['producto_id'] = self.get_object().producto.id
+                item['unidad_medida_producto'] = self.get_object().producto.unidad_medida
                 item['producto'] = self.get_object().producto.nombre
                 item['cantidad_teorica']=self.get_object().cantidad_teorica
                 data.append(item)

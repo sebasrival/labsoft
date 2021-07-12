@@ -46,7 +46,8 @@ class MateriaPrima(models.Model):
     descripcion = models.TextField()
     inci = models.CharField(max_length=100)
     um = models.CharField(max_length=5)  # unidad de medida
-    cantidadCont = models.FloatField(null=True)  # el null solo para crear rapido
+    cantidadCont = models.FloatField(null=True,blank=True)  # el null solo para crear rapido
+    observacion = models.CharField(max_length=200, blank=True, null=True)  # el null solo para crear rapido
 
     def __str__(self):
         return '%s - %s' % (self.codigo, self.nombre)
@@ -59,6 +60,8 @@ class MateriaPrima(models.Model):
         item['descripcion'] = self.descripcion
         item['inci'] = self.inci
         item['unidad_medida'] = self.um
+        item['observacion'] = self.observacion
+
         return item
     class Meta:
         verbose_name = 'Materia Prima'
@@ -134,7 +137,8 @@ class FacturaDet(models.Model):
 
 class StockMateriaPrima(models.Model):
     materia = models.ForeignKey(MateriaPrima, on_delete=models.CASCADE)
-    cantidad = models.PositiveIntegerField(default=1)
+    cantidad = models.PositiveIntegerField(default=1,blank=True,null=True)
+    cantidad_stock= models.PositiveIntegerField(default=1,blank=True,null=True)
 
     class Meta:
         verbose_name = 'Stock de Materia Prima'

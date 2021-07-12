@@ -130,7 +130,9 @@ function list_stock(url_list, url_edit, url_del, perm_change, perm_delete) {
         },
         columns: [
             {"data": "materia"},
-            {"data": "cantidad"},
+            {"data": "cantidad_stock"},
+            {"data": "unidad_medida"},
+
             {"data": "id" }
         ],
         columnDefs: [{

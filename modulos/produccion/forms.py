@@ -29,6 +29,44 @@ class EquipoForm(forms.ModelForm):
         widgets = {
             'codigo': forms.TextInput(attrs={'class': 'form-control'}),
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'horas_utilizadas': forms.TextInput(attrs={'class': 'form-control'}),
+
+            'horas_utiles': forms.TextInput(attrs={'class': 'form-control'}),
+
+            'fecha_ingreso': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={
+                    'value': datetime.now().strftime('%Y-%m-%d'),
+                    'autocomplete': 'off',
+                    'class': 'form-control datetimepicker-input',
+                    'id': 'date_joined',
+                    'data-target': '#date_joined',
+                    'data-toggle': 'datetimepicker'
+                }
+            ),
+            'ultimo_mantenimiento': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={
+                    'value': datetime.now().strftime('%Y-%m-%d'),
+                    'autocomplete': 'off',
+                    'class': 'form-control datetimepicker-input',
+                    'id': 'date_joined',
+                    'data-target': '#date_joined',
+                    'data-toggle': 'datetimepicker'
+                }
+            ),
+            'proximo_mantenimiento': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={
+                    'value': datetime.now().strftime('%Y-%m-%d'),
+                    'autocomplete': 'off',
+                    'class': 'form-control datetimepicker-input',
+                    'id': 'date_joined',
+                    'data-target': '#date_joined',
+                    'data-toggle': 'datetimepicker'
+                }
+            ),
+  
   
         }
 

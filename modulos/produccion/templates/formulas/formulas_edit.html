@@ -49,13 +49,24 @@
                                             <label><strong>Producto:</strong></label>
                                             {{ form.producto }}                           
                                          </div>
-                                           
+                                         <fieldset disabled>
                                         <div class="col">
                                             <label><strong>Cantidad Teorica:</strong></label>
                                             {{ form.cantidad_teorica }}
                                                                  
                                          </div>
-                                 
+                                        </fieldset>
+                                        <fieldset disabled>
+                                            <div class="col">
+                                                <label><strong>Unidad medida:</strong></label>
+                                                <select class="form-control" id="unidad_medida">
+                                                    <option>Litros</option>
+                                                    <option>Kilogramos</option>
+    
+                                                </select>                                                                 
+                                             </div>
+                                        </fieldset>
+                                      
                               
       
                                 </div>
