@@ -36,7 +36,7 @@
             <div class="tile">
                 <div class="tile-body">
                     <div class="table-responsive">
-                            {% if perms.ventas.add_formula %}
+                            {% if perms.produccion.add_formula %}
                            
                                 <a class="btn btn-success p-2" href="{% url 'produccion:formula_add' %}"
                                            title="Agregar Formula">
@@ -82,6 +82,6 @@
     <script type="text/javascript" src="{% static "js/functions/functions.js" %}"></script>
     <script type="text/javascript" src="{% static "js/produccion/index.js" %}"></script>
     <script>
-        list_formula('/modulos/produccion/formula/list/', '/modulos/produccion/formula/edit/','/modulos/produccion/formula/del/', {{ perms.ventas.change_pedido | safe | lower}}, {{ perms.ventas.delete_pedido | safe | lower}});
+        list_formula('/modulos/produccion/formula/list/', '/modulos/produccion/formula/edit/','/modulos/produccion/formula/del/', {{ perms.produccion.change_formula | safe | lower}}, {{ perms.produccion.delete_formula | safe | lower}});
     </script>
 {% endblock %}

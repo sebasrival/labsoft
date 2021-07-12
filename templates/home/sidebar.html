@@ -65,13 +65,13 @@
                     {% endif %}
                 </ul>
                 <ul class="treeview-menu">
-                    {% if perms.produccion.view_equipo or perms.produccion.add_quipo or perms.produccion.delete_equipo or perms.produccion.change_equipo %}
+                    {% if perms.produccion.view_ordenelaboracion or perms.produccion.add_ordenelaboracion or perms.produccion.delete_ordenelaboracion or perms.produccion.change_ordenelaboracion %}
                         <li><a class="treeview-item" href="{% url 'produccion:orden_list' %}">Ordenes de elaboracion</a>
                         </li>
                     {% endif %}
                 </ul>
                 <ul class="treeview-menu">
-                    {% if perms.produccion.view_equipo or perms.produccion.add_quipo or perms.produccion.delete_equipo or perms.produccion.change_equipo %}
+                    {% if perms.produccion.view_formula or perms.produccion.add_formula or perms.produccion.delete_formula or perms.produccion.change_formula %}
                         <li><a class="treeview-item" href="{% url 'produccion:formula_list' %}">Formulas</a></li>
                     {% endif %}
                 </ul>
@@ -83,7 +83,7 @@
                     class="treeview-indicator fa fa-angle-right"></i></a>
 
              <ul class="treeview-menu">
-                {% if perms.produccion.view_equipo or perms.produccion.add_quipo or perms.produccion.delete_equipo or perms.produccion.change_equipo%}
+                {% if perms.produccion%}
                 <li><a class="treeview-item" href="{% url 'reportes:mantenimientos_pdf' %}">Reporte de Mantenimientos</a></li>
             {% endif %}
             </ul>
