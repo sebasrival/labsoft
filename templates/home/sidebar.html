@@ -98,12 +98,12 @@
             {% endif %}
             </ul>
             <ul class="treeview-menu">
-                {% if perms.ventas %}
+                {% if perms.produccion %}
                 <li><a class="treeview-item" href="{% url 'reportes:mes_reporte_productos' %}">Reporte de Productos Mensual</a></li>
             {% endif %}
             </ul>
             <ul class="treeview-menu">
-                {% if perms.ventas %}
+                {% if perms.produccion %}
                 <li><a class="treeview-item" href="{% url 'reportes:pantalla_reporte_ordenes' %}">Reporte de Ordenes de Elaboracion</a></li>
             {% endif %}
             </ul>
