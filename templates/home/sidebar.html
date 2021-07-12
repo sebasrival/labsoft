@@ -16,9 +16,15 @@
                         class="app-menu__label">&nbsp;&nbsp;&nbsp;Compras</span><i
                         class="treeview-indicator fa fa-angle-right"></i></a>
                 <ul class="treeview-menu">
+                {% if perms.compras.add_facturacompra %}
                     <li><a class="treeview-item" href="{% url 'compras:factura_add' %}">Registrar Compra</a></li>
+                    {% endif %}
+                {% if perms.compras.view_facturacompra or perms.compras.delete_facturacompra or perms.compras.change_facturacompra %}
                     <li><a class="treeview-item" href="{% url 'compras:factura_list' %}">Facturas Compras</a></li>
+                {% endif %}
+                {% if perms.compras.view_materiaprima or perms.compras.add_materiaprima or perms.compras.delete_materiaprima or perms.compras.change_materiaprima %}
                     <li><a class="treeview-item" href="{% url 'compras:stock_list' %}">Stock Materia Prima</a></li>
+                    {% endif %}
                     {% if perms.compras.view_proveedor or perms.compras.add_proveedor or perms.compras.delete_proveedor or perms.compras.change_proveedor %}
                         <li><a class="treeview-item" href="{% url 'compras:proveedor_list' %}">Proveedores</a></li>
                     {% endif %}
